@@ -1,5 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import { getStagedDiff, isRepository } from '@/utils/git';
+import { getDiff, isRepository } from '@/utils/git';
 
 async function main() {
   if (!isRepository()) {
@@ -9,7 +9,10 @@ async function main() {
     process.exit(1);
   }
 
-  const diff = getStagedDiff();
+  const diff = getDiff({
+    staged: true,
+    excludeFiles: ['pnpm-lock.yaml', 'package-lock.json'],
+  });
 
   if (!diff) {
     console.error('Error: No staged files found.');
