@@ -11,6 +11,11 @@ async function main() {
 
   const diff = getStagedDiff();
 
+  if (!diff) {
+    console.error('Error: No staged files found.');
+    process.exit(1);
+  }
+
   const commitGenerator = new OpenAICommitGenerator(process.env.OPENAI_KEY!);
   const commitMessage = await commitGenerator.generate(diff);
   console.log(commitMessage);
