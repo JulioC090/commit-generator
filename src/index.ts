@@ -20,7 +20,9 @@ async function main() {
   }
 
   const commitGenerator = new OpenAICommitGenerator(process.env.OPENAI_KEY!);
-  const commitMessage = await commitGenerator.generate({ diff });
+  const commitMessage = await commitGenerator.generate({
+    diff,
+  });
   console.log(commitMessage);
 }
 
