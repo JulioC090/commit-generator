@@ -1,3 +1,5 @@
+import CommitInfo from '@/commit-generator/CommitInfo';
+import { buildPrompt } from '@/commit-generator/prompt';
 import OpenAI from 'openai';
 
 export default class OpenAICommitGenerator {
@@ -9,19 +11,13 @@ export default class OpenAICommitGenerator {
     });
   }
 
-  async generate(diff: string): Promise<string> {
+  async generate(commitInfo: CommitInfo): Promise<string> {
     const completion = await this.openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         {
           role: 'user',
-          content: `
-          Create a commit message in the Conventional Commits format for this diff:
-    
-          ${diff}
-    
-          As a response, just give the message:
-          <type>: <description>`,
+          content: buildPrompt(commitInfo),
         },
       ],
     });
