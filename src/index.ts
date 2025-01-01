@@ -1,4 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
+import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository } from '@/utils/git';
 import { program } from 'commander';
 import packageJSON from '../package.json';
@@ -15,10 +16,9 @@ program
   )
   .action(async (options) => {
     if (!isRepository()) {
-      console.error(
+      exitWithError(
         'Error: The current directory is not a valid Git repository.',
       );
-      process.exit(1);
     }
 
     const diff = getDiff({
@@ -27,8 +27,7 @@ program
     });
 
     if (!diff) {
-      console.error('Error: No staged files found.');
-      process.exit(1);
+      exitWithError('Error: No staged files found.');
     }
 
     const commitGenerator = new OpenAICommitGenerator(process.env.OPENAI_KEY!);
