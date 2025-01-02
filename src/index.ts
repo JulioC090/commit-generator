@@ -1,5 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import { loadConfig } from '@/utils/config';
+import { loadConfig, saveConfig } from '@/utils/config';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository } from '@/utils/git';
 import { program } from 'commander';
@@ -39,6 +39,13 @@ program
       type: options.type,
     });
     console.log(commitMessage);
+  });
+
+program
+  .command('save <key> <value>')
+  .description('Save a configuration key with the specified value')
+  .action(async (key, value) => {
+    await saveConfig(key, value);
   });
 
 program.parse(process.argv);

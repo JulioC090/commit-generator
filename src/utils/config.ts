@@ -7,6 +7,7 @@ interface Config {
 }
 
 const configFileName = '.commitgen.json';
+const configFilePath = path.join(__dirname, '../..', configFileName);
 
 async function loadConfigFile(filePath: string): Promise<Partial<Config>> {
   const fileContent: string = await fs.readFile(filePath, { encoding: 'utf8' });
@@ -40,12 +41,23 @@ async function loadEnvConfig(): Promise<Partial<Config>> {
 export async function loadConfig(): Promise<Partial<Config>> {
   const envConfig = await loadEnvConfig();
 
-  const fileConfig = await loadConfigFile(
-    path.join(__dirname, '../..', configFileName),
-  );
+  const fileConfig = await loadConfigFile(configFilePath);
 
   return {
     ...fileConfig,
     ...envConfig,
   } as Partial<Config>;
+}
+
+export async function saveConfig(key: keyof Config, value: string) {
+  const fileConfig: { [key: string]: unknown } =
+    await loadConfigFile(configFilePath);
+
+  if (value.includes(',')) {
+    fileConfig[key] = value.split(',');
+  } else {
+    fileConfig[key] = value;
+  }
+
+  await fs.writeFile(configFilePath, JSON.stringify(fileConfig, null, 2));
 }
