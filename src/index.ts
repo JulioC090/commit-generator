@@ -1,5 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import { loadConfig, removeConfig, saveConfig } from '@/utils/config';
+import { loadConfig, removeConfig, saveConfig } from '@/config/configManager';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
 import { program } from 'commander';
