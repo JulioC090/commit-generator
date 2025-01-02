@@ -15,6 +15,7 @@ program
     '-t, --type <commitType>',
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
+  .option('-f, --force', 'Make commit automatically')
   .action(async (options) => {
     if (!isRepository()) {
       exitWithError(
@@ -39,7 +40,11 @@ program
       type: options.type,
     });
 
-    makeCommit(commitMessage);
+    console.log(commitMessage);
+
+    if (options.force) {
+      makeCommit(commitMessage);
+    }
   });
 
 program
