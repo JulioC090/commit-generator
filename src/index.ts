@@ -33,7 +33,7 @@ program
       exitWithError('Error: No staged files found.');
     }
 
-    const commitGenerator = new OpenAICommitGenerator(config.openAIKey!);
+    const commitGenerator = new OpenAICommitGenerator(config.openaiKey!);
     const commitMessage = await commitGenerator.generate({
       diff,
       type: options.type,
