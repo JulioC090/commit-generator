@@ -1,4 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
+import config from '@/utils/config';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository } from '@/utils/git';
 import { program } from 'commander';
@@ -23,14 +24,14 @@ program
 
     const diff = getDiff({
       staged: options.staged,
-      excludeFiles: ['pnpm-lock.yaml', 'package-lock.json'],
+      excludeFiles: config.EXCLUDE_FILES,
     });
 
     if (!diff) {
       exitWithError('Error: No staged files found.');
     }
 
-    const commitGenerator = new OpenAICommitGenerator(process.env.OPENAI_KEY!);
+    const commitGenerator = new OpenAICommitGenerator(config.OPENAI_KEY);
     const commitMessage = await commitGenerator.generate({
       diff,
       type: options.type,
