@@ -1,5 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import { loadConfig, removeConfig, saveConfig } from '@/config/configManager';
+import ConfigManager from '@/config/ConfigManager';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
 import { program } from 'commander';
@@ -23,7 +23,7 @@ program
       );
     }
 
-    const config = await loadConfig();
+    const config = await new ConfigManager().loadConfig();
 
     const diff = getDiff({
       staged: options.staged,
@@ -47,14 +47,14 @@ program
   .command('save <key> <value>')
   .description('Save a configuration key with the specified value')
   .action(async (key, value) => {
-    await saveConfig(key, value);
+    await new ConfigManager().saveConfig(key, value);
   });
 
 program
   .command('remove <key>')
   .description('Remove a configuration key')
   .action(async (key) => {
-    await removeConfig(key);
+    await new ConfigManager().removeConfig(key);
   });
 
 program.parse(process.argv);
