@@ -1,5 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import config from '@/utils/config';
+import { loadConfig } from '@/utils/config';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository } from '@/utils/git';
 import { program } from 'commander';
@@ -22,16 +22,18 @@ program
       );
     }
 
+    const config = await loadConfig();
+
     const diff = getDiff({
       staged: options.staged,
-      excludeFiles: config.EXCLUDE_FILES,
+      excludeFiles: config.excludeFiles,
     });
 
     if (!diff) {
       exitWithError('Error: No staged files found.');
     }
 
-    const commitGenerator = new OpenAICommitGenerator(config.OPENAI_KEY);
+    const commitGenerator = new OpenAICommitGenerator(config.openAIKey!);
     const commitMessage = await commitGenerator.generate({
       diff,
       type: options.type,
