@@ -1,5 +1,5 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import { loadConfig, saveConfig } from '@/utils/config';
+import { loadConfig, removeConfig, saveConfig } from '@/utils/config';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository } from '@/utils/git';
 import { program } from 'commander';
@@ -46,6 +46,13 @@ program
   .description('Save a configuration key with the specified value')
   .action(async (key, value) => {
     await saveConfig(key, value);
+  });
+
+program
+  .command('remove <key>')
+  .description('Remove a configuration key')
+  .action(async (key) => {
+    await removeConfig(key);
   });
 
 program.parse(process.argv);

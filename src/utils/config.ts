@@ -61,3 +61,12 @@ export async function saveConfig(key: keyof Config, value: string) {
 
   await fs.writeFile(configFilePath, JSON.stringify(fileConfig, null, 2));
 }
+
+export async function removeConfig(key: string) {
+  const fileConfig: { [key: string]: unknown } =
+    await loadConfigFile(configFilePath);
+
+  delete fileConfig[key];
+
+  await fs.writeFile(configFilePath, JSON.stringify(fileConfig, null, 2));
+}
