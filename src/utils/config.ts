@@ -10,9 +10,14 @@ const configFileName = '.commitgen.json';
 const configFilePath = path.join(__dirname, '../..', configFileName);
 
 async function loadConfigFile(filePath: string): Promise<Partial<Config>> {
-  const fileContent: string = await fs.readFile(filePath, { encoding: 'utf8' });
-
-  return JSON.parse(fileContent) as Partial<Config>;
+  try {
+    const fileContent: string = await fs.readFile(filePath, {
+      encoding: 'utf8',
+    });
+    return JSON.parse(fileContent) as Partial<Config>;
+  } catch {
+    return {};
+  }
 }
 
 async function loadEnvConfig(): Promise<Partial<Config>> {
