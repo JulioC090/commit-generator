@@ -40,11 +40,7 @@ program
       type: options.type,
     });
 
-    console.log(commitMessage);
-
-    if (options.force) {
-      makeCommit(commitMessage);
-    }
+    makeCommit(commitMessage, { force: options.force });
   });
 
 program
