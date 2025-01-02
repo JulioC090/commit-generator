@@ -1,7 +1,7 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import { loadConfig, removeConfig, saveConfig } from '@/utils/config';
 import { exitWithError } from '@/utils/errorHandler';
-import { getDiff, isRepository } from '@/utils/git';
+import { getDiff, isRepository, makeCommit } from '@/utils/git';
 import { program } from 'commander';
 import packageJSON from '../package.json';
 
@@ -38,7 +38,8 @@ program
       diff,
       type: options.type,
     });
-    console.log(commitMessage);
+
+    makeCommit(commitMessage);
   });
 
 program

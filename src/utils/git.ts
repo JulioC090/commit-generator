@@ -42,3 +42,7 @@ export function getDiff(options: DiffOptions = { staged: false }): string {
     return '';
   }
 }
+
+export function makeCommit(commitMessage: string) {
+  execSync('git commit -F -', { input: commitMessage });
+}
