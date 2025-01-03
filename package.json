@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./dist/",
     "dev": "tsx watch --env-file=.env ./src/index.ts",
-    "build": "tsc && tsc-alias",
+    "build": "tsc -p tsconfig.build.json && tsc-alias",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit -p .",
