@@ -2,11 +2,14 @@
   "name": "commit-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/src/index.js",
+  "bin": {
+    "commitgen": "./dist/src/index.js"
+  },
   "scripts": {
     "start": "node ./dist/",
     "dev": "tsx watch --env-file=.env ./src/index.ts",
-    "build": "tsc -p tsconfig.build.json && tsc-alias",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.alias.json",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit -p .",
@@ -30,7 +33,7 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
-    "tsc-alias": "^1.8.10",
+    "tsc-alias": "1.8.8",
     "tsx": "^4.15.7",
     "typescript": "^5.5.2",
     "vite-tsconfig-paths": "^4.3.2",

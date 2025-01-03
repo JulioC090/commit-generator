@@ -3,10 +3,11 @@
     "target": "es2022",
     "module": "commonjs",
     "baseUrl": "src",
-    "rootDirs": ["src"],
+    "rootDirs": ["src", "tests"],
     "outDir": "dist",
     "paths": {
-      "@/*": ["*"],
+      "@/tests/*": ["../tests/*"],
+      "@/*": ["*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

@@ -1,8 +1,11 @@
+#!/usr/bin/env node
+
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import ConfigManager from '@/config/ConfigManager';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
 import { program } from 'commander';
+
 import packageJSON from '../package.json';
 
 program.version(packageJSON.version);
