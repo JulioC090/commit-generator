@@ -14,7 +14,7 @@ const defaultSources: Array<Source> = [{ name: 'env', type: 'env' }];
 
 export default class ConfigManager {
   private sources: Array<Source>;
-  private allConfigs = new Map<string, Partial<Config>>();
+  private allConfigsLoaded = new Map<string, Partial<Config>>();
   private config: Partial<Config> = {};
   private isLoaded = false;
 
@@ -30,6 +30,18 @@ export default class ConfigManager {
     });
 
     this.sources = sources;
+  }
+
+  private async loadSource(source: Source) {
+    if (source.type === 'file') {
+      return await this.loadConfigFile(source.path!);
+    } else if (source.type === 'env') {
+      return await this.loadEnvConfig();
+    } else {
+      throw new Error(
+        `Config Error: Source of type "${source.type}" is not supported`,
+      );
+    }
   }
 
   async loadConfigFile(filePath: string): Promise<Partial<Config>> {
@@ -70,22 +82,44 @@ export default class ConfigManager {
     if (this.isLoaded) return this.config;
 
     for (const source of this.sources) {
-      let config;
-      if (source.type === 'file') {
-        config = await this.loadConfigFile(source.path!);
-      } else if (source.type === 'env') {
-        config = await this.loadEnvConfig();
-      } else {
-        throw new Error(
-          `Config Error: Source of type "${source.type}" is not supported`,
-        );
-      }
+      const config = await this.loadSource(source);
       this.config = { ...this.config, ...config };
     }
 
     this.isLoaded = true;
 
     return this.config;
+  }
+
+  async get(key: string) {
+    if (this.isLoaded) {
+      if (key in this.config) {
+        return this.config[key as keyof Config];
+      } else {
+        return undefined;
+      }
+    }
+
+    for (let i = this.sources.length - 1; i >= 0; i--) {
+      const source = this.sources[i];
+
+      if (this.allConfigsLoaded.has(source.name)) {
+        if (key in this.allConfigsLoaded.get(source.name)!) {
+          return this.allConfigsLoaded.get(source.name)![key as keyof Config];
+        } else {
+          continue;
+        }
+      }
+
+      const config = await this.loadSource(source);
+      this.allConfigsLoaded.set(source.name, config);
+
+      if (key in config) {
+        return config[key as keyof Config];
+      }
+    }
+
+    return undefined;
   }
 
   async saveConfig(key: keyof Config, value: string, scope: string) {

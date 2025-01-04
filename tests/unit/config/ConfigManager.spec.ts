@@ -118,21 +118,109 @@ describe('ConfigManager', () => {
         excludeFiles: ['node_modules', '.git'],
       });
     });
+
+    it('should throw an error for unsupported source types', async () => {
+      const sut = new ConfigManager({
+        sources: [
+          {
+            name: 'Unsupported Source',
+            type: 'arg',
+          },
+        ],
+      });
+
+      await expect(sut.loadConfig()).rejects.toThrow(
+        'Config Error: Source of type "arg" is not supported',
+      );
+    });
   });
 
-  it('should throw an error for unsupported source types', async () => {
-    const sut = new ConfigManager({
-      sources: [
-        {
-          name: 'Unsupported Source',
-          type: 'arg',
-        },
-      ],
+  describe('get', () => {
+    it('should return the value from config when isLoaded is true', async () => {
+      const sut = new ConfigManager({
+        sources: [
+          { name: 'file', type: 'file', path: 'path/to/file' },
+          { name: 'env', type: 'env' },
+        ],
+      });
+
+      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
+
+      await sut.loadConfig();
+      expect(fs.readFile).toHaveBeenCalled();
+      expect(await sut.get('excludeFiles')).toEqual(['node_modules', '.git']);
+      expect(fs.readFile).toHaveBeenCalledTimes(1);
     });
 
-    await expect(sut.loadConfig()).rejects.toThrow(
-      'Config Error: Source of type "arg" is not supported',
-    );
+    it('should return undefined if the key is not found in config when isLoaded is true', async () => {
+      const sut = new ConfigManager({
+        sources: [
+          { name: 'file', type: 'file', path: 'path/to/file' },
+          { name: 'env', type: 'env' },
+        ],
+      });
+
+      await sut.loadConfig();
+      const result = await sut.get('nonExistingKey');
+      expect(result).toBeUndefined();
+    });
+
+    it('should return the value from the first matching source', async () => {
+      const sut = new ConfigManager({
+        sources: [
+          { name: 'file', type: 'file', path: 'path/to/file' },
+          { name: 'env', type: 'env' },
+        ],
+      });
+
+      vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
+        openaiKey: 'key',
+      }));
+
+      const result = await sut.get('openaiKey');
+      expect(result).toBe('key');
+    });
+
+    it('should cache the result after loading a source', async () => {
+      const sut = new ConfigManager({
+        sources: [
+          { name: 'file', type: 'file', path: 'path/to/file' },
+          { name: 'env', type: 'env' },
+        ],
+      });
+
+      vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
+        openaiKey: 'key',
+      }));
+
+      await sut.get('openaiKey');
+      expect(sut.loadEnvConfig).toHaveBeenCalled();
+      expect(await sut.get('openaiKey')).toBe('key');
+      expect(sut.loadEnvConfig).toHaveBeenCalledTimes(1);
+    });
+
+    it('should skip the current iteration and continue with the next source if key is not in the cache', async () => {
+      const sut = new ConfigManager({
+        sources: [
+          { name: 'file', type: 'file', path: 'path/to/file' },
+          { name: 'env', type: 'env' },
+        ],
+      });
+
+      vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
+        openaiKey: 'key',
+      }));
+
+      await sut.get('excludeFiles');
+      expect(sut.loadEnvConfig).toHaveBeenCalled();
+      expect(await sut.get('excludeFiles')).toBe(undefined);
+      expect(sut.loadEnvConfig).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return undefined if the key is not found in any source', async () => {
+      const result = await sut.get('nonExistingKey');
+      expect(result).toBeUndefined();
+    });
   });
 
   describe('saveConfig', () => {
