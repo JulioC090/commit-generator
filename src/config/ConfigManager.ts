@@ -113,16 +113,24 @@ export default class ConfigManager {
     return undefined;
   }
 
-  async saveConfig(key: keyof Config, value: string, scope: string) {
+  private getWritableSource(scope: string): Source {
     const validSource = this.sources.find((source) => source.name === scope);
 
-    if (!validSource)
+    if (!validSource) {
       throw new Error(`Config Error: No source with name "${scope}" found`);
+    }
 
-    if (validSource.type !== 'file')
+    if (validSource.type !== 'file') {
       throw new Error(
         `Config Error: The source "${validSource.name}" is not writable`,
       );
+    }
+
+    return validSource;
+  }
+
+  async saveConfig(key: keyof Config, value: string, scope: string) {
+    const validSource = this.getWritableSource(scope);
 
     const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
       validSource.path!,
@@ -138,15 +146,7 @@ export default class ConfigManager {
   }
 
   async removeConfig(key: string, scope: string) {
-    const validSource = this.sources.find((source) => source.name === scope);
-
-    if (!validSource)
-      throw new Error(`Config Error: No source with name "${scope}" found`);
-
-    if (validSource.type !== 'file')
-      throw new Error(
-        `Config Error: The source "${validSource.name}" is not writable`,
-      );
+    const validSource = this.getWritableSource(scope);
 
     const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
       validSource.path!,
