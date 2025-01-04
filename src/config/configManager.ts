@@ -1,18 +1,35 @@
+import { Source } from '@/config/Source';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 
 interface Config {
   openaiKey: string;
   excludeFiles: string[];
 }
 
+interface ConfigManagerProps {
+  sources: Array<Source>;
+}
+
+const defaultSources: Array<Source> = [{ name: 'env', type: 'env' }];
+
 export default class ConfigManager {
-  private readonly configFileName = '.commitgen.json';
-  private readonly configFilePath = path.join(
-    __dirname,
-    '../..',
-    this.configFileName,
-  );
+  private sources: Array<Source>;
+  private allConfigs = new Map<string, Partial<Config>>();
+  private config: Partial<Config> = {};
+
+  constructor({ sources = defaultSources }: ConfigManagerProps) {
+    if (sources.length === 0)
+      throw new Error('Config Error: No sources specified');
+
+    sources.forEach((source) => {
+      if (source.type === 'file' && !source.path)
+        throw new Error(
+          `Config Error: Source of type "file" must have a "path": ${source.name}`,
+        );
+    });
+
+    this.sources = sources;
+  }
 
   async loadConfigFile(filePath: string): Promise<Partial<Config>> {
     try {
@@ -49,19 +66,36 @@ export default class ConfigManager {
   }
 
   async loadConfig(): Promise<Partial<Config>> {
-    const envConfig = await this.loadEnvConfig();
+    for (const source of this.sources) {
+      let config;
+      if (source.type === 'file') {
+        config = await this.loadConfigFile(source.path!);
+      } else if (source.type === 'env') {
+        config = await this.loadEnvConfig();
+      } else {
+        throw new Error(
+          `Config Error: Source of type "${source.type}" is not supported`,
+        );
+      }
+      this.config = { ...this.config, ...config };
+    }
 
-    const fileConfig = await this.loadConfigFile(this.configFilePath);
-
-    return {
-      ...fileConfig,
-      ...envConfig,
-    } as Partial<Config>;
+    return this.config;
   }
 
-  async saveConfig(key: keyof Config, value: string) {
+  async saveConfig(key: keyof Config, value: string, scope: string) {
+    const validSource = this.sources.find((source) => source.name === scope);
+
+    if (!validSource)
+      throw new Error(`Config Error: No source with name "${scope}" found`);
+
+    if (validSource.type !== 'file')
+      throw new Error(
+        `Config Error: The source "${validSource.name}" is not writable`,
+      );
+
     const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
-      this.configFilePath,
+      validSource.path!,
     );
 
     if (value.includes(',')) {
@@ -70,22 +104,26 @@ export default class ConfigManager {
       fileConfig[key] = value;
     }
 
-    await fs.writeFile(
-      this.configFilePath,
-      JSON.stringify(fileConfig, null, 2),
-    );
+    await fs.writeFile(validSource.path!, JSON.stringify(fileConfig, null, 2));
   }
 
-  async removeConfig(key: string) {
+  async removeConfig(key: string, scope: string) {
+    const validSource = this.sources.find((source) => source.name === scope);
+
+    if (!validSource)
+      throw new Error(`Config Error: No source with name "${scope}" found`);
+
+    if (validSource.type !== 'file')
+      throw new Error(
+        `Config Error: The source "${validSource.name}" is not writable`,
+      );
+
     const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
-      this.configFilePath,
+      validSource.path!,
     );
 
     delete fileConfig[key];
 
-    await fs.writeFile(
-      this.configFilePath,
-      JSON.stringify(fileConfig, null, 2),
-    );
+    await fs.writeFile(validSource.path!, JSON.stringify(fileConfig, null, 2));
   }
 }

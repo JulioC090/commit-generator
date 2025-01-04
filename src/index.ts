@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import ConfigManager from '@/config/ConfigManager';
+import configManager from '@/config';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
 import { program } from 'commander';
-
 import packageJSON from '../package.json';
 
 program.version(packageJSON.version);
@@ -26,7 +25,7 @@ program
       );
     }
 
-    const config = await new ConfigManager().loadConfig();
+    const config = await configManager.loadConfig();
 
     const diff = getDiff({
       staged: options.staged,
@@ -50,14 +49,14 @@ program
   .command('save <key> <value>')
   .description('Save a configuration key with the specified value')
   .action(async (key, value) => {
-    await new ConfigManager().saveConfig(key, value);
+    await configManager.saveConfig(key, value, 'local');
   });
 
 program
   .command('remove <key>')
   .description('Remove a configuration key')
   .action(async (key) => {
-    await new ConfigManager().removeConfig(key);
+    await configManager.removeConfig(key, 'local');
   });
 
 program.parse(process.argv);
