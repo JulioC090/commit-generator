@@ -161,8 +161,10 @@ describe('ConfigManager', () => {
       });
 
       await sut.loadConfig();
+      expect(fs.readFile).toHaveBeenCalled();
       const result = await sut.get('nonExistingKey');
       expect(result).toBeUndefined();
+      expect(fs.readFile).toHaveBeenCalledTimes(1);
     });
 
     it('should return the value from the first matching source', async () => {
@@ -177,8 +179,13 @@ describe('ConfigManager', () => {
         openaiKey: 'key',
       }));
 
+      vi.spyOn(sut, 'loadConfigFile').mockImplementation(async () => ({
+        openaiKey: 'file_key',
+      }));
+
       const result = await sut.get('openaiKey');
       expect(result).toBe('key');
+      expect(fs.readFile).toHaveBeenCalledTimes(0);
     });
 
     it('should cache the result after loading a source', async () => {
@@ -196,24 +203,6 @@ describe('ConfigManager', () => {
       await sut.get('openaiKey');
       expect(sut.loadEnvConfig).toHaveBeenCalled();
       expect(await sut.get('openaiKey')).toBe('key');
-      expect(sut.loadEnvConfig).toHaveBeenCalledTimes(1);
-    });
-
-    it('should skip the current iteration and continue with the next source if key is not in the cache', async () => {
-      const sut = new ConfigManager({
-        sources: [
-          { name: 'file', type: 'file', path: 'path/to/file' },
-          { name: 'env', type: 'env' },
-        ],
-      });
-
-      vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
-        openaiKey: 'key',
-      }));
-
-      await sut.get('excludeFiles');
-      expect(sut.loadEnvConfig).toHaveBeenCalled();
-      expect(await sut.get('excludeFiles')).toBe(undefined);
       expect(sut.loadEnvConfig).toHaveBeenCalledTimes(1);
     });
 

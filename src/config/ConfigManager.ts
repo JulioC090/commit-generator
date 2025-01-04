@@ -93,29 +93,20 @@ export default class ConfigManager {
 
   async get(key: string) {
     if (this.isLoaded) {
-      if (key in this.config) {
-        return this.config[key as keyof Config];
-      } else {
-        return undefined;
-      }
+      return this.config[key as keyof Config] ?? undefined;
     }
 
     for (let i = this.sources.length - 1; i >= 0; i--) {
       const source = this.sources[i];
 
-      if (this.allConfigsLoaded.has(source.name)) {
-        if (key in this.allConfigsLoaded.get(source.name)!) {
-          return this.allConfigsLoaded.get(source.name)![key as keyof Config];
-        } else {
-          continue;
-        }
+      if (!this.allConfigsLoaded.has(source.name)) {
+        const config = await this.loadSource(source);
+        this.allConfigsLoaded.set(source.name, config);
       }
 
-      const config = await this.loadSource(source);
-      this.allConfigsLoaded.set(source.name, config);
-
-      if (key in config) {
-        return config[key as keyof Config];
+      const cachedConfig = this.allConfigsLoaded.get(source.name)!;
+      if (key in cachedConfig) {
+        return cachedConfig[key as keyof Config];
       }
     }
 
