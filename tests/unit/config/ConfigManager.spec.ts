@@ -89,6 +89,17 @@ describe('ConfigManager', () => {
   });
 
   describe('loadConfig', () => {
+    it('should return the config immediately if already loaded', async () => {
+      const sut = new ConfigManager({
+        sources: [{ name: 'file', type: 'file', path: 'path/to/file' }],
+      });
+
+      await sut.loadConfig();
+      expect(fs.readFile).toHaveBeenCalled();
+      await sut.loadConfig();
+      expect(fs.readFile).toHaveBeenCalledTimes(1);
+    });
+
     it('should merge file and environment configurations', async () => {
       vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
       process.env.COMMIT_GEN_CONFIG_OPENAI_KEY = 'env_openai_key';

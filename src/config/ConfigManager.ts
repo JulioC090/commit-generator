@@ -16,6 +16,7 @@ export default class ConfigManager {
   private sources: Array<Source>;
   private allConfigs = new Map<string, Partial<Config>>();
   private config: Partial<Config> = {};
+  private isLoaded = false;
 
   constructor({ sources = defaultSources }: ConfigManagerProps) {
     if (sources.length === 0)
@@ -66,6 +67,8 @@ export default class ConfigManager {
   }
 
   async loadConfig(): Promise<Partial<Config>> {
+    if (this.isLoaded) return this.config;
+
     for (const source of this.sources) {
       let config;
       if (source.type === 'file') {
@@ -79,6 +82,8 @@ export default class ConfigManager {
       }
       this.config = { ...this.config, ...config };
     }
+
+    this.isLoaded = true;
 
     return this.config;
   }
