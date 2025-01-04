@@ -129,7 +129,7 @@ export default class ConfigManager {
     return validSource;
   }
 
-  async saveConfig(key: keyof Config, value: string, scope: string) {
+  async set(key: keyof Config, value: string, scope: string) {
     const validSource = this.getWritableSource(scope);
 
     const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
@@ -145,7 +145,7 @@ export default class ConfigManager {
     await fs.writeFile(validSource.path!, JSON.stringify(fileConfig, null, 2));
   }
 
-  async removeConfig(key: string, scope: string) {
+  async unset(key: string, scope: string) {
     const validSource = this.getWritableSource(scope);
 
     const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(

@@ -212,7 +212,7 @@ describe('ConfigManager', () => {
     });
   });
 
-  describe('saveConfig', () => {
+  describe('set', () => {
     const sut = new ConfigManager({
       sources: [
         { name: 'file', type: 'file', path: 'path/to/file' },
@@ -221,13 +221,13 @@ describe('ConfigManager', () => {
     });
 
     it('should throw an error if no source with the given name exists', async () => {
-      await expect(
-        sut.saveConfig('openaiKey', 'value', 'invalid'),
-      ).rejects.toThrow('Config Error: No source with name "invalid" found');
+      await expect(sut.set('openaiKey', 'value', 'invalid')).rejects.toThrow(
+        'Config Error: No source with name "invalid" found',
+      );
     });
 
     it('should throw an error if the source is not writable (not of type "file")', async () => {
-      await expect(sut.saveConfig('openaiKey', 'value', 'env')).rejects.toThrow(
+      await expect(sut.set('openaiKey', 'value', 'env')).rejects.toThrow(
         'Config Error: The source "env" is not writable',
       );
     });
@@ -235,7 +235,7 @@ describe('ConfigManager', () => {
     it('should save a single value as a string', async () => {
       vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
 
-      await sut.saveConfig('openaiKey', 'new_openai_key', 'file');
+      await sut.set('openaiKey', 'new_openai_key', 'file');
 
       expect(fs.writeFile).toHaveBeenCalledWith(
         mockConfigFilePath,
@@ -253,7 +253,7 @@ describe('ConfigManager', () => {
     it('should save a comma-separated value as an array', async () => {
       vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
 
-      await sut.saveConfig('excludeFiles', 'src,dist', 'file');
+      await sut.set('excludeFiles', 'src,dist', 'file');
 
       expect(fs.writeFile).toHaveBeenCalledWith(
         mockConfigFilePath,
@@ -275,12 +275,12 @@ describe('ConfigManager', () => {
       );
 
       await expect(
-        sut.saveConfig('openaiKey', 'new_openai_key', 'file'),
+        sut.set('openaiKey', 'new_openai_key', 'file'),
       ).rejects.toThrow('Permission denied');
     });
   });
 
-  describe('removeConfig', () => {
+  describe('unset', () => {
     const sut = new ConfigManager({
       sources: [
         { name: 'file', type: 'file', path: 'path/to/file' },
@@ -289,13 +289,13 @@ describe('ConfigManager', () => {
     });
 
     it('should throw an error if no source with the given name exists', async () => {
-      await expect(sut.removeConfig('openaiKey', 'invalid')).rejects.toThrow(
+      await expect(sut.unset('openaiKey', 'invalid')).rejects.toThrow(
         'Config Error: No source with name "invalid" found',
       );
     });
 
     it('should throw an error if the source is not writable (not of type "file")', async () => {
-      await expect(sut.removeConfig('openaiKey', 'env')).rejects.toThrow(
+      await expect(sut.unset('openaiKey', 'env')).rejects.toThrow(
         'Config Error: The source "env" is not writable',
       );
     });
@@ -303,7 +303,7 @@ describe('ConfigManager', () => {
     it('should remove an existing configuration from the file', async () => {
       vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
 
-      await sut.removeConfig('excludeFiles', 'file');
+      await sut.unset('excludeFiles', 'file');
 
       expect(fs.writeFile).toHaveBeenCalledWith(
         mockConfigFilePath,

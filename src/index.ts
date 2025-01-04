@@ -49,14 +49,14 @@ program
   .command('save <key> <value>')
   .description('Save a configuration key with the specified value')
   .action(async (key, value) => {
-    await configManager.saveConfig(key, value, 'local');
+    await configManager.set(key, value, 'local');
   });
 
 program
   .command('remove <key>')
   .description('Remove a configuration key')
   .action(async (key) => {
-    await configManager.removeConfig(key, 'local');
+    await configManager.unset(key, 'local');
   });
 
 program.parse(process.argv);
