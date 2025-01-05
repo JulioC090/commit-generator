@@ -1,3 +1,4 @@
+import EnvConfigLoader from '@/config/EnvConfigLoader';
 import FileConfigLoader from '@/config/FileConfigLoader';
 import IConfig from '@/config/IConfig';
 import { Source } from '@/config/Source';
@@ -5,6 +6,7 @@ import { Source } from '@/config/Source';
 interface ConfigManagerProps {
   sources: Array<Source>;
   fileConfigLoader?: FileConfigLoader;
+  envConfigLoader?: EnvConfigLoader;
 }
 
 const defaultSources: Array<Source> = [{ name: 'env', type: 'env' }];
@@ -16,10 +18,12 @@ export default class ConfigManager {
   private isLoaded = false;
 
   private fileConfigLoader;
+  private envConfigLoader;
 
   constructor({
     sources = defaultSources,
     fileConfigLoader = new FileConfigLoader(),
+    envConfigLoader = new EnvConfigLoader({ prefix: 'commit_gen_config_' }),
   }: ConfigManagerProps) {
     if (sources.length === 0)
       throw new Error('Config Error: No sources specified');
@@ -33,41 +37,19 @@ export default class ConfigManager {
 
     this.sources = sources;
     this.fileConfigLoader = fileConfigLoader;
+    this.envConfigLoader = envConfigLoader;
   }
 
   private async loadSource(source: Source) {
     if (source.type === 'file') {
       return await this.fileConfigLoader.load(source.path!);
     } else if (source.type === 'env') {
-      return await this.loadEnvConfig();
+      return await this.envConfigLoader.load();
     } else {
       throw new Error(
         `Config Error: Source of type "${source.type}" is not supported`,
       );
     }
-  }
-
-  async loadEnvConfig(): Promise<Partial<IConfig>> {
-    const conf = Object.create(null);
-
-    for (const [envKey, envValue] of Object.entries(process.env)) {
-      if (!/^commit_gen_config_/i.test(envKey) || !envValue) {
-        continue;
-      }
-
-      const key = envKey
-        .slice('commit_gen_config_'.length)
-        .toLowerCase()
-        .replace(/_(.)/g, (_, char) => char.toUpperCase());
-
-      if (envValue.includes(',')) {
-        conf[key] = envValue.split(',');
-      } else {
-        conf[key] = envValue;
-      }
-    }
-
-    return conf;
   }
 
   async loadConfig(): Promise<Partial<IConfig>> {

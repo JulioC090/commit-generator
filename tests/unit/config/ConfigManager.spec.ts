@@ -1,4 +1,5 @@
 import ConfigManager from '@/config/ConfigManager';
+import EnvConfigLoader from '@/config/EnvConfigLoader';
 import FileConfigLoader from '@/config/FileConfigLoader';
 import { Source } from '@/config/Source';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -16,6 +17,10 @@ const mockFileConfigLoader = {
   load: vi.fn(),
   write: vi.fn(),
 } as FileConfigLoader;
+
+const mockEnvConfigLoader = {
+  load: vi.fn(),
+} as unknown as EnvConfigLoader;
 
 describe('ConfigManager', () => {
   beforeEach(() => {
@@ -40,32 +45,6 @@ describe('ConfigManager', () => {
       expect(() => new ConfigManager({ sources: invalidSources })).toThrowError(
         'Source of type "file" must have a "path": Missing Path Source',
       );
-    });
-  });
-
-  describe('loadEnvConfig', () => {
-    it('should load configuration from environment variables', async () => {
-      process.env = {
-        COMMIT_GEN_CONFIG_OPENAI_KEY: 'env_openai_key',
-        COMMIT_GEN_CONFIG_EXCLUDE_FILES: 'env_file1,env_file2',
-      };
-
-      const result = await sut.loadEnvConfig();
-
-      expect(result).toEqual({
-        openaiKey: 'env_openai_key',
-        excludeFiles: ['env_file1', 'env_file2'],
-      });
-    });
-
-    it('should ignore irrelevant environment variables', async () => {
-      process.env = {
-        UNRELATED_ENV_VAR: 'value',
-      };
-
-      const result = await sut.loadEnvConfig();
-
-      expect(result).toEqual({});
     });
   });
 
@@ -156,11 +135,12 @@ describe('ConfigManager', () => {
           { name: 'env', type: 'env' },
         ],
         fileConfigLoader: mockFileConfigLoader,
+        envConfigLoader: mockEnvConfigLoader,
       });
 
-      vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
+      vi.mocked(mockEnvConfigLoader.load).mockResolvedValueOnce({
         openaiKey: 'key',
-      }));
+      });
 
       const result = await sut.get('openaiKey');
       expect(result).toBe('key');
@@ -174,16 +154,17 @@ describe('ConfigManager', () => {
           { name: 'env', type: 'env' },
         ],
         fileConfigLoader: mockFileConfigLoader,
+        envConfigLoader: mockEnvConfigLoader,
       });
 
-      vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
+      vi.mocked(mockEnvConfigLoader.load).mockResolvedValueOnce({
         openaiKey: 'key',
-      }));
+      });
 
       await sut.get('openaiKey');
-      expect(sut.loadEnvConfig).toHaveBeenCalled();
+      expect(mockEnvConfigLoader.load).toHaveBeenCalled();
       expect(await sut.get('openaiKey')).toBe('key');
-      expect(sut.loadEnvConfig).toHaveBeenCalledTimes(1);
+      expect(mockEnvConfigLoader.load).toHaveBeenCalledTimes(1);
     });
 
     it('should return undefined if the key is not found in any source', async () => {
