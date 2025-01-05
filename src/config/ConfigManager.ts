@@ -1,5 +1,6 @@
 import EnvConfigLoader from '@/config/EnvConfigLoader';
 import FileConfigLoader from '@/config/FileConfigLoader';
+import formatConfigValue from '@/config/formatConfigValue';
 import IConfig from '@/config/IConfig';
 import { Source } from '@/config/Source';
 
@@ -109,11 +110,7 @@ export default class ConfigManager {
     const fileConfig: { [key: string]: unknown } =
       await this.fileConfigLoader.load(validSource.path!);
 
-    if (value.includes(',')) {
-      fileConfig[key] = value.split(',');
-    } else {
-      fileConfig[key] = value;
-    }
+    fileConfig[key] = formatConfigValue(value);
 
     await this.fileConfigLoader.write(validSource.path!, fileConfig);
   }

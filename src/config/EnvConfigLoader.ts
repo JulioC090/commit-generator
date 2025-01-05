@@ -1,3 +1,4 @@
+import formatConfigValue from '@/config/formatConfigValue';
 import IConfig from '@/config/IConfig';
 
 interface EnvConfigLoaderProps {
@@ -12,10 +13,6 @@ export default class EnvConfigLoader {
   constructor(props?: EnvConfigLoaderProps) {
     this.env = props?.env || process.env;
     this.prefix = props?.prefix;
-  }
-
-  private formatEnvValue(value: string) {
-    return value.includes(',') ? value.split(',') : value;
   }
 
   async load(): Promise<Partial<IConfig>> {
@@ -33,7 +30,7 @@ export default class EnvConfigLoader {
       let key = this.prefix ? envKey.slice(this.prefix.length) : envKey;
       key = key.toLowerCase().replace(/_(.)/g, (_, char) => char.toUpperCase());
 
-      conf[key] = this.formatEnvValue(envValue);
+      conf[key] = formatConfigValue(envValue);
     }
 
     return conf;
