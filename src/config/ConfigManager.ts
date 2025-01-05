@@ -1,24 +1,26 @@
+import FileConfigLoader from '@/config/FileConfigLoader';
+import IConfig from '@/config/IConfig';
 import { Source } from '@/config/Source';
-import fs from 'node:fs/promises';
-
-interface Config {
-  openaiKey: string;
-  excludeFiles: string[];
-}
 
 interface ConfigManagerProps {
   sources: Array<Source>;
+  fileConfigLoader?: FileConfigLoader;
 }
 
 const defaultSources: Array<Source> = [{ name: 'env', type: 'env' }];
 
 export default class ConfigManager {
   private sources: Array<Source>;
-  private allConfigsLoaded = new Map<string, Partial<Config>>();
-  private config: Partial<Config> = {};
+  private allConfigsLoaded = new Map<string, Partial<IConfig>>();
+  private config: Partial<IConfig> = {};
   private isLoaded = false;
 
-  constructor({ sources = defaultSources }: ConfigManagerProps) {
+  private fileConfigLoader;
+
+  constructor({
+    sources = defaultSources,
+    fileConfigLoader = new FileConfigLoader(),
+  }: ConfigManagerProps) {
     if (sources.length === 0)
       throw new Error('Config Error: No sources specified');
 
@@ -30,11 +32,12 @@ export default class ConfigManager {
     });
 
     this.sources = sources;
+    this.fileConfigLoader = fileConfigLoader;
   }
 
   private async loadSource(source: Source) {
     if (source.type === 'file') {
-      return await this.loadConfigFile(source.path!);
+      return await this.fileConfigLoader.load(source.path!);
     } else if (source.type === 'env') {
       return await this.loadEnvConfig();
     } else {
@@ -44,18 +47,7 @@ export default class ConfigManager {
     }
   }
 
-  async loadConfigFile(filePath: string): Promise<Partial<Config>> {
-    try {
-      const fileContent: string = await fs.readFile(filePath, {
-        encoding: 'utf8',
-      });
-      return JSON.parse(fileContent) as Partial<Config>;
-    } catch {
-      return {};
-    }
-  }
-
-  async loadEnvConfig(): Promise<Partial<Config>> {
+  async loadEnvConfig(): Promise<Partial<IConfig>> {
     const conf = Object.create(null);
 
     for (const [envKey, envValue] of Object.entries(process.env)) {
@@ -78,7 +70,7 @@ export default class ConfigManager {
     return conf;
   }
 
-  async loadConfig(): Promise<Partial<Config>> {
+  async loadConfig(): Promise<Partial<IConfig>> {
     if (this.isLoaded) return this.config;
 
     for (const source of this.sources) {
@@ -93,7 +85,7 @@ export default class ConfigManager {
 
   async get(key: string) {
     if (this.isLoaded) {
-      return this.config[key as keyof Config] ?? undefined;
+      return this.config[key as keyof IConfig] ?? undefined;
     }
 
     for (let i = this.sources.length - 1; i >= 0; i--) {
@@ -106,7 +98,7 @@ export default class ConfigManager {
 
       const cachedConfig = this.allConfigsLoaded.get(source.name)!;
       if (key in cachedConfig) {
-        return cachedConfig[key as keyof Config];
+        return cachedConfig[key as keyof IConfig];
       }
     }
 
@@ -129,12 +121,11 @@ export default class ConfigManager {
     return validSource;
   }
 
-  async set(key: keyof Config, value: string, scope: string) {
+  async set(key: keyof IConfig, value: string, scope: string) {
     const validSource = this.getWritableSource(scope);
 
-    const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
-      validSource.path!,
-    );
+    const fileConfig: { [key: string]: unknown } =
+      await this.fileConfigLoader.load(validSource.path!);
 
     if (value.includes(',')) {
       fileConfig[key] = value.split(',');
@@ -142,18 +133,17 @@ export default class ConfigManager {
       fileConfig[key] = value;
     }
 
-    await fs.writeFile(validSource.path!, JSON.stringify(fileConfig, null, 2));
+    await this.fileConfigLoader.write(validSource.path!, fileConfig);
   }
 
   async unset(key: string, scope: string) {
     const validSource = this.getWritableSource(scope);
 
-    const fileConfig: { [key: string]: unknown } = await this.loadConfigFile(
-      validSource.path!,
-    );
+    const fileConfig: { [key: string]: unknown } =
+      await this.fileConfigLoader.load(validSource.path!);
 
     delete fileConfig[key];
 
-    await fs.writeFile(validSource.path!, JSON.stringify(fileConfig, null, 2));
+    await this.fileConfigLoader.write(validSource.path!, fileConfig);
   }
 }

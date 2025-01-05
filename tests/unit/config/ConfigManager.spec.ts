@@ -1,26 +1,28 @@
 import ConfigManager from '@/config/ConfigManager';
+import FileConfigLoader from '@/config/FileConfigLoader';
 import { Source } from '@/config/Source';
-import fs from 'fs/promises';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockConfigFilePath = 'path/to/file';
 
 const sut = new ConfigManager({ sources: [{ name: 'env', type: 'env' }] });
 
-const mockFileContent = JSON.stringify(
-  {
-    openaiKey: 'mock_openai_key',
-    excludeFiles: ['node_modules', '.git'],
-  },
-  null,
-  2,
-);
+const mockFileContent = {
+  openaiKey: 'mock_openai_key',
+  excludeFiles: ['node_modules', '.git'],
+};
 
-vi.mock('fs/promises');
+const mockFileConfigLoader = {
+  load: vi.fn(),
+  write: vi.fn(),
+} as FileConfigLoader;
 
 describe('ConfigManager', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    vi.mocked(mockFileConfigLoader.load).mockResolvedValue({
+      ...mockFileContent,
+    });
   });
 
   describe('constructor', () => {
@@ -38,27 +40,6 @@ describe('ConfigManager', () => {
       expect(() => new ConfigManager({ sources: invalidSources })).toThrowError(
         'Source of type "file" must have a "path": Missing Path Source',
       );
-    });
-  });
-
-  describe('loadConfigFile', () => {
-    it('should load an existing config file', async () => {
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
-
-      const result = await sut.loadConfigFile(mockConfigFilePath);
-
-      expect(fs.readFile).toHaveBeenCalledWith(mockConfigFilePath, {
-        encoding: 'utf8',
-      });
-      expect(result).toEqual(JSON.parse(mockFileContent));
-    });
-
-    it('should return an empty object if the file does not exist', async () => {
-      vi.mocked(fs.readFile).mockRejectedValueOnce(new Error('File not found'));
-
-      const result = await sut.loadConfigFile(mockConfigFilePath);
-
-      expect(result).toEqual({});
     });
   });
 
@@ -92,16 +73,16 @@ describe('ConfigManager', () => {
     it('should return the config immediately if already loaded', async () => {
       const sut = new ConfigManager({
         sources: [{ name: 'file', type: 'file', path: 'path/to/file' }],
+        fileConfigLoader: mockFileConfigLoader,
       });
 
       await sut.loadConfig();
-      expect(fs.readFile).toHaveBeenCalled();
+      expect(mockFileConfigLoader.load).toHaveBeenCalled();
       await sut.loadConfig();
-      expect(fs.readFile).toHaveBeenCalledTimes(1);
+      expect(mockFileConfigLoader.load).toHaveBeenCalledTimes(1);
     });
 
     it('should merge file and environment configurations', async () => {
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
       process.env.COMMIT_GEN_CONFIG_OPENAI_KEY = 'env_openai_key';
 
       const sut = new ConfigManager({
@@ -109,6 +90,7 @@ describe('ConfigManager', () => {
           { name: 'file', type: 'file', path: 'path/to/file' },
           { name: 'env', type: 'env' },
         ],
+        fileConfigLoader: mockFileConfigLoader,
       });
 
       const result = await sut.loadConfig();
@@ -142,14 +124,13 @@ describe('ConfigManager', () => {
           { name: 'file', type: 'file', path: 'path/to/file' },
           { name: 'env', type: 'env' },
         ],
+        fileConfigLoader: mockFileConfigLoader,
       });
 
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
-
       await sut.loadConfig();
-      expect(fs.readFile).toHaveBeenCalled();
+      expect(mockFileConfigLoader.load).toHaveBeenCalled();
       expect(await sut.get('excludeFiles')).toEqual(['node_modules', '.git']);
-      expect(fs.readFile).toHaveBeenCalledTimes(1);
+      expect(mockFileConfigLoader.load).toHaveBeenCalledTimes(1);
     });
 
     it('should return undefined if the key is not found in config when isLoaded is true', async () => {
@@ -158,13 +139,14 @@ describe('ConfigManager', () => {
           { name: 'file', type: 'file', path: 'path/to/file' },
           { name: 'env', type: 'env' },
         ],
+        fileConfigLoader: mockFileConfigLoader,
       });
 
       await sut.loadConfig();
-      expect(fs.readFile).toHaveBeenCalled();
+      expect(mockFileConfigLoader.load).toHaveBeenCalled();
       const result = await sut.get('nonExistingKey');
       expect(result).toBeUndefined();
-      expect(fs.readFile).toHaveBeenCalledTimes(1);
+      expect(mockFileConfigLoader.load).toHaveBeenCalledTimes(1);
     });
 
     it('should return the value from the first matching source', async () => {
@@ -173,19 +155,16 @@ describe('ConfigManager', () => {
           { name: 'file', type: 'file', path: 'path/to/file' },
           { name: 'env', type: 'env' },
         ],
+        fileConfigLoader: mockFileConfigLoader,
       });
 
       vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
         openaiKey: 'key',
       }));
 
-      vi.spyOn(sut, 'loadConfigFile').mockImplementation(async () => ({
-        openaiKey: 'file_key',
-      }));
-
       const result = await sut.get('openaiKey');
       expect(result).toBe('key');
-      expect(fs.readFile).toHaveBeenCalledTimes(0);
+      expect(mockFileConfigLoader.load).toHaveBeenCalledTimes(0);
     });
 
     it('should cache the result after loading a source', async () => {
@@ -194,6 +173,7 @@ describe('ConfigManager', () => {
           { name: 'file', type: 'file', path: 'path/to/file' },
           { name: 'env', type: 'env' },
         ],
+        fileConfigLoader: mockFileConfigLoader,
       });
 
       vi.spyOn(sut, 'loadEnvConfig').mockImplementation(async () => ({
@@ -218,6 +198,7 @@ describe('ConfigManager', () => {
         { name: 'file', type: 'file', path: 'path/to/file' },
         { name: 'env', type: 'env' },
       ],
+      fileConfigLoader: mockFileConfigLoader,
     });
 
     it('should throw an error if no source with the given name exists', async () => {
@@ -233,44 +214,31 @@ describe('ConfigManager', () => {
     });
 
     it('should save a single value as a string', async () => {
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
-
       await sut.set('openaiKey', 'new_openai_key', 'file');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
+      expect(mockFileConfigLoader.write).toHaveBeenCalledWith(
         mockConfigFilePath,
-        JSON.stringify(
-          {
-            openaiKey: 'new_openai_key',
-            excludeFiles: ['node_modules', '.git'],
-          },
-          null,
-          2,
-        ),
+        {
+          openaiKey: 'new_openai_key',
+          excludeFiles: ['node_modules', '.git'],
+        },
       );
     });
 
     it('should save a comma-separated value as an array', async () => {
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
-
       await sut.set('excludeFiles', 'src,dist', 'file');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
+      expect(mockFileConfigLoader.write).toHaveBeenCalledWith(
         mockConfigFilePath,
-        JSON.stringify(
-          {
-            openaiKey: 'mock_openai_key',
-            excludeFiles: ['src', 'dist'],
-          },
-          null,
-          2,
-        ),
+        {
+          openaiKey: 'mock_openai_key',
+          excludeFiles: ['src', 'dist'],
+        },
       );
     });
 
     it('should throw an error if saving fails', async () => {
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
-      vi.mocked(fs.writeFile).mockRejectedValueOnce(
+      vi.mocked(mockFileConfigLoader.write).mockRejectedValueOnce(
         new Error('Permission denied'),
       );
 
@@ -286,6 +254,7 @@ describe('ConfigManager', () => {
         { name: 'file', type: 'file', path: 'path/to/file' },
         { name: 'env', type: 'env' },
       ],
+      fileConfigLoader: mockFileConfigLoader,
     });
 
     it('should throw an error if no source with the given name exists', async () => {
@@ -301,19 +270,15 @@ describe('ConfigManager', () => {
     });
 
     it('should remove an existing configuration from the file', async () => {
-      vi.mocked(fs.readFile).mockResolvedValueOnce(mockFileContent);
-
       await sut.unset('excludeFiles', 'file');
 
-      expect(fs.writeFile).toHaveBeenCalledWith(
+      expect(mockFileConfigLoader.load).toHaveBeenCalled();
+
+      expect(mockFileConfigLoader.write).toHaveBeenCalledWith(
         mockConfigFilePath,
-        JSON.stringify(
-          {
-            openaiKey: 'mock_openai_key',
-          },
-          null,
-          2,
-        ),
+        {
+          openaiKey: 'mock_openai_key',
+        },
       );
     });
   });
