@@ -42,14 +42,15 @@ export default class ConfigManager {
   }
 
   private async loadSource(source: Source) {
-    if (source.type === 'file') {
-      return await this.fileConfigLoader.load(source.path!);
-    } else if (source.type === 'env') {
-      return await this.envConfigLoader.load();
-    } else {
-      throw new Error(
-        `Config Error: Source of type "${source.type}" is not supported`,
-      );
+    switch (source.type) {
+      case 'file':
+        return await this.fileConfigLoader.load(source.path!);
+      case 'env':
+        return await this.envConfigLoader.load();
+      default:
+        throw new Error(
+          `Config Error: Source of type "${source.type}" is not supported`,
+        );
     }
   }
 
