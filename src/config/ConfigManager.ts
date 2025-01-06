@@ -1,64 +1,29 @@
-import EnvConfigLoader from '@/config/EnvConfigLoader';
-import FileConfigLoader from '@/config/FileConfigLoader';
+import ConfigSourceManager from '@/config/ConfigSourceManager';
 import formatConfigValue from '@/config/formatConfigValue';
 import IConfig from '@/config/IConfig';
-import { Source } from '@/config/Source';
 
 interface ConfigManagerProps {
-  sources: Array<Source>;
-  fileConfigLoader?: FileConfigLoader;
-  envConfigLoader?: EnvConfigLoader;
+  configSourceManager: ConfigSourceManager;
 }
 
-const defaultSources: Array<Source> = [{ name: 'env', type: 'env' }];
-
 export default class ConfigManager {
-  private sources: Array<Source>;
   private allConfigsLoaded = new Map<string, Partial<IConfig>>();
   private config: Partial<IConfig> = {};
   private isLoaded = false;
 
-  private fileConfigLoader;
-  private envConfigLoader;
+  private configSourceManager: ConfigSourceManager;
 
-  constructor({
-    sources = defaultSources,
-    fileConfigLoader = new FileConfigLoader(),
-    envConfigLoader = new EnvConfigLoader({ prefix: 'commit_gen_config_' }),
-  }: ConfigManagerProps) {
-    if (sources.length === 0)
-      throw new Error('Config Error: No sources specified');
-
-    sources.forEach((source) => {
-      if (source.type === 'file' && !source.path)
-        throw new Error(
-          `Config Error: Source of type "file" must have a "path": ${source.name}`,
-        );
-    });
-
-    this.sources = sources;
-    this.fileConfigLoader = fileConfigLoader;
-    this.envConfigLoader = envConfigLoader;
-  }
-
-  private async loadSource(source: Source) {
-    switch (source.type) {
-      case 'file':
-        return await this.fileConfigLoader.load(source.path!);
-      case 'env':
-        return await this.envConfigLoader.load();
-      default:
-        throw new Error(
-          `Config Error: Source of type "${source.type}" is not supported`,
-        );
-    }
+  constructor({ configSourceManager }: ConfigManagerProps) {
+    this.configSourceManager = configSourceManager;
   }
 
   async loadConfig(): Promise<Partial<IConfig>> {
     if (this.isLoaded) return this.config;
 
-    for (const source of this.sources) {
-      const config = await this.loadSource(source);
+    const sources = this.configSourceManager.getSources();
+
+    for (const source of sources) {
+      const config = await this.configSourceManager.load(source.name);
       this.config = { ...this.config, ...config };
     }
 
@@ -72,11 +37,13 @@ export default class ConfigManager {
       return this.config[key as keyof IConfig] ?? undefined;
     }
 
-    for (let i = this.sources.length - 1; i >= 0; i--) {
-      const source = this.sources[i];
+    const sources = this.configSourceManager.getSources();
+
+    for (let i = sources.length - 1; i >= 0; i--) {
+      const source = sources[i];
 
       if (!this.allConfigsLoaded.has(source.name)) {
-        const config = await this.loadSource(source);
+        const config = await this.configSourceManager.load(source.name);
         this.allConfigsLoaded.set(source.name, config);
       }
 
@@ -89,41 +56,21 @@ export default class ConfigManager {
     return undefined;
   }
 
-  private getWritableSource(scope: string): Source {
-    const validSource = this.sources.find((source) => source.name === scope);
-
-    if (!validSource) {
-      throw new Error(`Config Error: No source with name "${scope}" found`);
-    }
-
-    if (validSource.type !== 'file') {
-      throw new Error(
-        `Config Error: The source "${validSource.name}" is not writable`,
-      );
-    }
-
-    return validSource;
-  }
-
-  async set(key: keyof IConfig, value: string, scope: string) {
-    const validSource = this.getWritableSource(scope);
-
+  async set(key: keyof IConfig, value: string, sourceName: string) {
     const fileConfig: { [key: string]: unknown } =
-      await this.fileConfigLoader.load(validSource.path!);
+      await this.configSourceManager.load(sourceName);
 
     fileConfig[key] = formatConfigValue(value);
 
-    await this.fileConfigLoader.write(validSource.path!, fileConfig);
+    await this.configSourceManager.write(sourceName, fileConfig);
   }
 
-  async unset(key: string, scope: string) {
-    const validSource = this.getWritableSource(scope);
-
+  async unset(key: string, sourceName: string) {
     const fileConfig: { [key: string]: unknown } =
-      await this.fileConfigLoader.load(validSource.path!);
+      await this.configSourceManager.load(sourceName);
 
     delete fileConfig[key];
 
-    await this.fileConfigLoader.write(validSource.path!, fileConfig);
+    await this.configSourceManager.write(sourceName, fileConfig);
   }
 }
