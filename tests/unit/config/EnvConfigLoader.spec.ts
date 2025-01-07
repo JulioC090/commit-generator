@@ -2,6 +2,20 @@ import EnvConfigLoader from '@/config/EnvConfigLoader';
 import { describe, expect, it } from 'vitest';
 
 describe('EnvConfigLoader', async () => {
+  describe('constructor', () => {
+    it('should parse arguments from process.env correctly', async () => {
+      const originalEnv = process.env;
+      process.env = { OPENAI_KEY: 'env_openai_key' };
+
+      const sut = new EnvConfigLoader();
+      const config = await sut.load();
+
+      expect(config).toEqual({ openaiKey: 'env_openai_key' });
+
+      process.env = originalEnv;
+    });
+  });
+
   describe('load', async () => {
     it('should load variables with the correct prefix', async () => {
       const sut = new EnvConfigLoader({
