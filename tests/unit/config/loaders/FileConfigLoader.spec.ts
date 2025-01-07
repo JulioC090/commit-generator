@@ -1,4 +1,4 @@
-import FileConfigLoader from '@/config/FileConfigLoader';
+import FileConfigLoader from '@/config/loaders/FileConfigLoader';
 import fs from 'node:fs/promises';
 import { describe, expect, it, vi } from 'vitest';
 

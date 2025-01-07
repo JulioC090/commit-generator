@@ -1,7 +1,7 @@
-import ArgConfigLoader from '@/config/ArgConfigLoader';
-import EnvConfigLoader from '@/config/EnvConfigLoader';
-import FileConfigLoader from '@/config/FileConfigLoader';
 import IConfig from '@/config/IConfig';
+import ArgConfigLoader from '@/config/loaders/ArgConfigLoader';
+import EnvConfigLoader from '@/config/loaders/EnvConfigLoader';
+import FileConfigLoader from '@/config/loaders/FileConfigLoader';
 import { Source } from '@/config/Source';
 
 interface ConfigSourceManagerProps {

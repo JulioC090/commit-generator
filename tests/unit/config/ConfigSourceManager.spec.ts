@@ -1,7 +1,7 @@
-import ArgConfigLoader from '@/config/ArgConfigLoader';
 import ConfigSourceManager from '@/config/ConfigSourceManager';
-import EnvConfigLoader from '@/config/EnvConfigLoader';
-import FileConfigLoader from '@/config/FileConfigLoader';
+import ArgConfigLoader from '@/config/loaders/ArgConfigLoader';
+import EnvConfigLoader from '@/config/loaders/EnvConfigLoader';
+import FileConfigLoader from '@/config/loaders/FileConfigLoader';
 import { Source } from '@/config/Source';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

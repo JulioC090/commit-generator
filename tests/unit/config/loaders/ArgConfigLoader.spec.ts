@@ -1,4 +1,4 @@
-import ArgConfigLoader from '@/config/ArgConfigLoader';
+import ArgConfigLoader from '@/config/loaders/ArgConfigLoader';
 import { describe, expect, it } from 'vitest';
 
 describe('ArgConfigLoader', () => {

@@ -1,4 +1,4 @@
-import EnvConfigLoader from '@/config/EnvConfigLoader';
+import EnvConfigLoader from '@/config/loaders/EnvConfigLoader';
 import { describe, expect, it } from 'vitest';
 
 describe('EnvConfigLoader', async () => {
