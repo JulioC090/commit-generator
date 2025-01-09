@@ -1,4 +1,9 @@
-export type ConfigType = 'string' | 'number' | 'boolean';
+type Primitive = 'string' | 'number' | 'boolean';
+
+export type ConfigType =
+  | Primitive
+  | `${Primitive}|${Primitive}`
+  | `${Primitive}|${Primitive}|${Primitive}`;
 
 export type ConfigDefinition = {
   required?: boolean;

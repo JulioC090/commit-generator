@@ -80,5 +80,39 @@ describe('ConfigValidator', () => {
       expect(result.errors[0].key).toBe('age');
       expect(result.errors[0].error).toBe('WrongType');
     });
+
+    it('should return true for matching multiple types (string|number)', () => {
+      const sut = new ConfigValidator({
+        definitions: {
+          multiValue: { required: false, type: 'string|boolean' },
+        },
+      });
+
+      expect(
+        sut.validate({
+          multiValue: 'test',
+        }).valid,
+      ).toBe(true);
+
+      expect(
+        sut.validate({
+          multiValue: true,
+        }).valid,
+      ).toBe(true);
+    });
+
+    it('should return false for incorrect types when using multiple types', () => {
+      const sut = new ConfigValidator({
+        definitions: {
+          multiValue: { required: false, type: 'number|boolean' },
+        },
+      });
+
+      expect(
+        sut.validate({
+          multiValue: 'test',
+        }).valid,
+      ).toBe(false);
+    });
   });
 });

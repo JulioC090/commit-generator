@@ -54,6 +54,20 @@ export default class ConfigValidator {
   }
 
   private validateType(value: unknown, type: ConfigType): boolean {
-    return typeof value === type;
+    if (!type.includes('|')) {
+      return typeof value === type;
+    }
+
+    const types = type.split('|');
+
+    let isValid = false;
+
+    types.forEach((t) => {
+      if (typeof value === t) {
+        isValid = true;
+      }
+    });
+
+    return isValid;
   }
 }
