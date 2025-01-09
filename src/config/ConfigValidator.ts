@@ -1,8 +1,8 @@
-import { ConfigDefinitions } from '@/config/ConfigDefinitions';
+import { ConfigDefinitions, ConfigType } from '@/config/ConfigDefinitions';
 
 interface ValidationError {
   key: string;
-  error: 'Missing';
+  error: 'Missing' | 'WrongType';
   message: string;
 }
 
@@ -32,9 +32,28 @@ export default class ConfigValidator {
           error: 'Missing',
           message: `The "${key}" property is required`,
         });
+
+        continue;
+      }
+
+      if (
+        config[key] &&
+        !this.validateType(config[key], this.definitions[key].type)
+      ) {
+        errors.push({
+          key,
+          error: 'WrongType',
+          message: `The "${key}" property must be of type ${this.definitions[key].type}`,
+        });
+
+        continue;
       }
     }
 
     return { valid: errors.length === 0, errors };
+  }
+
+  private validateType(value: unknown, type: ConfigType): boolean {
+    return typeof value === type;
   }
 }
