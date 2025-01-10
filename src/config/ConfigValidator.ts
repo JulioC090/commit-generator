@@ -58,6 +58,10 @@ export default class ConfigValidator {
       return typeof value === type;
     }
 
+    return this.validateCompostType(value, type);
+  }
+
+  private validateCompostType(value: unknown, type: ConfigType): boolean {
     const types = type.split('|');
 
     let isValid = false;
