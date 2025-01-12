@@ -252,6 +252,17 @@ describe('ConfigValidator', () => {
   });
 
   describe('validateKey', () => {
+    it('should return error for missing definition', () => {
+      const result = sut.validateKey('unknownKey', 'unknownValue');
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toEqual({
+        key: 'unknownKey',
+        error: 'MissingDefinition',
+        message: 'The definition for the "unknownKey" property is missing',
+      });
+    });
+
     it('should return error for missing required key', () => {
       const result = sut.validateKey('username', undefined);
 

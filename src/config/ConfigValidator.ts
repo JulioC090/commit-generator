@@ -2,7 +2,7 @@ import { ConfigDefinitions, ConfigType } from '@/config/ConfigDefinitions';
 
 interface ValidationError {
   key: string;
-  error: 'Missing' | 'WrongType';
+  error: 'Missing' | 'WrongType' | 'MissingDefinition';
   message: string;
 }
 
@@ -75,6 +75,17 @@ export default class ConfigValidator {
     key: string,
     value: unknown,
   ): { valid: boolean; error?: ValidationError } {
+    if (!this.definitions[key]) {
+      return {
+        valid: false,
+        error: {
+          key,
+          error: 'MissingDefinition',
+          message: `The definition for the "${key}" property is missing`,
+        },
+      };
+    }
+
     if (!value && this.definitions[key].required) {
       return {
         valid: false,
