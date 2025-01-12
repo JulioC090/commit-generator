@@ -250,4 +250,35 @@ describe('ConfigValidator', () => {
       expect(() => sut.validate(config)).throws('Invalid array type');
     });
   });
+
+  describe('validateKey', () => {
+    it('should return error for missing required key', () => {
+      const result = sut.validateKey('username', undefined);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toEqual({
+        key: 'username',
+        error: 'Missing',
+        message: 'The "username" property is required',
+      });
+    });
+
+    it('should return error for wrong type', () => {
+      const result = sut.validateKey('age', 'not a number');
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toEqual({
+        key: 'age',
+        error: 'WrongType',
+        message: 'The "age" property must be of type number',
+      });
+    });
+
+    it('should return valid for correct type', () => {
+      const result = sut.validateKey('age', 25);
+
+      expect(result.valid).toBe(true);
+      expect(result.error).toBeUndefined();
+    });
+  });
 });

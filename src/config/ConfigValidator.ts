@@ -19,40 +19,6 @@ export default class ConfigValidator {
     this.definitions = definitions;
   }
 
-  validate(config: Config): {
-    valid: boolean;
-    errors: ValidationError[];
-  } {
-    const errors: ValidationError[] = [];
-
-    for (const key in this.definitions) {
-      if (!config[key] && this.definitions[key].required) {
-        errors.push({
-          key,
-          error: 'Missing',
-          message: `The "${key}" property is required`,
-        });
-
-        continue;
-      }
-
-      if (
-        config[key] &&
-        !this.validateType(config[key], this.definitions[key].type)
-      ) {
-        errors.push({
-          key,
-          error: 'WrongType',
-          message: `The "${key}" property must be of type ${this.definitions[key].type}`,
-        });
-
-        continue;
-      }
-    }
-
-    return { valid: errors.length === 0, errors };
-  }
-
   private validateType(value: unknown, type: ConfigType): boolean {
     if (!type.includes('|') && !type.includes('array')) {
       return typeof value === type;
@@ -86,5 +52,51 @@ export default class ConfigValidator {
 
     const result = value.every((item) => this.validateType(item, innerType));
     return result;
+  }
+
+  public validate(config: Config): {
+    valid: boolean;
+    errors: ValidationError[];
+  } {
+    const errors: ValidationError[] = [];
+
+    for (const key in this.definitions) {
+      const validationResult = this.validateKey(key, config[key]);
+
+      if (validationResult.error) {
+        errors.push(validationResult.error);
+      }
+    }
+
+    return { valid: errors.length === 0, errors };
+  }
+
+  public validateKey(
+    key: string,
+    value: unknown,
+  ): { valid: boolean; error?: ValidationError } {
+    if (!value && this.definitions[key].required) {
+      return {
+        valid: false,
+        error: {
+          key,
+          error: 'Missing',
+          message: `The "${key}" property is required`,
+        },
+      };
+    }
+
+    if (value && !this.validateType(value, this.definitions[key].type)) {
+      return {
+        valid: false,
+        error: {
+          key,
+          error: 'WrongType',
+          message: `The "${key}" property must be of type ${this.definitions[key].type}`,
+        },
+      };
+    }
+
+    return { valid: true };
   }
 }
