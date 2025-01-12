@@ -54,8 +54,12 @@ export default class ConfigValidator {
   }
 
   private validateType(value: unknown, type: ConfigType): boolean {
-    if (!type.includes('|')) {
+    if (!type.includes('|') && !type.includes('array')) {
       return typeof value === type;
+    }
+
+    if (type.startsWith('array<') && !type.includes('>|')) {
+      return this.validateArrayType(value, type);
     }
 
     return this.validateCompostType(value, type);
@@ -64,14 +68,23 @@ export default class ConfigValidator {
   private validateCompostType(value: unknown, type: ConfigType): boolean {
     const types = type.split('|');
 
-    let isValid = false;
-
-    types.forEach((t) => {
-      if (typeof value === t) {
-        isValid = true;
+    return types.some((t) => {
+      if (t.startsWith('array<')) {
+        return this.validateArrayType(value, t);
       }
+      return typeof value === t;
     });
+  }
 
-    return isValid;
+  private validateArrayType(value: unknown, type: ConfigType): boolean {
+    if (!Array.isArray(value)) return false;
+
+    const innerType = type.match(/array<(.+)>/)?.[1];
+    if (!innerType) {
+      throw new Error(`Invalid array type`);
+    }
+
+    const result = value.every((item) => this.validateType(item, innerType));
+    return result;
   }
 }

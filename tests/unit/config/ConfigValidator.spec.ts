@@ -114,5 +114,140 @@ describe('ConfigValidator', () => {
         }).valid,
       ).toBe(false);
     });
+
+    it('should validate array<string> correctly', () => {
+      const config = {
+        tags: ['tag1', 'tag2'],
+      };
+
+      const wrongConfig = {
+        tags: ['tag1', 123],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          tags: { required: false, type: 'array<string>' },
+        },
+      });
+
+      expect(sut.validate(config).valid).toBe(true);
+      expect(sut.validate(wrongConfig).valid).toBe(false);
+    });
+
+    it('should validate array<string|number> correctly', () => {
+      const config = {
+        values: ['value1', 42, 'value3'],
+      };
+
+      const wrongConfig = {
+        values: ['value1', {}, 'value3'],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          values: { required: false, type: 'array<string|number>' },
+        },
+      });
+
+      expect(sut.validate(config).valid).toBe(true);
+      expect(sut.validate(wrongConfig).valid).toBe(false);
+    });
+
+    it('should validate string|array<string> correctly', () => {
+      const config1 = {
+        mixed: 'simple string',
+      };
+      const config2 = {
+        mixed: ['string1', 'string2'],
+      };
+
+      const wrongConfig = {
+        mixed: [123, 'string'],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          mixed: { required: false, type: 'string|array<string>' },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(config2).valid).toBe(true);
+      expect(sut.validate(wrongConfig).valid).toBe(false);
+    });
+
+    it('should validate array<number>|number correctly', () => {
+      const config1 = {
+        numberArrayOrSingle: 42,
+      };
+      const config2 = {
+        numberArrayOrSingle: [1, 2, 3],
+      };
+
+      const wrongConfig = {
+        numberArrayOrSingle: ['string', 42],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          numberArrayOrSingle: {
+            required: false,
+            type: 'array<number>|number',
+          },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(config2).valid).toBe(true);
+      expect(sut.validate(wrongConfig).valid).toBe(false);
+    });
+
+    it('should validate string|array<string>|number|array<number> correctly', () => {
+      const config1 = {
+        complexType: 'string',
+      };
+      const config2 = {
+        complexType: ['string1', 'string2'],
+      };
+      const config3 = {
+        complexType: 42,
+      };
+      const config4 = {
+        complexType: [1, 2, 3],
+      };
+
+      const wrongConfig = {
+        complexType: [1, 'string'],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          complexType: {
+            required: false,
+            type: 'string|array<string>|number|array<number>',
+          },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(config2).valid).toBe(true);
+      expect(sut.validate(config3).valid).toBe(true);
+      expect(sut.validate(config4).valid).toBe(true);
+      expect(sut.validate(wrongConfig).valid).toBe(false);
+    });
+
+    it('should throw an error if non-array value is provided for array<> type', () => {
+      const config = {
+        emptyArrayType: [],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          emptyArrayType: { required: false, type: 'array<>' },
+        },
+      });
+
+      expect(() => sut.validate(config)).throws('Invalid array type');
+    });
   });
 });
