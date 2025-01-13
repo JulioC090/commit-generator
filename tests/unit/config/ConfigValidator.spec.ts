@@ -407,6 +407,66 @@ describe('ConfigValidator', () => {
 
       expect(() => sut.validate(config)).throw('Fields is not defined');
     });
+
+    it('should validate condicional key correctly', () => {
+      const config1 = {
+        aiAgent: {
+          model: 'other',
+        },
+      };
+
+      const config2 = {
+        aiAgent: {
+          model: 'chatgpt',
+          openaiKey: 'key',
+        },
+      };
+
+      const config3 = { aiAgent: {} };
+
+      const config4 = {};
+
+      const wrongConfig = {
+        aiAgent: {
+          model: 'chatgpt',
+        },
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          aiAgent: {
+            type: 'object',
+            fields: {
+              model: {
+                type: 'string',
+              },
+              openaiKey: {
+                type: 'string',
+                conditionalRequired: {
+                  key: 'aiAgent.model',
+                  value: 'chatgpt',
+                },
+              },
+            },
+          },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(config2).valid).toBe(true);
+      expect(sut.validate(config3).valid).toBe(true);
+      expect(sut.validate(config4).valid).toBe(true);
+      expect(sut.validate(wrongConfig)).toEqual({
+        valid: false,
+        errors: [
+          {
+            key: 'aiAgent.openaiKey',
+            error: 'Missing',
+            message: `The "aiAgent.openaiKey" property is required when "aiAgent.model" is "chatgpt"`,
+          },
+        ],
+      });
+    });
   });
 
   describe('validateKey', () => {

@@ -1,4 +1,5 @@
 import {
+  ConditionalRequired,
   ConfigDefinition,
   ConfigDefinitions,
 } from '@/config/ConfigDefinitions';
@@ -17,14 +18,15 @@ interface ConfigValidatorProps {
 
 export default class ConfigValidator {
   private definitions: ConfigDefinitions;
+  private conditionalRequirements: { [key: string]: ConditionalRequired } = {};
 
   constructor({ definitions }: ConfigValidatorProps) {
     this.definitions = definitions;
   }
 
-  private getDefinition(key: string): ConfigDefinition | null {
+  private getDefinition(key: string): ConfigDefinition | undefined {
     if (!key.includes('.')) {
-      return this.definitions[key] || null;
+      return this.definitions[key];
     }
 
     const keys = key.split('.');
@@ -32,17 +34,25 @@ export default class ConfigValidator {
 
     for (let i = 1; i < keys.length; i++) {
       if (!currentDef || currentDef.type !== 'object' || !currentDef.fields) {
-        return null;
+        return;
       }
       currentDef = currentDef.fields[keys[i]];
     }
 
-    return currentDef || null;
+    return currentDef;
   }
 
-  private validateType(value: unknown, definition: ConfigDefinition): boolean {
+  private validateType(
+    key: string,
+    value: unknown,
+    definition: ConfigDefinition,
+  ): boolean {
+    if (definition.conditionalRequired) {
+      this.conditionalRequirements[key] = definition.conditionalRequired;
+    }
+
     if (definition.type === 'object') {
-      return this.validateObjectType(value, definition.fields);
+      return this.validateObjectType(key, value, definition.fields);
     }
 
     if (!definition.type.includes('|') && !definition.type.includes('array')) {
@@ -53,13 +63,14 @@ export default class ConfigValidator {
       definition.type.startsWith('array<') &&
       !definition.type.includes('>|')
     ) {
-      return this.validateArrayType(value, definition);
+      return this.validateArrayType(key, value, definition);
     }
 
-    return this.validateCompostType(value, definition);
+    return this.validateCompostType(key, value, definition);
   }
 
   private validateCompostType(
+    key: string,
     value: unknown,
     definition: ConfigDefinition,
   ): boolean {
@@ -67,13 +78,14 @@ export default class ConfigValidator {
 
     return types.some((t) => {
       if (t.startsWith('array<')) {
-        return this.validateArrayType(value, { type: t });
+        return this.validateArrayType(key, value, { type: t });
       }
       return typeof value === t;
     });
   }
 
   private validateArrayType(
+    key: string,
     value: unknown,
     definition: ConfigDefinition,
   ): boolean {
@@ -85,12 +97,16 @@ export default class ConfigValidator {
     }
 
     const result = value.every((item) =>
-      this.validateType(item, { type: innerType, fields: definition.fields }),
+      this.validateType(key, item, {
+        type: innerType,
+        fields: definition.fields,
+      }),
     );
     return result;
   }
 
   private validateObjectType(
+    key: string,
     value: unknown,
     fields?: ConfigDefinitions,
   ): boolean {
@@ -103,14 +119,16 @@ export default class ConfigValidator {
 
     const obj = value as Record<string, unknown>;
 
-    for (const [key, fieldDef] of Object.entries(fields)) {
-      const fieldValue = obj[key];
+    for (const [fieldKey, fieldDef] of Object.entries(fields)) {
+      const fieldValue = obj[fieldKey];
 
       if (fieldValue === undefined || fieldValue === null) {
         if (fieldDef.required) {
           return false;
         }
-      } else if (!this.validateType(fieldValue, fieldDef)) {
+      } else if (
+        !this.validateType(`${key}.${fieldKey}`, fieldValue, fieldDef)
+      ) {
         return false;
       }
     }
@@ -130,6 +148,41 @@ export default class ConfigValidator {
       if (validationResult.error) {
         errors.push(validationResult.error);
       }
+    }
+
+    for (const [key, conditionalRequired] of Object.entries(
+      this.conditionalRequirements,
+    )) {
+      const conditionalValue = conditionalRequired.key
+        .split('.')
+        .reduce<Record<string, unknown> | undefined>(
+          (acc, key) => {
+            if (acc === undefined) return undefined;
+            return acc[key] as Record<string, unknown>;
+          },
+          config as Record<string, unknown>,
+        );
+
+      if (!conditionalValue || conditionalValue !== conditionalRequired.value) {
+        continue;
+      }
+
+      if (
+        key.split('.').reduce<Record<string, unknown> | undefined>(
+          (acc, key) => {
+            return acc![key] as Record<string, unknown>;
+          },
+          config as Record<string, unknown>,
+        )
+      ) {
+        continue;
+      }
+
+      errors.push({
+        key,
+        error: 'Missing',
+        message: `The "${key}" property is required when "${conditionalRequired.key}" is "${conditionalRequired.value}"`,
+      });
     }
 
     return { valid: errors.length === 0, errors };
@@ -163,7 +216,7 @@ export default class ConfigValidator {
       };
     }
 
-    if (value && !this.validateType(value, definition)) {
+    if (value && !this.validateType(key, value, definition)) {
       return {
         valid: false,
         error: {
