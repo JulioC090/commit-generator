@@ -1,4 +1,7 @@
-import { ConfigDefinitions, ConfigType } from '@/config/ConfigDefinitions';
+import {
+  ConfigDefinition,
+  ConfigDefinitions,
+} from '@/config/ConfigDefinitions';
 
 interface ValidationError {
   key: string;
@@ -19,39 +22,82 @@ export default class ConfigValidator {
     this.definitions = definitions;
   }
 
-  private validateType(value: unknown, type: ConfigType): boolean {
-    if (!type.includes('|') && !type.includes('array')) {
-      return typeof value === type;
+  private validateType(value: unknown, definition: ConfigDefinition): boolean {
+    if (definition.type === 'object') {
+      return this.validateObjectType(value, definition.fields);
     }
 
-    if (type.startsWith('array<') && !type.includes('>|')) {
-      return this.validateArrayType(value, type);
+    if (!definition.type.includes('|') && !definition.type.includes('array')) {
+      return typeof value === definition.type;
     }
 
-    return this.validateCompostType(value, type);
+    if (
+      definition.type.startsWith('array<') &&
+      !definition.type.includes('>|')
+    ) {
+      return this.validateArrayType(value, definition);
+    }
+
+    return this.validateCompostType(value, definition);
   }
 
-  private validateCompostType(value: unknown, type: ConfigType): boolean {
-    const types = type.split('|');
+  private validateCompostType(
+    value: unknown,
+    definition: ConfigDefinition,
+  ): boolean {
+    const types = definition.type.split('|');
 
     return types.some((t) => {
       if (t.startsWith('array<')) {
-        return this.validateArrayType(value, t);
+        return this.validateArrayType(value, { type: t });
       }
       return typeof value === t;
     });
   }
 
-  private validateArrayType(value: unknown, type: ConfigType): boolean {
+  private validateArrayType(
+    value: unknown,
+    definition: ConfigDefinition,
+  ): boolean {
     if (!Array.isArray(value)) return false;
 
-    const innerType = type.match(/array<(.+)>/)?.[1];
+    const innerType = definition.type.match(/array<(.+)>/)?.[1];
     if (!innerType) {
       throw new Error(`Invalid array type`);
     }
 
-    const result = value.every((item) => this.validateType(item, innerType));
+    const result = value.every((item) =>
+      this.validateType(item, { type: innerType, fields: definition.fields }),
+    );
     return result;
+  }
+
+  private validateObjectType(
+    value: unknown,
+    fields?: ConfigDefinitions,
+  ): boolean {
+    if (typeof value !== 'object' || value === null || Array.isArray(value))
+      return false;
+
+    if (!fields) {
+      throw new Error('Fields is not defined');
+    }
+
+    const obj = value as Record<string, unknown>;
+
+    for (const [key, fieldDef] of Object.entries(fields)) {
+      const fieldValue = obj[key];
+
+      if (fieldValue === undefined || fieldValue === null) {
+        if (fieldDef.required) {
+          return false;
+        }
+      } else if (!this.validateType(fieldValue, fieldDef)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   public validate(config: Config): {
@@ -97,7 +143,7 @@ export default class ConfigValidator {
       };
     }
 
-    if (value && !this.validateType(value, this.definitions[key].type)) {
+    if (value && !this.validateType(value, this.definitions[key])) {
       return {
         valid: false,
         error: {

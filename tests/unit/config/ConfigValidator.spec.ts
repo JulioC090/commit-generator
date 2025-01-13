@@ -249,6 +249,164 @@ describe('ConfigValidator', () => {
 
       expect(() => sut.validate(config)).throws('Invalid array type');
     });
+
+    it('should validate object correctly', () => {
+      const config1 = {
+        objectType: {
+          field1Type: 'field1',
+          field2Type: 2,
+        },
+      };
+
+      const config2 = {
+        objectType: {
+          field1Type: 'field1',
+        },
+      };
+
+      const config3 = {
+        objectType: {
+          field1Type: 'field1',
+          fieldInsideField: {
+            field1: true,
+          },
+        },
+      };
+
+      const wrongConfig1 = {
+        objectType: {
+          field1Type: 1,
+          field2Type: 'field2',
+        },
+      };
+
+      const wrongConfig2 = {
+        objectType: {
+          field2Type: 2,
+        },
+      };
+
+      const wrongConfig3 = {
+        objectType: {
+          field1Type: 'field1',
+          fieldInsideField: {
+            field1: 40,
+          },
+        },
+      };
+
+      const wrongConfig4 = {
+        objectType: [],
+      };
+
+      const wrongConfig5 = {
+        objectType: 'is not a object',
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          objectType: {
+            type: 'object',
+            fields: {
+              field1Type: {
+                type: 'string',
+                required: true,
+              },
+              field2Type: {
+                type: 'number',
+              },
+              fieldInsideField: {
+                type: 'object',
+                fields: {
+                  field1: {
+                    type: 'boolean',
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(config2).valid).toBe(true);
+      expect(sut.validate(config3).valid).toBe(true);
+      expect(sut.validate(wrongConfig1).valid).toBe(false);
+      expect(sut.validate(wrongConfig2).valid).toBe(false);
+      expect(sut.validate(wrongConfig3).valid).toBe(false);
+      expect(sut.validate(wrongConfig4).valid).toBe(false);
+      expect(sut.validate(wrongConfig5).valid).toBe(false);
+    });
+
+    it('should validate string|object correctly', () => {
+      const config1 = {
+        user: 'user_test',
+      };
+
+      const config2 = {
+        user: {
+          name: 'user_test',
+        },
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          user: {
+            type: 'string|object',
+            fields: {
+              name: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(config2).valid).toBe(true);
+    });
+
+    it('should validate array<object> correctly', () => {
+      const config1 = {
+        userList: [{ name: 'user_test1' }, { name: 'user_test2' }],
+      };
+
+      const wrongConfig = {
+        userList: [{ name: 2 }],
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          userList: {
+            type: 'array<object>',
+            fields: {
+              name: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      });
+
+      expect(sut.validate(config1).valid).toBe(true);
+      expect(sut.validate(wrongConfig).valid).toBe(false);
+    });
+
+    it('should throw an error if the object field is not provided', () => {
+      const config = {
+        invalidObject: {},
+      };
+
+      const sut = new ConfigValidator({
+        definitions: {
+          invalidObject: {
+            type: 'object',
+          },
+        },
+      });
+
+      expect(() => sut.validate(config)).throw('Fields is not defined');
+    });
   });
 
   describe('validateKey', () => {
