@@ -247,7 +247,9 @@ describe('ConfigValidator', () => {
         },
       });
 
-      expect(() => sut.validate(config)).throws('Invalid array type');
+      expect(() => sut.validate(config)).toThrowError(
+        'Invalid array type for key "emptyArrayType". Expected an array with a specific type, but the type definition is incorrect or missing.',
+      );
     });
 
     it('should validate object correctly', () => {
@@ -405,7 +407,9 @@ describe('ConfigValidator', () => {
         },
       });
 
-      expect(() => sut.validate(config)).throw('Fields is not defined');
+      expect(() => sut.validate(config)).toThrowError(
+        'Fields definition is not provided for key "invalidObject"',
+      );
     });
 
     it('should validate condicional key correctly', () => {

@@ -93,7 +93,9 @@ export default class ConfigValidator {
 
     const innerType = definition.type.match(/array<(.+)>/)?.[1];
     if (!innerType) {
-      throw new Error(`Invalid array type`);
+      throw new Error(
+        `Invalid array type for key "${key}". Expected an array with a specific type, but the type definition is incorrect or missing.`,
+      );
     }
 
     const result = value.every((item) =>
@@ -114,7 +116,7 @@ export default class ConfigValidator {
       return false;
 
     if (!fields) {
-      throw new Error('Fields is not defined');
+      throw new Error(`Fields definition is not provided for key "${key}".`);
     }
 
     const obj = value as Record<string, unknown>;
