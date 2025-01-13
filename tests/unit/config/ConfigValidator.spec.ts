@@ -449,5 +449,33 @@ describe('ConfigValidator', () => {
       expect(result.valid).toBe(true);
       expect(result.error).toBeUndefined();
     });
+
+    it('should validate a nested key with valid subsets', () => {
+      const sut = new ConfigValidator({
+        definitions: {
+          object: {
+            type: 'object',
+            fields: {
+              subObject: {
+                type: 'object',
+                fields: {
+                  field: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      expect(
+        sut.validateKey('object.subObject.field', 'field_value').valid,
+      ).toBe(true);
+      expect(sut.validateKey('object.subObject.field', 1).valid).toBe(false);
+      expect(sut.validateKey('invalid.object.field', 'invalid').valid).toBe(
+        false,
+      );
+    });
   });
 });

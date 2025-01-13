@@ -22,6 +22,24 @@ export default class ConfigValidator {
     this.definitions = definitions;
   }
 
+  private getDefinition(key: string): ConfigDefinition | null {
+    if (!key.includes('.')) {
+      return this.definitions[key] || null;
+    }
+
+    const keys = key.split('.');
+    let currentDef: ConfigDefinition | undefined = this.definitions[keys[0]];
+
+    for (let i = 1; i < keys.length; i++) {
+      if (!currentDef || currentDef.type !== 'object' || !currentDef.fields) {
+        return null;
+      }
+      currentDef = currentDef.fields[keys[i]];
+    }
+
+    return currentDef || null;
+  }
+
   private validateType(value: unknown, definition: ConfigDefinition): boolean {
     if (definition.type === 'object') {
       return this.validateObjectType(value, definition.fields);
@@ -121,7 +139,9 @@ export default class ConfigValidator {
     key: string,
     value: unknown,
   ): { valid: boolean; error?: ValidationError } {
-    if (!this.definitions[key]) {
+    const definition = this.getDefinition(key);
+
+    if (!definition) {
       return {
         valid: false,
         error: {
@@ -132,7 +152,7 @@ export default class ConfigValidator {
       };
     }
 
-    if (!value && this.definitions[key].required) {
+    if (!value && definition.required) {
       return {
         valid: false,
         error: {
@@ -143,13 +163,13 @@ export default class ConfigValidator {
       };
     }
 
-    if (value && !this.validateType(value, this.definitions[key])) {
+    if (value && !this.validateType(value, definition)) {
       return {
         valid: false,
         error: {
           key,
           error: 'WrongType',
-          message: `The "${key}" property must be of type ${this.definitions[key].type}`,
+          message: `The "${key}" property must be of type ${definition.type}`,
         },
       };
     }
