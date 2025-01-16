@@ -1,5 +1,5 @@
 import formatConfigValue from '@/config/formatConfigValue';
-import IConfig from '@/config/IConfig';
+import { ConfigValue } from '@/config/types/ConfigValue';
 
 interface ArgConfigLoaderProps {
   arg?: Array<string>;
@@ -12,7 +12,7 @@ export default class ArgConfigLoader {
     this.arg = props?.arg || process.argv.slice(2);
   }
 
-  async load(): Promise<Partial<IConfig>> {
+  async load(): Promise<ConfigValue> {
     const config = Object.create(null);
 
     this.arg.forEach((arg) => {

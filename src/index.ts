@@ -29,14 +29,16 @@ program
 
     const diff = getDiff({
       staged: options.staged,
-      excludeFiles: config.excludeFiles,
+      excludeFiles: (config.excludeFiles as Array<string>) ?? null,
     });
 
     if (!diff) {
       exitWithError('Error: No staged files found.');
     }
 
-    const commitGenerator = new OpenAICommitGenerator(config.openaiKey!);
+    const commitGenerator = new OpenAICommitGenerator(
+      (config.openaiKey as string) ?? '',
+    );
     const commitMessage = await commitGenerator.generate({
       diff,
       type: options.type,

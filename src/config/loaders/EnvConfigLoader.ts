@@ -1,5 +1,5 @@
 import formatConfigValue from '@/config/formatConfigValue';
-import IConfig from '@/config/IConfig';
+import { ConfigValue } from '@/config/types/ConfigValue';
 
 interface EnvConfigLoaderProps {
   env?: NodeJS.ProcessEnv;
@@ -15,7 +15,7 @@ export default class EnvConfigLoader {
     this.prefix = props?.prefix;
   }
 
-  async load(): Promise<Partial<IConfig>> {
+  async load(): Promise<ConfigValue> {
     const conf = Object.create(null);
 
     const prefixRegex = this.prefix ? new RegExp(`^${this.prefix}`, 'i') : null;

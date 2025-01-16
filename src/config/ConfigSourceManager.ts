@@ -1,7 +1,7 @@
-import IConfig from '@/config/IConfig';
 import ArgConfigLoader from '@/config/loaders/ArgConfigLoader';
 import EnvConfigLoader from '@/config/loaders/EnvConfigLoader';
 import FileConfigLoader from '@/config/loaders/FileConfigLoader';
+import { ConfigValue } from '@/config/types/ConfigValue';
 import { Source } from '@/config/types/Source';
 
 interface ConfigSourceManagerProps {
@@ -73,7 +73,7 @@ export default class ConfigSourceManager {
     return !!source && source.type === 'file';
   }
 
-  async load(sourceName: string): Promise<Partial<IConfig>> {
+  async load(sourceName: string): Promise<ConfigValue> {
     const source = this.ensureSourceExists(sourceName);
 
     switch (source.type) {
@@ -86,7 +86,7 @@ export default class ConfigSourceManager {
     }
   }
 
-  async write(sourceName: string, config: Partial<IConfig>): Promise<void> {
+  async write(sourceName: string, config: ConfigValue): Promise<void> {
     const source = this.ensureSourceExists(sourceName);
 
     if (!this.isWritableSource(sourceName)) {

@@ -1,14 +1,13 @@
 import ConfigSourceManager from '@/config/ConfigSourceManager';
 import formatConfigValue from '@/config/formatConfigValue';
-import IConfig from '@/config/IConfig';
-
+import { ConfigValue } from '@/config/types/ConfigValue';
 interface ConfigManagerProps {
   configSourceManager: ConfigSourceManager;
 }
 
 export default class ConfigManager {
-  private allConfigsLoaded = new Map<string, Partial<IConfig>>();
-  private config: Partial<IConfig> = {};
+  private allConfigsLoaded = new Map<string, ConfigValue>();
+  private config: ConfigValue = {};
   private isLoaded = false;
 
   private configSourceManager: ConfigSourceManager;
@@ -17,7 +16,7 @@ export default class ConfigManager {
     this.configSourceManager = configSourceManager;
   }
 
-  async loadConfig(): Promise<Partial<IConfig>> {
+  async loadConfig(): Promise<ConfigValue> {
     if (this.isLoaded) return this.config;
 
     const sources = this.configSourceManager.getSources();
@@ -34,7 +33,7 @@ export default class ConfigManager {
 
   async get(key: string) {
     if (this.isLoaded) {
-      return this.config[key as keyof IConfig] ?? undefined;
+      return this.config[key] ?? undefined;
     }
 
     const sources = this.configSourceManager.getSources();
@@ -49,16 +48,15 @@ export default class ConfigManager {
 
       const cachedConfig = this.allConfigsLoaded.get(source.name)!;
       if (key in cachedConfig) {
-        return cachedConfig[key as keyof IConfig];
+        return cachedConfig[key];
       }
     }
 
     return undefined;
   }
 
-  async set(key: keyof IConfig, value: string, sourceName: string) {
-    const fileConfig: { [key: string]: unknown } =
-      await this.configSourceManager.load(sourceName);
+  async set(key: string, value: string, sourceName: string) {
+    const fileConfig = await this.configSourceManager.load(sourceName);
 
     fileConfig[key] = formatConfigValue(value);
 
@@ -66,8 +64,7 @@ export default class ConfigManager {
   }
 
   async unset(key: string, sourceName: string) {
-    const fileConfig: { [key: string]: unknown } =
-      await this.configSourceManager.load(sourceName);
+    const fileConfig = await this.configSourceManager.load(sourceName);
 
     delete fileConfig[key];
 
