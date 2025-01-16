@@ -1,8 +1,10 @@
 import ConfigSourceManager from '@/config/ConfigSourceManager';
+import ConfigValidator from '@/config/ConfigValidator';
 import formatConfigValue from '@/config/formatConfigValue';
 import { ConfigValue } from '@/config/types/ConfigValue';
 interface ConfigManagerProps {
   configSourceManager: ConfigSourceManager;
+  configValidator: ConfigValidator;
 }
 
 export default class ConfigManager {
@@ -11,9 +13,11 @@ export default class ConfigManager {
   private isLoaded = false;
 
   private configSourceManager: ConfigSourceManager;
+  private configValidator: ConfigValidator;
 
-  constructor({ configSourceManager }: ConfigManagerProps) {
+  constructor({ configSourceManager, configValidator }: ConfigManagerProps) {
     this.configSourceManager = configSourceManager;
+    this.configValidator = configValidator;
   }
 
   async loadConfig(): Promise<ConfigValue> {
@@ -27,6 +31,13 @@ export default class ConfigManager {
     }
 
     this.isLoaded = true;
+
+    const validation = this.configValidator.validate(this.config);
+
+    if (!validation.valid) {
+      console.error('Config loaded with errors:');
+      validation.errors!.forEach((error) => console.error(error.message));
+    }
 
     return this.config;
   }
@@ -56,6 +67,13 @@ export default class ConfigManager {
   }
 
   async set(key: string, value: string, sourceName: string) {
+    const validation = this.configValidator.validateKey(key, value);
+
+    if (!validation.valid) {
+      console.error(validation.error?.message);
+      return;
+    }
+
     const fileConfig = await this.configSourceManager.load(sourceName);
 
     fileConfig[key] = formatConfigValue(value);

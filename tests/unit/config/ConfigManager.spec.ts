@@ -1,5 +1,6 @@
 import ConfigManager from '@/config/ConfigManager';
 import ConfigSourceManager from '@/config/ConfigSourceManager';
+import ConfigValidator from '@/config/ConfigValidator';
 import { Source } from '@/config/types/Source';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -19,14 +20,27 @@ const mockConfigSourceManager = {
   write: vi.fn(),
 } as unknown as ConfigSourceManager;
 
+const mockConfigValidator = {
+  validate: vi.fn(),
+  validateKey: vi.fn(),
+} as unknown as ConfigValidator;
+
 describe('ConfigManager', () => {
   let sut: ConfigManager;
 
   beforeEach(() => {
     vi.resetAllMocks();
 
-    sut = new ConfigManager({ configSourceManager: mockConfigSourceManager });
+    sut = new ConfigManager({
+      configSourceManager: mockConfigSourceManager,
+      configValidator: mockConfigValidator,
+    });
     vi.mocked(mockConfigSourceManager.getSources).mockReturnValue(mockSources);
+    vi.mocked(mockConfigValidator.validate).mockReturnValue({
+      valid: true,
+      errors: [],
+    });
+    vi.mocked(mockConfigValidator.validateKey).mockReturnValue({ valid: true });
   });
 
   describe('loadConfig', () => {
@@ -51,6 +65,37 @@ describe('ConfigManager', () => {
         openaiKey: 'env_openai_key',
         excludeFiles: ['node_modules', '.git'],
       });
+    });
+
+    it('should not log errors when the config is valid', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      await sut.loadConfig();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should log errors when the config is invalid', async () => {
+      vi.mocked(mockConfigValidator.validate).mockReturnValueOnce({
+        valid: false,
+        errors: [
+          { key: 'someKey', error: 'Missing', message: 'Missing somekey' },
+        ],
+      });
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      await sut.loadConfig();
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+
+      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -124,6 +169,22 @@ describe('ConfigManager', () => {
   });
 
   describe('set', () => {
+    it('should log an error and return when validation fails', async () => {
+      vi.mocked(mockConfigValidator.validateKey).mockReturnValueOnce({
+        valid: false,
+        error: { key: 'someKey', error: 'Missing', message: 'Missing somekey' },
+      });
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      await sut.set('invalidKey', 'value', 'source');
+
+      expect(consoleErrorSpy).toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+
     it('should save a single value as a string', async () => {
       vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce({
         ...mockFileContent,
