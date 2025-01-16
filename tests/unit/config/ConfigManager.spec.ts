@@ -1,6 +1,6 @@
 import ConfigManager from '@/config/ConfigManager';
 import ConfigSourceManager from '@/config/ConfigSourceManager';
-import { Source } from '@/config/Source';
+import { Source } from '@/config/types/Source';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockFileContent = {

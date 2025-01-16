@@ -2,7 +2,7 @@ import IConfig from '@/config/IConfig';
 import ArgConfigLoader from '@/config/loaders/ArgConfigLoader';
 import EnvConfigLoader from '@/config/loaders/EnvConfigLoader';
 import FileConfigLoader from '@/config/loaders/FileConfigLoader';
-import { Source } from '@/config/Source';
+import { Source } from '@/config/types/Source';
 
 interface ConfigSourceManagerProps {
   sources: Array<Source>;

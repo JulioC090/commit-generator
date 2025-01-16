@@ -2,7 +2,7 @@ import ConfigSourceManager from '@/config/ConfigSourceManager';
 import ArgConfigLoader from '@/config/loaders/ArgConfigLoader';
 import EnvConfigLoader from '@/config/loaders/EnvConfigLoader';
 import FileConfigLoader from '@/config/loaders/FileConfigLoader';
-import { Source } from '@/config/Source';
+import { Source } from '@/config/types/Source';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockFileConfigLoader = {

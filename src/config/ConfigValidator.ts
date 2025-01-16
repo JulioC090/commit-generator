@@ -2,15 +2,14 @@ import {
   ConditionalRequired,
   ConfigDefinition,
   ConfigDefinitions,
-} from '@/config/ConfigDefinitions';
+} from '@/config/types/ConfigDefinitions';
+import { ConfigValue } from '@/config/types/ConfigValue';
 
 interface ValidationError {
   key: string;
   error: 'Missing' | 'WrongType' | 'MissingDefinition';
   message: string;
 }
-
-type Config = { [key: string]: unknown };
 
 interface ConfigValidatorProps {
   definitions: ConfigDefinitions;
@@ -138,7 +137,7 @@ export default class ConfigValidator {
     return true;
   }
 
-  public validate(config: Config): {
+  public validate(config: ConfigValue): {
     valid: boolean;
     errors: ValidationError[];
   } {

@@ -1,5 +1,5 @@
-import { ConfigDefinitions } from '@/config/ConfigDefinitions';
 import ConfigValidator from '@/config/ConfigValidator';
+import { ConfigDefinitions } from '@/config/types/ConfigDefinitions';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockDefinitions: ConfigDefinitions = {
