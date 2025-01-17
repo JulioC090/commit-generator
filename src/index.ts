@@ -5,6 +5,7 @@ import configManager from '@/config';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
 import { program } from 'commander';
+import readline from 'node:readline/promises';
 import packageJSON from '../package.json';
 
 program.version(packageJSON.version);
@@ -44,7 +45,22 @@ program
       type: options.type,
     });
 
-    makeCommit(commitMessage, { force: options.force });
+    let finalCommit = commitMessage;
+
+    if (!options.force) {
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+
+      const rlPromise = rl.question('Confirm Commit Message: ');
+      rl.write(commitMessage);
+      finalCommit = await rlPromise;
+
+      rl.close();
+    }
+
+    makeCommit(finalCommit);
   });
 
 program
