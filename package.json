@@ -7,7 +7,7 @@
     "commitgen": "./dist/src/index.js"
   },
   "scripts": {
-    "start": "node ./dist/",
+    "start": "node .",
     "dev": "tsx watch --env-file=.env ./src/index.ts",
     "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.alias.json",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
