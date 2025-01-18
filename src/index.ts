@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
-import configManager from '@/config';
-import { exitWithError } from '@/utils/errorHandler';
-import { getDiff, isRepository, makeCommit } from '@/utils/git';
+import generateCommit from '@/actions/generateCommit';
+import saveKey from '@/actions/saveKey';
+import unsetKey from '@/actions/unsetKey';
 import { program } from 'commander';
-import readline from 'node:readline/promises';
 import packageJSON from '../package.json';
 
 program.version(packageJSON.version);
@@ -19,62 +17,16 @@ program
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
   .option('-f, --force', 'Make commit automatically')
-  .action(async (options) => {
-    if (!isRepository()) {
-      exitWithError(
-        'Error: The current directory is not a valid Git repository.',
-      );
-    }
-
-    const config = await configManager.loadConfig();
-
-    const diff = getDiff({
-      staged: options.staged,
-      excludeFiles: (config.excludeFiles as Array<string>) ?? null,
-    });
-
-    if (!diff) {
-      exitWithError('Error: No staged files found.');
-    }
-
-    const commitGenerator = new OpenAICommitGenerator(
-      (config.openaiKey as string) ?? '',
-    );
-    const commitMessage = await commitGenerator.generate({
-      diff,
-      type: options.type,
-    });
-
-    let finalCommit = commitMessage;
-
-    if (!options.force) {
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-      });
-
-      const rlPromise = rl.question('Confirm Commit Message: ');
-      rl.write(commitMessage);
-      finalCommit = await rlPromise;
-
-      rl.close();
-    }
-
-    makeCommit(finalCommit);
-  });
+  .action(generateCommit);
 
 program
   .command('save <key> <value>')
   .description('Save a configuration key with the specified value')
-  .action(async (key, value) => {
-    await configManager.set(key, value, 'local');
-  });
+  .action(saveKey);
 
 program
   .command('remove <key>')
   .description('Remove a configuration key')
-  .action(async (key) => {
-    await configManager.unset(key, 'local');
-  });
+  .action(unsetKey);
 
 program.parse(process.argv);
