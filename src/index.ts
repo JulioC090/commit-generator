@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
-import generateCommit from '@/actions/generateCommit';
+import GenerateCommit from '@/actions/GenerateCommit';
 import saveKey from '@/actions/saveKey';
 import unsetKey from '@/actions/unsetKey';
+import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
+import configManager from '@/config';
+import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
 import { program } from 'commander';
 import packageJSON from '../package.json';
 
@@ -16,7 +19,21 @@ program
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
   .option('-f, --force', 'Make commit automatically')
-  .action(generateCommit);
+  .action(async (options) => {
+    const config = await configManager.loadConfig();
+
+    const commitGenerator = new OpenAICommitGenerator(
+      (config.openaiKey as string) ?? '',
+    );
+    const userInteractor = new CommandLineInteractor();
+    const generateCommit = new GenerateCommit({
+      userInteractor,
+      commitGenerator,
+      excludeFiles: config.excludeFiles as Array<string>,
+    });
+
+    generateCommit.execute(options);
+  });
 
 program
   .command('save <key> <value>')

@@ -1,8 +1,9 @@
 import CommitInfo from '@/commit-generator/CommitInfo';
+import ICommitGenerator from '@/commit-generator/ICommitGenerator';
 import { buildPrompt } from '@/commit-generator/prompt';
 import OpenAI from 'openai';
 
-export default class OpenAICommitGenerator {
+export default class OpenAICommitGenerator implements ICommitGenerator {
   private openai;
 
   constructor(apiKey: string) {
