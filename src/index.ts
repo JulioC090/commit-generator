@@ -2,7 +2,7 @@
 
 import GenerateCommit from '@/actions/GenerateCommit';
 import SaveKey from '@/actions/SaveKey';
-import unsetKey from '@/actions/unsetKey';
+import UnsetKey from '@/actions/UnsetKey';
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import configManager from '@/config';
 import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
@@ -46,6 +46,9 @@ program
 program
   .command('remove <key>')
   .description('Remove a configuration key')
-  .action(unsetKey);
+  .action(async (key) => {
+    const unsetKey = new UnsetKey({ configManager });
+    await unsetKey.execute(key);
+  });
 
 program.parse(process.argv);
