@@ -1,14 +1,17 @@
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import configManager from '@/config';
+import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
+import IUserInteractor from '@/user-interactor/IUserInteractor';
 import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
-import readline from 'node:readline/promises';
 
 interface GenerateCommitProps {
   staged?: boolean;
   force?: boolean;
   type?: string;
 }
+
+const userInteractor: IUserInteractor = new CommandLineInteractor();
 
 export default async function generateCommit(options: GenerateCommitProps) {
   if (!isRepository()) {
@@ -39,16 +42,7 @@ export default async function generateCommit(options: GenerateCommitProps) {
   let finalCommit = commitMessage;
 
   if (!options.force) {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    const rlPromise = rl.question('Confirm Commit Message: ');
-    rl.write(commitMessage);
-    finalCommit = await rlPromise;
-
-    rl.close();
+    finalCommit = await userInteractor.confirmCommitMessage(commitMessage);
   }
 
   makeCommit(finalCommit);
