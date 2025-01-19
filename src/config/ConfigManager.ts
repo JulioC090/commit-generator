@@ -2,12 +2,13 @@ import ConfigSourceManager from '@/config/ConfigSourceManager';
 import ConfigValidator from '@/config/ConfigValidator';
 import formatConfigValue from '@/config/formatConfigValue';
 import { ConfigValue } from '@/config/types/ConfigValue';
+import IConfig from '@/config/types/IConfig';
 interface ConfigManagerProps {
   configSourceManager: ConfigSourceManager;
   configValidator: ConfigValidator;
 }
 
-export default class ConfigManager {
+export default class ConfigManager implements IConfig {
   private allConfigsLoaded = new Map<string, ConfigValue>();
   private config: ConfigValue = {};
   private isLoaded = false;

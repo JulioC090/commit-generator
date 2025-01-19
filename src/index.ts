@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import GenerateCommit from '@/actions/GenerateCommit';
-import saveKey from '@/actions/saveKey';
+import SaveKey from '@/actions/SaveKey';
 import unsetKey from '@/actions/unsetKey';
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import configManager from '@/config';
@@ -38,7 +38,10 @@ program
 program
   .command('save <key> <value>')
   .description('Save a configuration key with the specified value')
-  .action(saveKey);
+  .action(async (key, value) => {
+    const saveKey = new SaveKey({ configManager });
+    await saveKey.execute(key, value);
+  });
 
 program
   .command('remove <key>')
