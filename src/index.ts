@@ -11,7 +11,6 @@ program.version(packageJSON.version);
 program
   .command('generate')
   .description('Generate a commit message based on Git diffs')
-  .option('-s, --staged', 'Use only staged files for the diff')
   .option(
     '-t, --type <commitType>',
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',

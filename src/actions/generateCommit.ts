@@ -6,7 +6,6 @@ import { exitWithError } from '@/utils/errorHandler';
 import { getDiff, isRepository, makeCommit } from '@/utils/git';
 
 interface GenerateCommitProps {
-  staged?: boolean;
   force?: boolean;
   type?: string;
 }
@@ -23,7 +22,7 @@ export default async function generateCommit(options: GenerateCommitProps) {
   const config = await configManager.loadConfig();
 
   const diff = getDiff({
-    staged: options.staged,
+    staged: true,
     excludeFiles: (config.excludeFiles as Array<string>) ?? null,
   });
 
