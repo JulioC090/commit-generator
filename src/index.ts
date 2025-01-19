@@ -6,6 +6,7 @@ import UnsetKey from '@/actions/UnsetKey';
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import configManager from '@/config';
 import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
+import Git from '@/utils/Git';
 import { program } from 'commander';
 import packageJSON from '../package.json';
 
@@ -26,9 +27,11 @@ program
       (config.openaiKey as string) ?? '',
     );
     const userInteractor = new CommandLineInteractor();
+    const git = new Git();
     const generateCommit = new GenerateCommit({
       userInteractor,
       commitGenerator,
+      git,
       excludeFiles: config.excludeFiles as Array<string>,
     });
 
