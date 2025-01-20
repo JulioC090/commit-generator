@@ -4,14 +4,16 @@ interface UnsetKeyProps {
   configManager: IConfig;
 }
 
-export default class UnsetKey {
+export default class UnsetKeys {
   private configManager: IConfig;
 
   constructor({ configManager }: UnsetKeyProps) {
     this.configManager = configManager;
   }
 
-  async execute(key: string) {
-    await this.configManager.unset(key, 'local');
+  async execute(keys: Array<string>) {
+    for (const key of keys) {
+      await this.configManager.unset(key, 'local');
+    }
   }
 }
