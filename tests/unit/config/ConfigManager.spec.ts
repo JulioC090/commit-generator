@@ -198,6 +198,10 @@ describe('ConfigManager', () => {
         openaiKey: 'new_openai_key',
         excludeFiles: ['node_modules', '.git'],
       });
+      expect(mockConfigValidator.validateKey).toHaveBeenCalledWith(
+        'openaiKey',
+        'new_openai_key',
+      );
     });
 
     it('should save a comma-separated value as an array', async () => {
@@ -213,6 +217,10 @@ describe('ConfigManager', () => {
         openaiKey: 'mock_openai_key',
         excludeFiles: ['src', 'dist'],
       });
+      expect(mockConfigValidator.validateKey).toHaveBeenCalledWith(
+        'excludeFiles',
+        ['src', 'dist'],
+      );
     });
   });
 

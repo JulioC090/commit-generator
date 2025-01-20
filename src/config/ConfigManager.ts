@@ -68,7 +68,9 @@ export default class ConfigManager implements IConfig {
   }
 
   async set(key: string, value: string, sourceName: string) {
-    const validation = this.configValidator.validateKey(key, value);
+    const formattedValue = formatConfigValue(value);
+
+    const validation = this.configValidator.validateKey(key, formattedValue);
 
     if (!validation.valid) {
       console.error(validation.error?.message);
@@ -77,7 +79,7 @@ export default class ConfigManager implements IConfig {
 
     const fileConfig = await this.configSourceManager.load(sourceName);
 
-    fileConfig[key] = formatConfigValue(value);
+    fileConfig[key] = formattedValue;
 
     await this.configSourceManager.write(sourceName, fileConfig);
   }
