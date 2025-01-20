@@ -8,7 +8,10 @@ import configManager from '@/config';
 import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
 import Git from '@/utils/Git';
 import { program } from 'commander';
-import packageJSON from '../package.json';
+
+// tsc-alias don't support json files
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const packageJSON = require('../package.json');
 
 program.version(packageJSON.version);
 
