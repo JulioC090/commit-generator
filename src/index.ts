@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import GenerateCommit from '@/actions/GenerateCommit';
-import SaveKey from '@/actions/SaveKey';
+import SaveKey from '@/actions/SaveKeys';
 import UnsetKey from '@/actions/UnsetKey';
 import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
 import configManager from '@/config';
 import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
+import { createKeyValueArray } from '@/utils/createKeyValueArray';
 import Git from '@/utils/Git';
 import { program } from 'commander';
 
@@ -42,11 +43,14 @@ program
   });
 
 program
-  .command('save <key> <value>')
-  .description('Save a configuration key with the specified value')
-  .action(async (key, value) => {
+  .command('save <keyValue...>')
+  .description('Save configuration keys with their specified values')
+  .action(async (keyValue) => {
     const saveKey = new SaveKey({ configManager });
-    await saveKey.execute(key, value);
+
+    const keyValuePairs = createKeyValueArray(keyValue);
+
+    await saveKey.execute(keyValuePairs);
   });
 
 program

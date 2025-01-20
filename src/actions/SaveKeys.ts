@@ -4,6 +4,11 @@ interface SaveKeyProps {
   configManager: IConfig;
 }
 
+interface Pair {
+  key: string;
+  value: string;
+}
+
 export default class SaveKey {
   private configManager: IConfig;
 
@@ -11,7 +16,9 @@ export default class SaveKey {
     this.configManager = configManager;
   }
 
-  async execute(key: string, value: string) {
-    await this.configManager.set(key, value, 'local');
+  async execute(pairs: Array<Pair>) {
+    for (const { key, value } of pairs) {
+      await this.configManager.set(key, value, 'local');
+    }
   }
 }
