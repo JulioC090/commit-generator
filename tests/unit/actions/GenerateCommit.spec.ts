@@ -1,3 +1,4 @@
+import AddHistory from '@/actions/AddHistory';
 import GenerateCommit from '@/actions/GenerateCommit';
 import { exitWithError } from '@/utils/errorHandler';
 import Git from '@/utils/Git';
@@ -21,6 +22,10 @@ const mockCommitGenerator = {
   generate: vi.fn(),
 };
 
+const mockAddHistory = {
+  execute: vi.fn(),
+} as unknown as AddHistory;
+
 describe('GenerateCommit', () => {
   it('should exit with error if not in a Git repository', async () => {
     mockGit.isRepository.mockReturnValue(false);
@@ -29,6 +34,7 @@ describe('GenerateCommit', () => {
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
       git: mockGit as unknown as Git,
+      addHistory: mockAddHistory,
     });
 
     await sut.execute({});
@@ -46,6 +52,7 @@ describe('GenerateCommit', () => {
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
       git: mockGit as unknown as Git,
+      addHistory: mockAddHistory,
     });
 
     await sut.execute({});
@@ -65,6 +72,7 @@ describe('GenerateCommit', () => {
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
       git: mockGit as unknown as Git,
+      addHistory: mockAddHistory,
     });
 
     await sut.execute({ force: false });
@@ -73,6 +81,23 @@ describe('GenerateCommit', () => {
       'initial commit message',
     );
     expect(mockGit.commit).toHaveBeenCalledWith('final commit message');
+  });
+
+  it('should save commit in history', async () => {
+    mockGit.isRepository.mockReturnValue(true);
+    mockGit.diff.mockReturnValue('some diff');
+    mockCommitGenerator.generate.mockResolvedValue('commit message');
+
+    const sut = new GenerateCommit({
+      userInteractor: mockUserInteractor,
+      commitGenerator: mockCommitGenerator,
+      git: mockGit as unknown as Git,
+      addHistory: mockAddHistory,
+    });
+
+    await sut.execute({ force: true });
+
+    expect(mockAddHistory.execute).toHaveBeenCalledWith('commit message');
   });
 
   it('should generate a commit message and commit', async () => {
@@ -84,6 +109,7 @@ describe('GenerateCommit', () => {
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
       git: mockGit as unknown as Git,
+      addHistory: mockAddHistory,
     });
 
     await sut.execute({ force: true });

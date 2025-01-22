@@ -1,3 +1,4 @@
+import AddHistory from '@/actions/AddHistory';
 import ICommitGenerator from '@/commit-generator/ICommitGenerator';
 import IUserInteractor from '@/user-interactor/IUserInteractor';
 import { exitWithError } from '@/utils/errorHandler';
@@ -8,6 +9,7 @@ interface GenerateCommitProps {
   commitGenerator: ICommitGenerator;
   git: Git;
   excludeFiles?: string[];
+  addHistory: AddHistory;
 }
 
 interface ExecuteOptions {
@@ -20,17 +22,20 @@ export default class GenerateCommit {
   private commitGenerator: ICommitGenerator;
   private git: Git;
   private excludeFiles?: string[];
+  private addHistory: AddHistory;
 
   constructor({
     userInteractor,
     commitGenerator,
     git,
     excludeFiles,
+    addHistory,
   }: GenerateCommitProps) {
     this.userInteractor = userInteractor;
     this.commitGenerator = commitGenerator;
     this.git = git;
     this.excludeFiles = excludeFiles;
+    this.addHistory = addHistory;
   }
 
   public async execute(options: ExecuteOptions) {
@@ -60,6 +65,8 @@ export default class GenerateCommit {
       finalCommit =
         await this.userInteractor.confirmCommitMessage(commitMessage);
     }
+
+    this.addHistory.execute(finalCommit);
 
     this.git.commit(finalCommit);
   }

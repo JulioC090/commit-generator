@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import AddHistory from '@/actions/AddHistory';
 import GenerateCommit from '@/actions/GenerateCommit';
 import SaveKey from '@/actions/SaveKeys';
 import UnsetKeys from '@/actions/UnsetKeys';
@@ -9,6 +10,7 @@ import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
 import { createKeyValueArray } from '@/utils/createKeyValueArray';
 import Git from '@/utils/Git';
 import { program } from 'commander';
+import path from 'node:path';
 
 // tsc-alias don't support json files
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -27,6 +29,10 @@ program
   .action(async (options) => {
     const config = await configManager.loadConfig();
 
+    const historyPath = path.join(__dirname, '../', 'history');
+
+    const addHistory = new AddHistory({ historyPath });
+
     const commitGenerator = new OpenAICommitGenerator(
       (config.openaiKey as string) ?? '',
     );
@@ -37,6 +43,7 @@ program
       commitGenerator,
       git,
       excludeFiles: config.excludeFiles as Array<string>,
+      addHistory,
     });
 
     generateCommit.execute(options);
