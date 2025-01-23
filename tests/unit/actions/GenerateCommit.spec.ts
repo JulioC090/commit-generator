@@ -27,23 +27,6 @@ const mockAddHistory = {
 } as unknown as AddHistory;
 
 describe('GenerateCommit', () => {
-  it('should exit with error if not in a Git repository', async () => {
-    mockGit.isRepository.mockReturnValue(false);
-
-    const sut = new GenerateCommit({
-      userInteractor: mockUserInteractor,
-      commitGenerator: mockCommitGenerator,
-      git: mockGit as unknown as Git,
-      addHistory: mockAddHistory,
-    });
-
-    await sut.execute({});
-
-    expect(exitWithError).toHaveBeenCalledWith(
-      'Error: The current directory is not a valid Git repository.',
-    );
-  });
-
   it('should exit with error if there are no staged files', async () => {
     mockGit.isRepository.mockReturnValue(true);
     mockGit.diff.mockReturnValue(null);

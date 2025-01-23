@@ -1,3 +1,4 @@
+import { exitWithError } from '@/utils/errorHandler';
 import { execSync } from 'node:child_process';
 
 interface DiffOptions {
@@ -6,7 +7,11 @@ interface DiffOptions {
 }
 
 export default class Git {
+  private _isRepository?: boolean;
+
   public isRepository(): boolean {
+    if (this._isRepository) return this._isRepository;
+
     try {
       const output = execSync('git rev-parse --is-inside-work-tree --quiet', {
         encoding: 'utf-8',
@@ -34,6 +39,12 @@ export default class Git {
   }
 
   public diff(options: DiffOptions = { staged: false }): string {
+    if (!this.isRepository()) {
+      exitWithError(
+        'Error: The current directory is not a valid Git repository.',
+      );
+    }
+
     try {
       return execSync(`git diff ${this.buildDiffArgs(options)}`, {
         encoding: 'utf-8',
@@ -45,6 +56,12 @@ export default class Git {
   }
 
   public commit(commitMessage: string): void {
+    if (!this.isRepository()) {
+      exitWithError(
+        'Error: The current directory is not a valid Git repository.',
+      );
+    }
+
     execSync('git commit -F -', { input: commitMessage });
   }
 }

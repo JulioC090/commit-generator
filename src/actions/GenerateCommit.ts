@@ -39,12 +39,6 @@ export default class GenerateCommit {
   }
 
   public async execute(options: ExecuteOptions) {
-    if (!this.git.isRepository()) {
-      exitWithError(
-        'Error: The current directory is not a valid Git repository.',
-      );
-    }
-
     const diff = this.git.diff({
       staged: true,
       excludeFiles: this.excludeFiles,
