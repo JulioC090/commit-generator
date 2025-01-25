@@ -1,5 +1,5 @@
-import SaveKey from '@/actions/SaveKeys';
 import IConfig from '@/config/types/IConfig';
+import SaveKey from '@/core/actions/SaveKeys';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockConfigManager = {

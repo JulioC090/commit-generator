@@ -1,5 +1,5 @@
-import GenerateCommit from '@/actions/GenerateCommit';
-import Git from '@/utils/Git';
+import GenerateCommit from '@/core/actions/GenerateCommit';
+import Git from '@/core/utils/Git';
 
 interface GenerateAndCommitProps {
   generateCommit: GenerateCommit;

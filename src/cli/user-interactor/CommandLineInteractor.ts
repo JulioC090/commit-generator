@@ -1,4 +1,4 @@
-import IUserInteractor from '@/user-interactor/IUserInteractor';
+import IUserInteractor from '@/core/user-interactor/IUserInteractor';
 import readline from 'node:readline/promises';
 
 export default class CommandLineInteractor implements IUserInteractor {

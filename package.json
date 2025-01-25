@@ -2,13 +2,13 @@
   "name": "commit-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/cli/index.js",
   "bin": {
-    "commitgen": "./dist/index.js"
+    "commitgen": "./dist/cli/index.js"
   },
   "scripts": {
     "start": "node .",
-    "dev": "tsx watch --env-file=.env ./src/index.ts",
+    "dev": "tsx watch --env-file=.env ./src/cli/index.ts",
     "build": "npm run clean && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "clean": "rimraf dist",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",

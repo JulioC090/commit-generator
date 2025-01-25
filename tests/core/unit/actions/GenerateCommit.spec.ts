@@ -1,10 +1,10 @@
-import AddHistory from '@/actions/AddHistory';
-import GenerateCommit from '@/actions/GenerateCommit';
-import { exitWithError } from '@/utils/errorHandler';
-import Git from '@/utils/Git';
+import { exitWithError } from '@/cli/utils/errorHandler';
+import AddHistory from '@/core/actions/AddHistory';
+import GenerateCommit from '@/core/actions/GenerateCommit';
+import Git from '@/core/utils/Git';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/utils/errorHandler', () => ({
+vi.mock('@/cli/utils/errorHandler', () => ({
   exitWithError: vi.fn(),
 }));
 

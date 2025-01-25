@@ -1,5 +1,5 @@
-import UnsetKeys from '@/actions/UnsetKeys';
 import IConfig from '@/config/types/IConfig';
+import UnsetKeys from '@/core/actions/UnsetKeys';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockConfigManager = {

@@ -1,4 +1,4 @@
-import CommitInfo from '@/commit-generator/CommitInfo';
+import CommitInfo from '@/core/commit-generator/CommitInfo';
 
 export function buildPrompt({ diff, type }: CommitInfo): string {
   if (type) {

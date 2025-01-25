@@ -1,6 +1,6 @@
-import CommitGenerated from '@/actions/CommitGenerated';
-import GetHistory from '@/actions/GetHistory';
-import Git from '@/utils/Git';
+import CommitGenerated from '@/core/actions/CommitGenerated';
+import GetHistory from '@/core/actions/GetHistory';
+import Git from '@/core/utils/Git';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockGetHistory = {

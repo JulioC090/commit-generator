@@ -1,6 +1,6 @@
-import GenerateAndCommit from '@/actions/GenerateAndCommit';
-import GenerateCommit from '@/actions/GenerateCommit';
-import Git from '@/utils/Git';
+import GenerateAndCommit from '@/core/actions/GenerateAndCommit';
+import GenerateCommit from '@/core/actions/GenerateCommit';
+import Git from '@/core/utils/Git';
 import { describe, expect, it, vi } from 'vitest';
 
 const mockGit = {

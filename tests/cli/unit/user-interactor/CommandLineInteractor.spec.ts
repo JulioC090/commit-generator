@@ -1,4 +1,4 @@
-import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
+import CommandLineInteractor from '@/cli/user-interactor/CommandLineInteractor';
 import readline from 'node:readline/promises';
 import { describe, expect, it, vi } from 'vitest';
 

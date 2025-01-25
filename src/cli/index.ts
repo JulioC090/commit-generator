@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
-import AddHistory from '@/actions/AddHistory';
-import CommitGenerated from '@/actions/CommitGenerated';
-import GenerateAndCommit from '@/actions/GenerateAndCommit';
-import GenerateCommit from '@/actions/GenerateCommit';
-import GetHistory from '@/actions/GetHistory';
-import SaveKey from '@/actions/SaveKeys';
-import UnsetKeys from '@/actions/UnsetKeys';
-import OpenAICommitGenerator from '@/commit-generator/OpenAICommitGenerator';
+import CommandLineInteractor from '@/cli/user-interactor/CommandLineInteractor';
+import { createKeyValueArray } from '@/cli/utils/createKeyValueArray';
 import configManager from '@/config';
-import CommandLineInteractor from '@/user-interactor/CommandLineInteractor';
-import { createKeyValueArray } from '@/utils/createKeyValueArray';
-import Git from '@/utils/Git';
+import AddHistory from '@/core/actions/AddHistory';
+import CommitGenerated from '@/core/actions/CommitGenerated';
+import GenerateAndCommit from '@/core/actions/GenerateAndCommit';
+import GenerateCommit from '@/core/actions/GenerateCommit';
+import GetHistory from '@/core/actions/GetHistory';
+import SaveKey from '@/core/actions/SaveKeys';
+import UnsetKeys from '@/core/actions/UnsetKeys';
+import OpenAICommitGenerator from '@/core/commit-generator/OpenAICommitGenerator';
+import Git from '@/core/utils/Git';
 import { program } from 'commander';
 import path from 'node:path';
 
 // tsc-alias don't support json files
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const packageJSON = require('../package.json');
+const packageJSON = require('../../package.json');
 
 program.version(packageJSON.version);
 
@@ -31,7 +31,7 @@ program
   .action(async (options) => {
     const config = await configManager.loadConfig();
 
-    const historyPath = path.join(__dirname, '../', 'history');
+    const historyPath = path.join(__dirname, '../..', 'history');
 
     const addHistory = new AddHistory({ historyPath });
 
@@ -65,7 +65,7 @@ program
   .action(async (options) => {
     const config = await configManager.loadConfig();
 
-    const historyPath = path.join(__dirname, '../', 'history');
+    const historyPath = path.join(__dirname, '../..', 'history');
 
     const addHistory = new AddHistory({ historyPath });
 
@@ -90,7 +90,7 @@ program
   .command('commit')
   .description('Commit the last generated message')
   .action(async () => {
-    const historyPath = path.join(__dirname, '../', 'history');
+    const historyPath = path.join(__dirname, '../..', 'history');
 
     const getHistory = new GetHistory({ historyPath });
     const git = new Git();

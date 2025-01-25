@@ -1,4 +1,4 @@
-import { exitWithError } from '@/utils/errorHandler';
+import { exitWithError } from '@/cli/utils/errorHandler';
 import { execSync } from 'node:child_process';
 
 interface DiffOptions {

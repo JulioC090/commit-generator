@@ -1,4 +1,4 @@
-import AddHistory from '@/actions/AddHistory';
+import AddHistory from '@/core/actions/AddHistory';
 import fsSync from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';

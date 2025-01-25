@@ -1,8 +1,8 @@
-import AddHistory from '@/actions/AddHistory';
-import ICommitGenerator from '@/commit-generator/ICommitGenerator';
-import IUserInteractor from '@/user-interactor/IUserInteractor';
-import { exitWithError } from '@/utils/errorHandler';
-import Git from '@/utils/Git';
+import { exitWithError } from '@/cli/utils/errorHandler';
+import AddHistory from '@/core/actions/AddHistory';
+import ICommitGenerator from '@/core/commit-generator/ICommitGenerator';
+import IUserInteractor from '@/core/user-interactor/IUserInteractor';
+import Git from '@/core/utils/Git';
 
 interface GenerateCommitProps {
   userInteractor: IUserInteractor;

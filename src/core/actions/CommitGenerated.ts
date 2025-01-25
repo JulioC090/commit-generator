@@ -1,5 +1,5 @@
-import GetHistory from '@/actions/GetHistory';
-import Git from '@/utils/Git';
+import GetHistory from '@/core/actions/GetHistory';
+import Git from '@/core/utils/Git';
 
 interface CommitGeneratedProps {
   getHistory: GetHistory;

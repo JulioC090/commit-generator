@@ -1,4 +1,4 @@
-import { createKeyValueArray } from '@/utils/createKeyValueArray';
+import { createKeyValueArray } from '@/cli/utils/createKeyValueArray';
 import { describe, expect, it } from 'vitest';
 
 describe('createKeyValueArray', () => {
