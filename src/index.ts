@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import AddHistory from '@/actions/AddHistory';
+import GenerateAndCommit from '@/actions/GenerateAndCommit';
 import GenerateCommit from '@/actions/GenerateCommit';
 import SaveKey from '@/actions/SaveKeys';
 import UnsetKeys from '@/actions/UnsetKeys';
@@ -38,6 +39,7 @@ program
     );
     const userInteractor = new CommandLineInteractor();
     const git = new Git();
+
     const generateCommit = new GenerateCommit({
       userInteractor,
       commitGenerator,
@@ -46,9 +48,9 @@ program
       addHistory,
     });
 
-    const commitMessage = await generateCommit.execute(options);
+    const generateAndCommit = new GenerateAndCommit({ generateCommit, git });
 
-    git.commit(commitMessage);
+    await generateAndCommit.execute(options);
   });
 
 program
