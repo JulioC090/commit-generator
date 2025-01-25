@@ -18,6 +18,7 @@ import path from 'node:path';
 // tsc-alias don't support json files
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const packageJSON = require('../../package.json');
+const historyPath = path.join(__dirname, '../..', 'history');
 
 program.version(packageJSON.version);
 
@@ -30,8 +31,6 @@ program
   .option('-f, --force', 'Make commit automatically')
   .action(async (options) => {
     const config = await configManager.loadConfig();
-
-    const historyPath = path.join(__dirname, '../..', 'history');
 
     const addHistory = new AddHistory({ historyPath });
 
@@ -65,8 +64,6 @@ program
   .action(async (options) => {
     const config = await configManager.loadConfig();
 
-    const historyPath = path.join(__dirname, '../..', 'history');
-
     const addHistory = new AddHistory({ historyPath });
 
     const commitGenerator = new OpenAICommitGenerator(
@@ -90,8 +87,6 @@ program
   .command('commit')
   .description('Commit the last generated message')
   .action(async () => {
-    const historyPath = path.join(__dirname, '../..', 'history');
-
     const getHistory = new GetHistory({ historyPath });
     const git = new Git();
 
