@@ -1,24 +1,15 @@
 #!/usr/bin/env node
 
-import CommandLineInteractor from '@/cli/user-interactor/CommandLineInteractor';
-import { createKeyValueArray } from '@/cli/utils/createKeyValueArray';
-import configManager from '@/config';
-import AddHistory from '@/core/actions/AddHistory';
-import CommitGenerated from '@/core/actions/CommitGenerated';
-import GenerateAndCommit from '@/core/actions/GenerateAndCommit';
-import GenerateCommit from '@/core/actions/GenerateCommit';
-import GetHistory from '@/core/actions/GetHistory';
-import SaveKey from '@/core/actions/SaveKeys';
-import UnsetKeys from '@/core/actions/UnsetKeys';
-import OpenAICommitGenerator from '@/core/commit-generator/OpenAICommitGenerator';
-import Git from '@/core/utils/Git';
+import commit from '@/cli/commands/commit';
+import generate from '@/cli/commands/generate';
+import generateAndCommit from '@/cli/commands/generateAndCommit';
+import remove from '@/cli/commands/remove';
+import save from '@/cli/commands/save';
 import { program } from 'commander';
-import path from 'node:path';
 
 // tsc-alias don't support json files
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const packageJSON = require('../../package.json');
-const historyPath = path.join(__dirname, '../..', 'history');
 
 program.version(packageJSON.version);
 
@@ -29,29 +20,7 @@ program
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
   .option('-f, --force', 'Make commit automatically')
-  .action(async (options) => {
-    const config = await configManager.loadConfig();
-
-    const addHistory = new AddHistory({ historyPath });
-
-    const commitGenerator = new OpenAICommitGenerator(
-      (config.openaiKey as string) ?? '',
-    );
-    const userInteractor = new CommandLineInteractor();
-    const git = new Git();
-
-    const generateCommit = new GenerateCommit({
-      userInteractor,
-      commitGenerator,
-      git,
-      excludeFiles: config.excludeFiles as Array<string>,
-      addHistory,
-    });
-
-    const generateAndCommit = new GenerateAndCommit({ generateCommit, git });
-
-    await generateAndCommit.execute(options);
-  });
+  .action(generateAndCommit);
 
 program
   .command('generate')
@@ -61,57 +30,21 @@ program
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
   .option('-f, --force', 'Make commit automatically')
-  .action(async (options) => {
-    const config = await configManager.loadConfig();
-
-    const addHistory = new AddHistory({ historyPath });
-
-    const commitGenerator = new OpenAICommitGenerator(
-      (config.openaiKey as string) ?? '',
-    );
-    const userInteractor = new CommandLineInteractor();
-    const git = new Git();
-
-    const generateCommit = new GenerateCommit({
-      userInteractor,
-      commitGenerator,
-      git,
-      excludeFiles: config.excludeFiles as Array<string>,
-      addHistory,
-    });
-
-    await generateCommit.execute(options);
-  });
+  .action(generate);
 
 program
   .command('commit')
   .description('Commit the last generated message')
-  .action(async () => {
-    const getHistory = new GetHistory({ historyPath });
-    const git = new Git();
-
-    const commitGenerated = new CommitGenerated({ getHistory, git });
-
-    await commitGenerated.execute();
-  });
+  .action(commit);
 
 program
   .command('save <keyValue...>')
   .description('Save configuration keys with their specified values')
-  .action(async (keyValue) => {
-    const saveKey = new SaveKey({ configManager });
-
-    const keyValuePairs = createKeyValueArray(keyValue);
-
-    await saveKey.execute(keyValuePairs);
-  });
+  .action(save);
 
 program
   .command('remove <key...>')
   .description('Remove a configuration key')
-  .action(async (keys) => {
-    const unsetKey = new UnsetKeys({ configManager });
-    await unsetKey.execute(keys);
-  });
+  .action(remove);
 
 program.parse(process.argv);
