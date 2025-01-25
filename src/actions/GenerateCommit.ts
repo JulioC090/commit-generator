@@ -38,7 +38,7 @@ export default class GenerateCommit {
     this.addHistory = addHistory;
   }
 
-  public async execute(options: ExecuteOptions) {
+  public async execute(options: ExecuteOptions): Promise<string> {
     const diff = this.git.diff({
       staged: true,
       excludeFiles: this.excludeFiles,
@@ -62,6 +62,6 @@ export default class GenerateCommit {
 
     this.addHistory.execute(finalCommit);
 
-    this.git.commit(finalCommit);
+    return finalCommit;
   }
 }

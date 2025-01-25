@@ -46,7 +46,9 @@ program
       addHistory,
     });
 
-    generateCommit.execute(options);
+    const commitMessage = await generateCommit.execute(options);
+
+    git.commit(commitMessage);
   });
 
 program

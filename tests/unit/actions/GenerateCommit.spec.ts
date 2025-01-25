@@ -58,12 +58,13 @@ describe('GenerateCommit', () => {
       addHistory: mockAddHistory,
     });
 
-    await sut.execute({ force: false });
+    const result = await sut.execute({ force: false });
 
     expect(mockUserInteractor.confirmCommitMessage).toHaveBeenCalledWith(
       'initial commit message',
     );
-    expect(mockGit.commit).toHaveBeenCalledWith('final commit message');
+
+    expect(result).toBe('final commit message');
   });
 
   it('should save commit in history', async () => {
@@ -81,26 +82,5 @@ describe('GenerateCommit', () => {
     await sut.execute({ force: true });
 
     expect(mockAddHistory.execute).toHaveBeenCalledWith('commit message');
-  });
-
-  it('should generate a commit message and commit', async () => {
-    mockGit.isRepository.mockReturnValue(true);
-    mockGit.diff.mockReturnValue('some diff');
-    mockCommitGenerator.generate.mockResolvedValue('commit message');
-
-    const sut = new GenerateCommit({
-      userInteractor: mockUserInteractor,
-      commitGenerator: mockCommitGenerator,
-      git: mockGit as unknown as Git,
-      addHistory: mockAddHistory,
-    });
-
-    await sut.execute({ force: true });
-
-    expect(mockCommitGenerator.generate).toHaveBeenCalledWith({
-      diff: 'some diff',
-      type: undefined,
-    });
-    expect(mockGit.commit).toHaveBeenCalledWith('commit message');
   });
 });
