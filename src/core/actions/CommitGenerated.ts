@@ -1,14 +1,14 @@
 import GetHistory from '@/core/actions/GetHistory';
-import Git from '@/core/utils/Git';
+import IGit from '@/git/types/IGit';
 
 interface CommitGeneratedProps {
   getHistory: GetHistory;
-  git: Git;
+  git: IGit;
 }
 
 export default class CommitGenerated {
   private getHistory: GetHistory;
-  private git: Git;
+  private git: IGit;
 
   constructor({ getHistory, git }: CommitGeneratedProps) {
     this.getHistory = getHistory;

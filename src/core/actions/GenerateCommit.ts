@@ -2,12 +2,12 @@ import { exitWithError } from '@/cli/utils/errorHandler';
 import AddHistory from '@/core/actions/AddHistory';
 import ICommitGenerator from '@/core/commit-generator/ICommitGenerator';
 import IUserInteractor from '@/core/user-interactor/IUserInteractor';
-import Git from '@/core/utils/Git';
+import IGit from '@/git/types/IGit';
 
 interface GenerateCommitProps {
   userInteractor: IUserInteractor;
   commitGenerator: ICommitGenerator;
-  git: Git;
+  git: IGit;
   excludeFiles?: string[];
   addHistory: AddHistory;
 }
@@ -20,7 +20,7 @@ interface ExecuteOptions {
 export default class GenerateCommit {
   private userInteractor: IUserInteractor;
   private commitGenerator: ICommitGenerator;
-  private git: Git;
+  private git: IGit;
   private excludeFiles?: string[];
   private addHistory: AddHistory;
 

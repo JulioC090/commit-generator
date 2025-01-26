@@ -4,7 +4,7 @@ import configManager from '@/config';
 import AddHistory from '@/core/actions/AddHistory';
 import GenerateCommit from '@/core/actions/GenerateCommit';
 import OpenAICommitGenerator from '@/core/commit-generator/OpenAICommitGenerator';
-import Git from '@/core/utils/Git';
+import git from '@/git';
 
 export default async function generate(options: {
   type: string;
@@ -18,7 +18,6 @@ export default async function generate(options: {
     (config.openaiKey as string) ?? '',
   );
   const userInteractor = new CommandLineInteractor();
-  const git = new Git();
 
   const generateCommit = new GenerateCommit({
     userInteractor,

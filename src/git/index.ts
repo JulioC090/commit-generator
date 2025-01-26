@@ -1,12 +1,9 @@
 import { exitWithError } from '@/cli/utils/errorHandler';
+import IDiffOptions from '@/git/types/IDiffOptions';
+import IGit from '@/git/types/IGit';
 import { execSync } from 'node:child_process';
 
-interface DiffOptions {
-  staged?: boolean;
-  excludeFiles?: Array<string>;
-}
-
-export default class Git {
+class Git implements IGit {
   private _isRepository?: boolean;
 
   public isRepository(): boolean {
@@ -23,7 +20,7 @@ export default class Git {
     }
   }
 
-  private buildDiffArgs(options: DiffOptions) {
+  private buildDiffArgs(options: IDiffOptions) {
     const diffArgs: Array<string> = [];
 
     if (options.staged) {
@@ -38,7 +35,7 @@ export default class Git {
     return diffArgs.join(' ').trim();
   }
 
-  public diff(options: DiffOptions = { staged: false }): string {
+  public diff(options: IDiffOptions = { staged: false }): string {
     if (!this.isRepository()) {
       exitWithError(
         'Error: The current directory is not a valid Git repository.',
@@ -65,3 +62,5 @@ export default class Git {
     execSync('git commit -F -', { input: commitMessage });
   }
 }
+
+export default new Git();

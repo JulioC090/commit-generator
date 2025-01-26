@@ -1,6 +1,6 @@
 import CommitGenerated from '@/core/actions/CommitGenerated';
 import GetHistory from '@/core/actions/GetHistory';
-import Git from '@/core/utils/Git';
+import IGit from '@/git/types/IGit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockGetHistory = {
@@ -9,7 +9,7 @@ const mockGetHistory = {
 
 const mockGitMock = {
   commit: vi.fn(),
-} as unknown as Git;
+} as unknown as IGit;
 
 describe('CommitGenerated', () => {
   let sut: CommitGenerated;

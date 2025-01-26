@@ -1,7 +1,7 @@
 import { exitWithError } from '@/cli/utils/errorHandler';
 import AddHistory from '@/core/actions/AddHistory';
 import GenerateCommit from '@/core/actions/GenerateCommit';
-import Git from '@/core/utils/Git';
+import IGit from '@/git/types/IGit';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/cli/utils/errorHandler', () => ({
@@ -12,7 +12,7 @@ const mockGit = {
   isRepository: vi.fn(),
   diff: vi.fn(),
   commit: vi.fn(),
-};
+} as unknown as IGit;
 
 const mockUserInteractor = {
   confirmCommitMessage: vi.fn(),
@@ -28,13 +28,13 @@ const mockAddHistory = {
 
 describe('GenerateCommit', () => {
   it('should exit with error if there are no staged files', async () => {
-    mockGit.isRepository.mockReturnValue(true);
-    mockGit.diff.mockReturnValue(null);
+    vi.mocked(mockGit.isRepository).mockReturnValue(true);
+    vi.mocked(mockGit.diff).mockReturnValue('');
 
     const sut = new GenerateCommit({
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
-      git: mockGit as unknown as Git,
+      git: mockGit,
       addHistory: mockAddHistory,
     });
 
@@ -44,8 +44,8 @@ describe('GenerateCommit', () => {
   });
 
   it('should confirm the commit message if not forced', async () => {
-    mockGit.isRepository.mockReturnValue(true);
-    mockGit.diff.mockReturnValue('some diff');
+    vi.mocked(mockGit.isRepository).mockReturnValue(true);
+    vi.mocked(mockGit.diff).mockReturnValue('some diff');
     mockCommitGenerator.generate.mockResolvedValue('initial commit message');
     mockUserInteractor.confirmCommitMessage.mockResolvedValue(
       'final commit message',
@@ -54,7 +54,7 @@ describe('GenerateCommit', () => {
     const sut = new GenerateCommit({
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
-      git: mockGit as unknown as Git,
+      git: mockGit,
       addHistory: mockAddHistory,
     });
 
@@ -68,14 +68,14 @@ describe('GenerateCommit', () => {
   });
 
   it('should save commit in history', async () => {
-    mockGit.isRepository.mockReturnValue(true);
-    mockGit.diff.mockReturnValue('some diff');
+    vi.mocked(mockGit.isRepository).mockReturnValue(true);
+    vi.mocked(mockGit.diff).mockReturnValue('some diff');
     mockCommitGenerator.generate.mockResolvedValue('commit message');
 
     const sut = new GenerateCommit({
       userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
-      git: mockGit as unknown as Git,
+      git: mockGit,
       addHistory: mockAddHistory,
     });
 

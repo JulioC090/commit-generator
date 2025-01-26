@@ -1,9 +1,9 @@
 import GenerateCommit from '@/core/actions/GenerateCommit';
-import Git from '@/core/utils/Git';
+import IGit from '@/git/types/IGit';
 
 interface GenerateAndCommitProps {
   generateCommit: GenerateCommit;
-  git: Git;
+  git: IGit;
 }
 
 interface ExecuteOptions {
@@ -13,7 +13,7 @@ interface ExecuteOptions {
 
 export default class GenerateAndCommit {
   private generateCommit: GenerateCommit;
-  private git: Git;
+  private git: IGit;
 
   constructor({ generateCommit, git }: GenerateAndCommitProps) {
     this.generateCommit = generateCommit;

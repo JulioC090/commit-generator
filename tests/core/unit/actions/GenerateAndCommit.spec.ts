@@ -1,11 +1,11 @@
 import GenerateAndCommit from '@/core/actions/GenerateAndCommit';
 import GenerateCommit from '@/core/actions/GenerateCommit';
-import Git from '@/core/utils/Git';
+import IGit from '@/git/types/IGit';
 import { describe, expect, it, vi } from 'vitest';
 
 const mockGit = {
   commit: vi.fn(),
-} as unknown as Git;
+} as unknown as IGit;
 
 const mockGenerateCommit = {
   execute: vi.fn(),
