@@ -30,7 +30,6 @@ program
     '-t, --type <commitType>',
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
-  .option('-f, --force', 'Make commit automatically')
   .action(generate);
 
 program

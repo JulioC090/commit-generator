@@ -1,8 +1,7 @@
 import { historyPath } from '@/cli/constants';
-import CommandLineInteractor from '@/cli/user-interactor/CommandLineInteractor';
+import editLine from '@/cli/utils/editLine';
 import configManager from '@/config';
 import AddHistory from '@/core/actions/AddHistory';
-import GenerateAndCommit from '@/core/actions/GenerateAndCommit';
 import GenerateCommit from '@/core/actions/GenerateCommit';
 import OpenAICommitGenerator from '@/core/commit-generator/OpenAICommitGenerator';
 import git from '@/git';
@@ -18,17 +17,21 @@ export default async function generateAndCommit(options: {
   const commitGenerator = new OpenAICommitGenerator(
     (config.openaiKey as string) ?? '',
   );
-  const userInteractor = new CommandLineInteractor();
 
   const generateCommit = new GenerateCommit({
-    userInteractor,
     commitGenerator,
     git,
     excludeFiles: config.excludeFiles as Array<string>,
     addHistory,
   });
 
-  const generateAndCommit = new GenerateAndCommit({ generateCommit, git });
+  const commit = await generateCommit.execute(options);
 
-  await generateAndCommit.execute(options);
+  let finalCommit = commit;
+
+  if (!options.force) {
+    finalCommit = await editLine(commit);
+  }
+
+  git.commit(finalCommit);
 }

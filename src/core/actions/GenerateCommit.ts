@@ -1,11 +1,9 @@
 import { exitWithError } from '@/cli/utils/errorHandler';
 import AddHistory from '@/core/actions/AddHistory';
 import ICommitGenerator from '@/core/commit-generator/ICommitGenerator';
-import IUserInteractor from '@/core/user-interactor/IUserInteractor';
 import IGit from '@/git/types/IGit';
 
 interface GenerateCommitProps {
-  userInteractor: IUserInteractor;
   commitGenerator: ICommitGenerator;
   git: IGit;
   excludeFiles?: string[];
@@ -13,25 +11,21 @@ interface GenerateCommitProps {
 }
 
 interface ExecuteOptions {
-  force?: boolean;
   type?: string;
 }
 
 export default class GenerateCommit {
-  private userInteractor: IUserInteractor;
   private commitGenerator: ICommitGenerator;
   private git: IGit;
   private excludeFiles?: string[];
   private addHistory: AddHistory;
 
   constructor({
-    userInteractor,
     commitGenerator,
     git,
     excludeFiles,
     addHistory,
   }: GenerateCommitProps) {
-    this.userInteractor = userInteractor;
     this.commitGenerator = commitGenerator;
     this.git = git;
     this.excludeFiles = excludeFiles;
@@ -53,15 +47,8 @@ export default class GenerateCommit {
       type: options.type,
     });
 
-    let finalCommit = commitMessage;
+    this.addHistory.execute(commitMessage);
 
-    if (!options.force) {
-      finalCommit =
-        await this.userInteractor.confirmCommitMessage(commitMessage);
-    }
-
-    this.addHistory.execute(finalCommit);
-
-    return finalCommit;
+    return commitMessage;
   }
 }

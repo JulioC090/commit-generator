@@ -14,10 +14,6 @@ const mockGit = {
   commit: vi.fn(),
 } as unknown as IGit;
 
-const mockUserInteractor = {
-  confirmCommitMessage: vi.fn(),
-};
-
 const mockCommitGenerator = {
   generate: vi.fn(),
 };
@@ -32,7 +28,6 @@ describe('GenerateCommit', () => {
     vi.mocked(mockGit.diff).mockReturnValue('');
 
     const sut = new GenerateCommit({
-      userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
       git: mockGit,
       addHistory: mockAddHistory,
@@ -43,43 +38,18 @@ describe('GenerateCommit', () => {
     expect(exitWithError).toHaveBeenCalledWith('Error: No staged files found.');
   });
 
-  it('should confirm the commit message if not forced', async () => {
-    vi.mocked(mockGit.isRepository).mockReturnValue(true);
-    vi.mocked(mockGit.diff).mockReturnValue('some diff');
-    mockCommitGenerator.generate.mockResolvedValue('initial commit message');
-    mockUserInteractor.confirmCommitMessage.mockResolvedValue(
-      'final commit message',
-    );
-
-    const sut = new GenerateCommit({
-      userInteractor: mockUserInteractor,
-      commitGenerator: mockCommitGenerator,
-      git: mockGit,
-      addHistory: mockAddHistory,
-    });
-
-    const result = await sut.execute({ force: false });
-
-    expect(mockUserInteractor.confirmCommitMessage).toHaveBeenCalledWith(
-      'initial commit message',
-    );
-
-    expect(result).toBe('final commit message');
-  });
-
   it('should save commit in history', async () => {
     vi.mocked(mockGit.isRepository).mockReturnValue(true);
     vi.mocked(mockGit.diff).mockReturnValue('some diff');
     mockCommitGenerator.generate.mockResolvedValue('commit message');
 
     const sut = new GenerateCommit({
-      userInteractor: mockUserInteractor,
       commitGenerator: mockCommitGenerator,
       git: mockGit,
       addHistory: mockAddHistory,
     });
 
-    await sut.execute({ force: true });
+    await sut.execute({});
 
     expect(mockAddHistory.execute).toHaveBeenCalledWith('commit message');
   });
