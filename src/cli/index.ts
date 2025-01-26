@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --no-deprecation
 
 import commit from '@/cli/commands/commit';
 import generate from '@/cli/commands/generate';
