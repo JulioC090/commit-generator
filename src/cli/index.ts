@@ -14,6 +14,7 @@ const packageJSON = require('../../package.json');
 program.version(packageJSON.version);
 
 program
+  .passThroughOptions()
   .description('Generate a commit message based on Git diffs and Commit')
   .option(
     '-t, --type <commitType>',
