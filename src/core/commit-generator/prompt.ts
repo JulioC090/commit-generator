@@ -1,6 +1,6 @@
-import CommitInfo from '@/core/commit-generator/CommitInfo';
+import ICommitInfo from '@/core/types/ICommitInfo';
 
-export function buildPrompt({ diff, type }: CommitInfo): string {
+export function buildPrompt({ diff, type }: ICommitInfo): string {
   if (type) {
     return `
       Create a commit message in the Conventional Commits format

@@ -1,6 +1,6 @@
 import { exitWithError } from '@/cli/utils/errorHandler';
 import AddHistory from '@/core/actions/AddHistory';
-import ICommitGenerator from '@/core/commit-generator/ICommitGenerator';
+import ICommitGenerator from '@/core/types/ICommitGenerator';
 import IGit from '@/git/types/IGit';
 
 interface GenerateCommitProps {

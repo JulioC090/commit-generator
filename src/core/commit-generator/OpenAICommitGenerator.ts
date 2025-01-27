@@ -1,6 +1,6 @@
-import CommitInfo from '@/core/commit-generator/CommitInfo';
-import ICommitGenerator from '@/core/commit-generator/ICommitGenerator';
 import { buildPrompt } from '@/core/commit-generator/prompt';
+import ICommitGenerator from '@/core/types/ICommitGenerator';
+import ICommitInfo from '@/core/types/ICommitInfo';
 import OpenAI from 'openai';
 
 export default class OpenAICommitGenerator implements ICommitGenerator {
@@ -12,7 +12,7 @@ export default class OpenAICommitGenerator implements ICommitGenerator {
     });
   }
 
-  async generate(commitInfo: CommitInfo): Promise<string> {
+  async generate(commitInfo: ICommitInfo): Promise<string> {
     const completion = await this.openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
