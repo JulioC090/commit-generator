@@ -1,4 +1,5 @@
 import { exitWithError } from '@/cli/utils/errorHandler';
+import buildDiffArgs from '@/git/buildDiffArgs';
 import IDiffOptions from '@/git/types/IDiffOptions';
 import IGit from '@/git/types/IGit';
 import { execSync } from 'node:child_process';
@@ -20,21 +21,6 @@ class Git implements IGit {
     }
   }
 
-  private buildDiffArgs(options: IDiffOptions) {
-    const diffArgs: Array<string> = [];
-
-    if (options.staged) {
-      diffArgs.push('--cached --staged');
-    }
-
-    if (options.excludeFiles && options.excludeFiles.length > 0) {
-      diffArgs.push('-- .');
-      diffArgs.push(...options.excludeFiles.map((file) => `:(exclude)${file}`));
-    }
-
-    return diffArgs.join(' ').trim();
-  }
-
   public diff(options: IDiffOptions = { staged: false }): string {
     if (!this.isRepository()) {
       exitWithError(
@@ -43,7 +29,7 @@ class Git implements IGit {
     }
 
     try {
-      return execSync(`git diff ${this.buildDiffArgs(options)}`, {
+      return execSync(`git diff ${buildDiffArgs(options)}`, {
         encoding: 'utf-8',
       }).trim();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
