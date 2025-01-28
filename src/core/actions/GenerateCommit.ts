@@ -42,9 +42,12 @@ export default class GenerateCommit {
       exitWithError('Error: No staged files found.');
     }
 
+    const previousLogs = this.git.log(5);
+
     const commitMessage = await this.commitGenerator.generate({
       diff,
       type: options.type,
+      previousLogs,
     });
 
     this.addHistory.execute(commitMessage);

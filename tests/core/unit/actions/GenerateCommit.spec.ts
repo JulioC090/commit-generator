@@ -12,6 +12,7 @@ const mockGit = {
   isRepository: vi.fn(),
   diff: vi.fn(),
   commit: vi.fn(),
+  log: vi.fn(),
 } as unknown as IGit;
 
 const mockCommitGenerator = {

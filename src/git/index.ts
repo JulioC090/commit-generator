@@ -47,6 +47,16 @@ class Git implements IGit {
 
     execSync('git commit -F -', { input: commitMessage });
   }
+
+  public log(amount: number): string {
+    try {
+      return execSync(`git log -${amount} --pretty=format:%s`, {
+        encoding: 'utf-8',
+      }).trim();
+    } catch {
+      return '';
+    }
+  }
 }
 
 export default new Git();
