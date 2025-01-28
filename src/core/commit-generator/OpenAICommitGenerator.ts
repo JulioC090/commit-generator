@@ -1,4 +1,4 @@
-import { buildPrompt } from '@/core/commit-generator/prompt';
+import { generatePrompt } from '@/core/commit-generator/generatePrompt';
 import ICommitGenerator from '@/core/types/ICommitGenerator';
 import ICommitInfo from '@/core/types/ICommitInfo';
 import OpenAI from 'openai';
@@ -18,7 +18,7 @@ export default class OpenAICommitGenerator implements ICommitGenerator {
       messages: [
         {
           role: 'user',
-          content: buildPrompt(commitInfo),
+          content: generatePrompt(commitInfo),
         },
       ],
     });
