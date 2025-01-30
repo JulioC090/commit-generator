@@ -5,6 +5,7 @@ import generate from '@/cli/commands/generate';
 import generateAndCommit from '@/cli/commands/generateAndCommit';
 import remove from '@/cli/commands/remove';
 import save from '@/cli/commands/save';
+import validate from '@/cli/commands/validate';
 import { program } from 'commander';
 
 // tsc-alias don't support json files
@@ -36,6 +37,18 @@ program
   .command('commit')
   .description('Commit the last generated message')
   .action(commit);
+
+program
+  .command('validate')
+  .argument(
+    '[message]',
+    'Optional commit message. If not provided, the latest commit will be used.',
+  )
+  .description(
+    'Validate the commit message. If no message is provided, the latest commit will be validated.\n' +
+      'This command ensures the message follows best practices and can provide recommendations.',
+  )
+  .action(validate);
 
 program
   .command('save <keyValue...>')
