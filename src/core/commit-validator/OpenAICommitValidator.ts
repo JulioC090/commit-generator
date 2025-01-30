@@ -3,6 +3,7 @@ import ICommitInfo from '@/core/types/ICommitInfo';
 import ICommitValidator, {
   IValidateResult,
 } from '@/core/types/ICommitValidator';
+import normalizeJson from '@/core/utils/normalizeJson';
 import sanitize from '@/core/utils/sanitize';
 import OpenAI from 'openai';
 
@@ -30,9 +31,10 @@ export default class OpenAICommitValidator implements ICommitValidator {
     });
 
     const responseText = sanitize(completion.choices[0].message.content || '');
+    const normalizedResponse = normalizeJson(responseText);
 
     try {
-      const result = JSON.parse(responseText) as IValidateResult;
+      const result = JSON.parse(normalizedResponse) as IValidateResult;
       return result;
     } catch {
       throw new Error(`Invalid OpenAI response: ${responseText}`);
