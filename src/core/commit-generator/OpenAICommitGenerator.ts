@@ -1,6 +1,7 @@
 import { generatePrompt } from '@/core/commit-generator/generatePrompt';
 import ICommitGenerator from '@/core/types/ICommitGenerator';
 import ICommitInfo from '@/core/types/ICommitInfo';
+import sanitize from '@/core/utils/sanitize';
 import OpenAI from 'openai';
 
 export default class OpenAICommitGenerator implements ICommitGenerator {
@@ -23,6 +24,6 @@ export default class OpenAICommitGenerator implements ICommitGenerator {
       ],
     });
 
-    return completion.choices[0].message.content || '';
+    return sanitize(completion.choices[0].message.content || '');
   }
 }
