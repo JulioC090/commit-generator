@@ -2,6 +2,7 @@
 
 import amend from '@/cli/commands/amend';
 import commit from '@/cli/commands/commit';
+import edit from '@/cli/commands/edit';
 import generate from '@/cli/commands/generate';
 import generateAndCommit from '@/cli/commands/generateAndCommit';
 import remove from '@/cli/commands/remove';
@@ -33,6 +34,11 @@ program
     'Specify the type of commit (e.g., feat, fix, chore, docs, refactor, test, style, build, ci, perf, revert)',
   )
   .action(generate);
+
+program
+  .command('edit')
+  .description('Edit the last generated commit message')
+  .action(edit);
 
 program
   .command('commit')
