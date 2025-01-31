@@ -1,5 +1,6 @@
 #!/usr/bin/env node --no-deprecation
 
+import amend from '@/cli/commands/amend';
 import commit from '@/cli/commands/commit';
 import generate from '@/cli/commands/generate';
 import generateAndCommit from '@/cli/commands/generateAndCommit';
@@ -37,6 +38,13 @@ program
   .command('commit')
   .description('Commit the last generated message')
   .action(commit);
+
+program
+  .command('amend')
+  .description(
+    'Amend the last commit by replacing its message with the latest generated one, without modifying the staged files.',
+  )
+  .action(amend);
 
 program
   .command('validate')

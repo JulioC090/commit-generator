@@ -49,6 +49,16 @@ class Git implements IGit {
     execSync('git commit -F -', { input: commitMessage });
   }
 
+  public amend(commitMessage: string): void {
+    if (!this.isRepository()) {
+      exitWithError(
+        'Error: The current directory is not a valid Git repository.',
+      );
+    }
+
+    execSync('git commit --amend -F -', { input: commitMessage });
+  }
+
   public log(amount: number): string {
     try {
       return execSync(`git log -${amount} --pretty=format:%s`, {
