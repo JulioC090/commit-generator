@@ -1,25 +1,15 @@
 import { historyPath } from '@/cli/constants';
 import configManager from '@/config';
-import AddHistory from '@/core/actions/AddHistory';
-import ValidateCommit from '@/core/actions/ValidateCommit';
-import OpenAICommitValidator from '@/core/commit-validator/OpenAICommitValidator';
-import git from '@/git';
+import createValidateCommit from '@/core/factories/createValidateCommit';
 
 export default async function validate(commitMessage?: string) {
   const config = await configManager.loadConfig();
 
-  const addHistory = new AddHistory({ historyPath });
-
-  const commitValidator = new OpenAICommitValidator(
-    (config.openaiKey as string) ?? '',
+  const validateCommit = createValidateCommit(
+    { key: (config.openaiKey as string) ?? '' },
+    historyPath,
+    config.excludeFiles as Array<string>,
   );
-
-  const validateCommit = new ValidateCommit({
-    addHistory,
-    git,
-    commitValidator,
-    excludeFiles: config.excludeFiles as Array<string>,
-  });
 
   const result = await validateCommit.execute({ commitMessage });
 
