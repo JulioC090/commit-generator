@@ -1,9 +1,10 @@
 import { createKeyValueArray } from '@/cli/utils/createKeyValueArray';
 import configManager from '@/config';
-import SaveKey from '@/core/actions/SaveKeys';
 
 export default async function save(keyValues: Array<string>) {
-  const saveKey = new SaveKey({ configManager });
-  const keyValuePairs = createKeyValueArray(keyValues);
-  await saveKey.execute(keyValuePairs);
+  const pairs = createKeyValueArray(keyValues);
+
+  for (const { key, value } of pairs) {
+    await configManager.set(key, value, 'local');
+  }
 }
