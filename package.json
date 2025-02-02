@@ -2,20 +2,12 @@
   "name": "commit-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/cli/index.js",
-  "bin": {
-    "commitgen": "./dist/cli/index.js"
-  },
   "scripts": {
-    "start": "node .",
-    "dev": "tsx watch --env-file=.env ./src/cli/index.ts",
-    "build": "npm run clean && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "clean": "rimraf dist",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit -p .",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
+    "typecheck": "pnpm run --filter \"@commit-generator/*\" typecheck", 
     "prepare": "husky"
   },
   "keywords": [],
@@ -24,7 +16,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "@vitest/coverage-v8": "^1.6.0",
@@ -40,10 +31,6 @@
     "typescript": "^5.5.2",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.6.0"
-  },
-  "dependencies": {
-    "commander": "^13.0.0",
-    "openai": "^4.77.0"
   },
   "packageManager": "pnpm@9.15.2"
 }

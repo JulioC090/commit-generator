@@ -7,13 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      commander:
-        specifier: ^13.0.0
-        version: 13.1.0
-      openai:
-        specifier: ^4.77.0
-        version: 4.80.1
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.3.0
@@ -21,9 +14,6 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.2.2
         version: 19.6.0
-      '@types/node':
-        specifier: ^22.10.2
-        version: 22.10.10
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.18.1
         version: 8.21.0(@typescript-eslint/parser@8.21.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3)
@@ -69,6 +59,50 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@22.10.10)
+
+  packages/config:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+
+  packages/core:
+    dependencies:
+      '@commit-generator/git':
+        specifier: workspace:^
+        version: link:../git
+      openai:
+        specifier: ^4.77.0
+        version: 4.80.1
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+
+  packages/git:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+
+  projects/cli:
+    dependencies:
+      '@commit-generator/config':
+        specifier: workspace:^
+        version: link:../../packages/config
+      '@commit-generator/core':
+        specifier: workspace:^
+        version: link:../../packages/core
+      '@commit-generator/git':
+        specifier: workspace:^
+        version: link:../../packages/git
+      commander:
+        specifier: ^13.0.0
+        version: 13.1.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
 
 packages:
 
