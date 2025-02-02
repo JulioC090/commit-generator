@@ -1,35 +1,45 @@
-import js from "@eslint/js";
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsparser from "@typescript-eslint/parser";
-import prettier from "eslint-config-prettier";
-import eslintPluginPrettier from "eslint-plugin-prettier";
+import eslintJs from "@eslint/js";
+import prettierConfig from "eslint-config-prettier";
+import prettierPlugin from "eslint-plugin-prettier/recommended";
+import turbo from 'eslint-plugin-turbo';
 import globals from "globals";
+import tsEslint from "typescript-eslint";
 
 export default [
-  js.configs.recommended,
+  // Recommended JavaScript configuration
+  eslintJs.configs.recommended,
   
+  // Recommended TypeScript configuration
+  ...tsEslint.configs.recommended,
+
+  // Turbo-specific rules for monorepos
+  turbo.configs['flat/recommended'],
+  
+  // Disables rules that conflict with Prettier
+  prettierConfig,
+  
+  // Recommended rules from the Prettier plugin
+  prettierPlugin,
+  
+  // Language and global environment settings
   {
     languageOptions: {
-      parser: tsparser,
+      ecmaVersion: 2022,
+      sourceType: "module",
       globals: {
         ...globals.node,
         ...globals.es2022,
-      }
+      },
     },
-    plugins: {
-      "@typescript-eslint": tseslint
-    },
-    rules: {
-      ...tseslint.configs.recommended.rules
-    }
   },
-
-  prettier,
-
+  
+  // Directories ignored by ESLint
   {
-    plugins: {
-      prettier: eslintPluginPrettier
-    },
+    ignores: ["node_modules", "dist"],
+  },
+  
+  // Prettier custom rules
+  {
     rules: {
       "prettier/prettier": [
         "error",
@@ -39,13 +49,9 @@ export default [
           bracketSpacing: true,
           bracketSameLine: false,
           tabWidth: 2,
-          endOfLine: "auto"
-        }
-      ]
-    }
+          endOfLine: "auto",
+        },
+      ],
+    },
   },
-
-  {
-    ignores: ["node_modules", "dist"]
-  }
 ];
