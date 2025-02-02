@@ -1,9 +1,10 @@
 {
   "name": "@commit-generator/git",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
