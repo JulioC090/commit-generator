@@ -7,7 +7,7 @@
     "build": "turbo run build",
     "clean": "turbo run clean",
     "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix --",
+    "lint:fix": "turbo run lint:fix --filter=[HEAD]",
     "test": "turbo run test",
     "test:watch": "vitest watch",
     "test:coverage": "turbo run test:coverage",
