@@ -15,9 +15,10 @@
     "clean": "rimraf dist",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit -p .",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit -p ."
   },
   "devDependencies": {
     "@types/node": "^22.10.2"

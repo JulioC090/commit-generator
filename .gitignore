@@ -4,3 +4,4 @@ coverage
 .env
 .commitgen.json
 history
+.turbo

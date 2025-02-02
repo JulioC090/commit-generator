@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "lint": "pnpm run --filter \"@commit-generator/*\" lint",
-    "lint:fix": "pnpm run --filter \"@commit-generator/*\" lint:fix",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "typecheck": "pnpm run --filter \"@commit-generator/*\" typecheck", 
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test",
+    "test:watch": "vitest watch",
+    "test:coverage": "turbo run test:coverage",
+    "typecheck": "turbo run typecheck"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +28,9 @@
     "typescript": "^5.5.2",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "turbo": "^2.4.0"
   },
   "packageManager": "pnpm@9.15.2"
 }
