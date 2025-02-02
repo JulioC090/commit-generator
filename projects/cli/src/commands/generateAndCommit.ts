@@ -5,8 +5,8 @@ import { createGenerateCommit } from '@commit-generator/core';
 import { git } from '@commit-generator/git';
 
 export default async function generateAndCommit(options: {
-  type: string;
-  force: boolean;
+  type?: string;
+  force?: boolean;
 }) {
   const config = await configManager.loadConfig();
 

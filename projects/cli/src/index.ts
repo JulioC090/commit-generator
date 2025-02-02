@@ -8,7 +8,7 @@ import generateAndCommit from '@/commands/generateAndCommit';
 import remove from '@/commands/remove';
 import save from '@/commands/save';
 import validate from '@/commands/validate';
-import { program } from 'commander';
+import { program } from '@commander-js/extra-typings';
 
 // tsc-alias don't support json files
 // eslint-disable-next-line @typescript-eslint/no-require-imports
