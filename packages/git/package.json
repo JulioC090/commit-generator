@@ -15,8 +15,6 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@commit-generator/typescript-config": "workspace:^",
-    "@commit-generator/config": "workspace:^",
     "@types/node": "^22.10.2"
   }
 }
