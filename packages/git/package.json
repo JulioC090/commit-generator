@@ -15,6 +15,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@commit-generator/config": "workspace:^",
     "@types/node": "^22.10.2"
   }
 }
