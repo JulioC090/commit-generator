@@ -19,6 +19,7 @@
     "openai": "^4.77.0"
   },
   "devDependencies": {
+    "@commit-generator/typescript-config": "workspace:^",
     "@commit-generator/config": "workspace:^",
     "@types/node": "^22.10.2"
   }

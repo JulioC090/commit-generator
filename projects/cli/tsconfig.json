@@ -1,7 +1,6 @@
 {
+  "extends": "@commit-generator/typescript-config/base.json",
   "compilerOptions": {
-    "target": "es2022",
-    "module": "commonjs",
     "baseUrl": "src",
     "rootDirs": ["src", "tests"],
     "outDir": "dist",
@@ -9,11 +8,6 @@
       "@/tests/*": ["../tests/*"],
       "@/*": ["*"]
     },
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "removeComments": true
   },
   "include": ["src", "tests"],
   "exclude": []

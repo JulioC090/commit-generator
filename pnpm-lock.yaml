@@ -47,6 +47,9 @@ importers:
       '@commit-generator/config':
         specifier: workspace:^
         version: 'link:'
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
@@ -63,6 +66,9 @@ importers:
       '@commit-generator/config':
         specifier: workspace:^
         version: link:../config
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
@@ -96,9 +102,14 @@ importers:
       '@commit-generator/config':
         specifier: workspace:^
         version: link:../config
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+
+  packages/typescript-config: {}
 
   projects/cli:
     dependencies:
@@ -115,6 +126,9 @@ importers:
         specifier: ^13.0.0
         version: 13.1.0
     devDependencies:
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
