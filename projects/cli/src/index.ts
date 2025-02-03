@@ -8,6 +8,7 @@ import generateAndCommit from '@/commands/generateAndCommit';
 import remove from '@/commands/remove';
 import save from '@/commands/save';
 import validate from '@/commands/validate';
+import keyValueParser from '@/parsers/keyValueParser';
 import { program } from '@commander-js/extra-typings';
 
 // tsc-alias don't support json files
@@ -65,7 +66,12 @@ program
   .action(validate);
 
 program
-  .command('save <keyValue...>')
+  .command('save')
+  .argument(
+    '<keyValue...>',
+    'Key-value pairs in the format key=value',
+    keyValueParser,
+  )
   .description('Save configuration keys with their specified values')
   .action(save);
 
