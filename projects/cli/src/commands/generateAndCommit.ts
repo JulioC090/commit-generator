@@ -11,6 +11,8 @@ export default async function generateAndCommit(options: {
   type?: string;
   force?: boolean;
 }) {
+  const spinner = ora('Generating commit message, please wait...');
+
   try {
     const config = await configManager.loadConfig();
 
@@ -25,7 +27,7 @@ export default async function generateAndCommit(options: {
     );
 
     console.clear();
-    const spinner = ora('Generating commit message, please wait...').start();
+    spinner.start();
     let commitMessage = await generateCommit.execute(options);
     spinner.stop();
 
@@ -40,6 +42,8 @@ export default async function generateAndCommit(options: {
     console.clear();
     console.log(chalk.blue('Commit successful!'));
   } catch (error) {
+    spinner.stop();
+    console.clear();
     console.error(chalk.red('An error occurred:'), (error as Error).message);
   }
 }
