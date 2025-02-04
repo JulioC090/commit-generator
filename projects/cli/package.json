@@ -29,6 +29,8 @@
     "@commit-generator/core": "workspace:^",
     "@commit-generator/git": "workspace:^",
     "chalk": "^4",
-    "commander": "^13.0.0"
+    "commander": "^13.0.0",
+    "inquirer": "^12.4.1",
+    "ora-classic": "^5.4.2"
   }
 }
