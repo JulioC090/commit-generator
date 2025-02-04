@@ -52,22 +52,6 @@ importers:
         specifier: ^22.10.2
         version: 22.10.10
 
-  packages/core:
-    dependencies:
-      '@commit-generator/git':
-        specifier: workspace:^
-        version: link:../git
-      openai:
-        specifier: ^4.77.0
-        version: 4.80.1
-    devDependencies:
-      '@commit-generator/typescript-config':
-        specifier: workspace:^
-        version: link:../typescript-config
-      '@types/node':
-        specifier: ^22.10.2
-        version: 22.10.10
-
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
@@ -113,7 +97,7 @@ importers:
         version: link:../../packages/config
       '@commit-generator/core':
         specifier: workspace:^
-        version: link:../../packages/core
+        version: link:../core
       '@commit-generator/git':
         specifier: workspace:^
         version: link:../../packages/git
@@ -130,6 +114,22 @@ importers:
         specifier: ^5.4.2
         version: 5.4.2
     devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+
+  projects/core:
+    dependencies:
+      '@commit-generator/git':
+        specifier: workspace:^
+        version: link:../../packages/git
+      openai:
+        specifier: ^4.77.0
+        version: 4.80.1
+    devDependencies:
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
