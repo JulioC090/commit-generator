@@ -29,7 +29,7 @@ describe('Prompt', () => {
 
     const prompt = new Prompt(props);
 
-    const expectedOutput = `Intro text.\n\nRules here.\n\nOutput info.\n\nExamples here.\n\nInputs:`;
+    const expectedOutput = `Intro text.\n\nRules here.\n\nOutput info.\n\nExamples here.`;
 
     expect(prompt.toString()).toBe(expectedOutput);
   });

@@ -51,6 +51,6 @@ describe('PromptBuilder', () => {
       .build();
 
     expect(prompt).toBeInstanceOf(Prompt);
-    expect(prompt.toString()).toBe(`Intro only.\n\n\n\n\n\n\n\nInputs:`);
+    expect(prompt.toString()).toBe(`Intro only.`);
   });
 });

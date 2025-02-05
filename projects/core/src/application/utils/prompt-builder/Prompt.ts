@@ -22,14 +22,31 @@ export default class Prompt {
   }
 
   public toString(): string {
-    let output = this.intro + '\n\n';
-    output += this.rules + '\n\n';
-    output += this.output + '\n\n';
-    output += this.examples + '\n\n';
-    output += 'Inputs:\n';
-    for (const input of this.inputs) {
-      output += `  - ${input}\n`;
+    let output: string = '';
+
+    if (this.intro) {
+      output += this.intro + '\n\n';
     }
+
+    if (this.rules) {
+      output += this.rules + '\n\n';
+    }
+
+    if (this.output) {
+      output += this.output + '\n\n';
+    }
+
+    if (this.examples) {
+      output += this.examples + '\n\n';
+    }
+
+    if (this.inputs.length > 0) {
+      output += 'Inputs:\n';
+      for (const input of this.inputs) {
+        output += `  - ${input}\n`;
+      }
+    }
+
     return output.trim();
   }
 }
