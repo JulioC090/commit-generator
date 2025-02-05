@@ -3,4 +3,3 @@ export { default as createCommitGenerated } from '@/application/factories/create
 export { default as createEditLastGenerated } from '@/application/factories/createEditLastGenerated';
 export { default as createGenerateCommit } from '@/application/factories/createGenerateCommit';
 export { default as createValidateCommit } from '@/application/factories/createValidateCommit';
-

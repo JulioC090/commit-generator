@@ -1,6 +1,7 @@
+import CommitGenerator from '@/application/services/CommitGenerator';
 import AddHistory from '@/application/use-cases/AddHistory';
 import GenerateCommit from '@/application/use-cases/GenerateCommit';
-import OpenAICommitGenerator from '@/infrastructure/ai/OpenAICommitGenerator';
+import OpenAIModel from '@/infrastructure/ai/OpenAIModel';
 import { git } from '@commit-generator/git';
 
 export default function createGenerateCommit(
@@ -8,8 +9,11 @@ export default function createGenerateCommit(
   historyPath: string,
   excludeFiles: string[],
 ) {
+  const openAIModel = new OpenAIModel(commitGeneratorConfig.key);
+  const commitGenerator = new CommitGenerator(openAIModel);
+
   return new GenerateCommit({
-    commitGenerator: new OpenAICommitGenerator(commitGeneratorConfig.key),
+    commitGenerator,
     addHistory: new AddHistory({ historyPath }),
     excludeFiles,
     git,
