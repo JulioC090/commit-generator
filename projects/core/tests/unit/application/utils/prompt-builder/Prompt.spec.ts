@@ -13,7 +13,7 @@ describe('Prompt', () => {
 
     const prompt = new Prompt(props);
 
-    const expectedOutput = `This is an introduction.\n1. Follow the rules.\n2. Be concise.\nExpected output format:\nExample: Input -> Output\nInputs:\n  - Input 1\n  - Input 2\n  - Input 3\n`;
+    const expectedOutput = `This is an introduction.\n\n1. Follow the rules.\n2. Be concise.\n\nExpected output format:\n\nExample: Input -> Output\n\nInputs:\n  - Input 1\n  - Input 2\n  - Input 3`;
 
     expect(prompt.toString()).toBe(expectedOutput);
   });
@@ -29,7 +29,7 @@ describe('Prompt', () => {
 
     const prompt = new Prompt(props);
 
-    const expectedOutput = `Intro text.\nRules here.\nOutput info.\nExamples here.\nInputs:\n`;
+    const expectedOutput = `Intro text.\n\nRules here.\n\nOutput info.\n\nExamples here.\n\nInputs:`;
 
     expect(prompt.toString()).toBe(expectedOutput);
   });

@@ -18,7 +18,7 @@ describe('PromptBuilder', () => {
 
     expect(prompt).toBeInstanceOf(Prompt);
     expect(prompt.toString()).toBe(
-      `This is an introduction.\n1. Follow the rules.\n2. Be concise.\nExpected output format:\nExample: Input -> Output\nInputs:\n  - Input 1\n  - Input 2\n  - Optional Input 3\n`,
+      `This is an introduction.\n\n1. Follow the rules.\n2. Be concise.\n\nExpected output format:\n\nExample: Input -> Output\n\nInputs:\n  - Input 1\n  - Input 2\n  - Optional Input 3`,
     );
   });
 
@@ -36,7 +36,7 @@ describe('PromptBuilder', () => {
 
     expect(prompt).toBeInstanceOf(Prompt);
     expect(prompt.toString()).toBe(
-      `Intro text.\nRules here.\nOutput info.\nExamples here.\nInputs:\n  - Input 1\n`,
+      `Intro text.\n\nRules here.\n\nOutput info.\n\nExamples here.\n\nInputs:\n  - Input 1`,
     );
   });
 
@@ -51,6 +51,6 @@ describe('PromptBuilder', () => {
       .build();
 
     expect(prompt).toBeInstanceOf(Prompt);
-    expect(prompt.toString()).toBe(`Intro only.\n\n\n\nInputs:\n`);
+    expect(prompt.toString()).toBe(`Intro only.\n\n\n\n\n\n\n\nInputs:`);
   });
 });
