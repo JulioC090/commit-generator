@@ -1,14 +1,14 @@
 import IAIModel from '@/application/interfaces/IAIModel';
 import ICommitInfo from '@/application/interfaces/ICommitInfo';
 import CommitGenerator from '@/application/services/CommitGenerator';
-import sanitize from '@/infrastructure/ai/sanitizers/sanitize';
+import sanitize from '@/application/utils/sanitizers/sanitize';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/infrastructure/ai/prompts/generatePrompt', () => ({
+vi.mock('@/application/utils/prompts/generatePrompt', () => ({
   generatePrompt: vi.fn(),
 }));
 
-vi.mock('@/infrastructure/ai/sanitizers/sanitize', () => ({
+vi.mock('@/application/utils/sanitizers/sanitize', () => ({
   default: vi.fn(),
 }));
 

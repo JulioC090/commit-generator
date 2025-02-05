@@ -1,4 +1,4 @@
-import Prompt from '@/infrastructure/ai/prompt-builder/Prompt';
+import Prompt from '@/application/utils/prompt-builder/Prompt';
 
 export default class PromptBuilder {
   private intro: string = '';

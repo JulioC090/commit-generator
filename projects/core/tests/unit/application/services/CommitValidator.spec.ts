@@ -1,19 +1,19 @@
 import IAIModel from '@/application/interfaces/IAIModel';
 import ICommitInfo from '@/application/interfaces/ICommitInfo';
 import CommitValidator from '@/application/services/CommitValidator';
-import normalizeJson from '@/infrastructure/ai/sanitizers/normalizeJson';
-import sanitize from '@/infrastructure/ai/sanitizers/sanitize';
+import normalizeJson from '@/application/utils/sanitizers/normalizeJson';
+import sanitize from '@/application/utils/sanitizers/sanitize';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/infrastructure/ai/prompts/validatePrompt', () => ({
+vi.mock('@/application/utils/prompts/validatePrompt', () => ({
   default: vi.fn(),
 }));
 
-vi.mock('@/infrastructure/ai/sanitizers/normalizeJson', () => ({
+vi.mock('@/application/utils/sanitizers/normalizeJson', () => ({
   default: vi.fn(),
 }));
 
-vi.mock('@/infrastructure/ai/sanitizers/sanitize', () => ({
+vi.mock('@/application/utils/sanitizers/sanitize', () => ({
   default: vi.fn(),
 }));
 

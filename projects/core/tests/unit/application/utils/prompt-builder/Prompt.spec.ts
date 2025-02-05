@@ -1,4 +1,4 @@
-import Prompt from '@/infrastructure/ai/prompt-builder/Prompt';
+import Prompt from '@/application/utils/prompt-builder/Prompt';
 import { describe, expect, it } from 'vitest';
 
 describe('Prompt', () => {

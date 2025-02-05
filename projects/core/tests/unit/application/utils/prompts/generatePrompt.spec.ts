@@ -1,4 +1,4 @@
-import { generatePrompt } from '@/infrastructure/ai/prompts/generatePrompt';
+import { generatePrompt } from '@/application/utils/prompts/generatePrompt';
 import { describe, expect, it } from 'vitest';
 
 describe('generatePrompt', () => {

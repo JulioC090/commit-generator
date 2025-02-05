@@ -1,4 +1,4 @@
-import validatePrompt from '@/infrastructure/ai/prompts/validatePrompt';
+import validatePrompt from '@/application/utils/prompts/validatePrompt';
 import { describe, expect, it } from 'vitest';
 
 describe('validatePrompt', () => {

@@ -3,9 +3,9 @@ import ICommitInfo from '@/application/interfaces/ICommitInfo';
 import ICommitValidator, {
   IValidateResult,
 } from '@/application/interfaces/ICommitValidator';
-import validatePrompt from '@/infrastructure/ai/prompts/validatePrompt';
-import normalizeJson from '@/infrastructure/ai/sanitizers/normalizeJson';
-import sanitize from '@/infrastructure/ai/sanitizers/sanitize';
+import validatePrompt from '@/application/utils/prompts/validatePrompt';
+import normalizeJson from '@/application/utils/sanitizers/normalizeJson';
+import sanitize from '@/application/utils/sanitizers/sanitize';
 
 export default class CommitValidator implements ICommitValidator {
   constructor(private aiModel: IAIModel) {}

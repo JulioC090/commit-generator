@@ -1,4 +1,4 @@
-import sanitize from '@/infrastructure/ai/sanitizers/sanitize';
+import sanitize from '@/application/utils/sanitizers/sanitize';
 import { describe, expect, it } from 'vitest';
 
 describe('sanitize', () => {

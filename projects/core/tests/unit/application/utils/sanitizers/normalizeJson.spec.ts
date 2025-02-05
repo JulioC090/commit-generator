@@ -1,4 +1,4 @@
-import normalizeJson from '@/infrastructure/ai/sanitizers/normalizeJson';
+import normalizeJson from '@/application/utils/sanitizers/normalizeJson';
 import { describe, expect, it } from 'vitest';
 
 describe('normalizeJson', () => {

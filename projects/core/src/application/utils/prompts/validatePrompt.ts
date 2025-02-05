@@ -1,5 +1,5 @@
 import ICommitInfo from '@/application/interfaces/ICommitInfo';
-import PromptBuilder from '@/infrastructure/ai/prompt-builder/PromptBuilder';
+import PromptBuilder from '@/application/utils/prompt-builder/PromptBuilder';
 
 export default function validatePrompt(
   commitMessage: string,
