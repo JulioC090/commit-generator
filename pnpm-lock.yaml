@@ -85,6 +85,18 @@ importers:
         specifier: ^22.10.2
         version: 22.10.10
 
+  packages/history:
+    devDependencies:
+      '@commit-generator/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+
   packages/typescript-config: {}
 
   projects/cli:
