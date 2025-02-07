@@ -126,6 +126,9 @@ importers:
         specifier: ^5.4.2
         version: 5.4.2
     devDependencies:
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
