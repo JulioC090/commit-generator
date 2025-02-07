@@ -1,20 +1,11 @@
-import AddHistory from '@/application/use-cases/AddHistory';
+import ICommitHistory from '@/application/interfaces/ICommitHistory';
 import EditLastGenerated from '@/application/use-cases/EditLastGenerated';
-import GetHistory from '@/application/use-cases/GetHistory';
-import { IGit } from '@commit-generator/git';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mockGetHistory = {
-  execute: vi.fn().mockResolvedValue(['Initial commit']),
-} as unknown as GetHistory;
-
-const mockAddHistory = {
-  execute: vi.fn(),
-} as unknown as AddHistory;
-
-const mockGit = {
-  amend: vi.fn(),
-} as unknown as IGit;
+const mockCommitHistory = {
+  add: vi.fn(),
+  get: vi.fn().mockResolvedValue(['Initial commit']),
+} as unknown as ICommitHistory;
 
 const mockEditMessage = vi.fn();
 
@@ -25,45 +16,43 @@ describe('EditLastGenerated', () => {
     vi.resetAllMocks();
 
     sut = new EditLastGenerated({
-      getHistory: mockGetHistory,
-      addHistory: mockAddHistory,
-      git: mockGit,
+      commitHistory: mockCommitHistory,
       editMessage: mockEditMessage,
     });
   });
 
   it('should edit the last commit message and save it to history', async () => {
-    vi.mocked(mockGetHistory.execute).mockResolvedValueOnce(['Initial commit']);
+    vi.mocked(mockCommitHistory.get).mockResolvedValueOnce(['Initial commit']);
     vi.mocked(mockEditMessage).mockReturnValueOnce('Updated commit message');
 
     await sut.execute();
 
-    expect(mockGetHistory.execute).toHaveBeenCalledWith(1);
+    expect(mockCommitHistory.get).toHaveBeenCalledWith(1);
     expect(mockEditMessage).toHaveBeenCalledWith('Initial commit');
-    expect(mockAddHistory.execute).toHaveBeenCalledWith(
+    expect(mockCommitHistory.add).toHaveBeenCalledWith(
       'Updated commit message',
     );
   });
 
   it('should throw an error if no commits are found', async () => {
-    vi.mocked(mockGetHistory.execute).mockResolvedValueOnce([]);
+    vi.mocked(mockCommitHistory.get).mockResolvedValueOnce([]);
 
     await expect(sut.execute()).rejects.toThrow('No commits found in history');
 
-    expect(mockGetHistory.execute).toHaveBeenCalledWith(1);
-    expect(mockAddHistory.execute).not.toHaveBeenCalled();
+    expect(mockCommitHistory.get).toHaveBeenCalledWith(1);
+    expect(mockCommitHistory.add).not.toHaveBeenCalled();
   });
 
   it('should throw an error if the new commit message is empty', async () => {
-    vi.mocked(mockGetHistory.execute).mockResolvedValueOnce(['Initial commit']);
+    vi.mocked(mockCommitHistory.get).mockResolvedValueOnce(['Initial commit']);
     vi.mocked(mockEditMessage).mockReturnValueOnce('');
 
     await expect(sut.execute()).rejects.toThrow(
       'Commit message cannot be empty',
     );
 
-    expect(mockGetHistory.execute).toHaveBeenCalledWith(1);
+    expect(mockCommitHistory.get).toHaveBeenCalledWith(1);
     expect(mockEditMessage).toHaveBeenCalledWith('Initial commit');
-    expect(mockAddHistory.execute).not.toHaveBeenCalled();
+    expect(mockCommitHistory.add).not.toHaveBeenCalled();
   });
 });

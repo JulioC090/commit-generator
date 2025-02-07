@@ -1,7 +1,7 @@
 import CommitGenerator from '@/application/services/CommitGenerator';
-import AddHistory from '@/application/use-cases/AddHistory';
 import GenerateCommit from '@/application/use-cases/GenerateCommit';
 import OpenAIModel from '@/infrastructure/ai/OpenAIModel';
+import { CommitHistory } from '@commit-generator/commit-history';
 import { git } from '@commit-generator/git';
 
 export default function createGenerateCommit(
@@ -14,7 +14,7 @@ export default function createGenerateCommit(
 
   return new GenerateCommit({
     commitGenerator,
-    addHistory: new AddHistory({ historyPath }),
+    commitHistory: new CommitHistory(historyPath),
     excludeFiles,
     git,
   });

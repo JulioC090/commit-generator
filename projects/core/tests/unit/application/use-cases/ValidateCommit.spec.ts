@@ -1,5 +1,5 @@
+import ICommitHistory from '@/application/interfaces/ICommitHistory';
 import ICommitValidator from '@/application/interfaces/ICommitValidator';
-import AddHistory from '@/application/use-cases/AddHistory';
 import ValidateCommit from '@/application/use-cases/ValidateCommit';
 import { IGit } from '@commit-generator/git';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -7,8 +7,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 describe('ValidateCommit', () => {
   let sut: ValidateCommit;
   let mockCommitValidator: ICommitValidator;
+  let mockCommitHistory: ICommitHistory;
   let mockGit: IGit;
-  let mockAddHistory: AddHistory;
 
   beforeEach(() => {
     vi.resetAllMocks();
@@ -22,14 +22,15 @@ describe('ValidateCommit', () => {
       log: vi.fn(),
     } as unknown as IGit;
 
-    mockAddHistory = {
-      execute: vi.fn(),
-    } as unknown as AddHistory;
+    mockCommitHistory = {
+      add: vi.fn(),
+      get: vi.fn(),
+    } as unknown as ICommitHistory;
 
     sut = new ValidateCommit({
       commitValidator: mockCommitValidator,
+      commitHistory: mockCommitHistory,
       git: mockGit,
-      addHistory: mockAddHistory,
     });
   });
 
@@ -53,7 +54,7 @@ describe('ValidateCommit', () => {
       'fix: adjust login flow',
       { diff: 'mocked diff' },
     );
-    expect(mockAddHistory.execute).toHaveBeenCalledWith(
+    expect(mockCommitHistory.add).toHaveBeenCalledWith(
       'feat(auth): improve login security',
     );
     expect(result).toEqual({
@@ -75,7 +76,7 @@ describe('ValidateCommit', () => {
     const validateCommit = new ValidateCommit({
       commitValidator: mockCommitValidator,
       git: mockGit,
-      addHistory: mockAddHistory,
+      commitHistory: mockCommitHistory,
     });
 
     const result = await validateCommit.execute({});
@@ -89,7 +90,7 @@ describe('ValidateCommit', () => {
       'Initial commit message',
       { diff: 'mocked diff' },
     );
-    expect(mockAddHistory.execute).toHaveBeenCalledWith(
+    expect(mockCommitHistory.add).toHaveBeenCalledWith(
       'feat(auth): improve login security',
     );
     expect(result).toEqual({

@@ -43,6 +43,18 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@22.10.10)
 
+  packages/commit-history:
+    devDependencies:
+      '@commit-generator/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+
   packages/config:
     devDependencies:
       '@commit-generator/typescript-config':
@@ -85,18 +97,6 @@ importers:
         specifier: ^22.10.2
         version: 22.10.10
 
-  packages/history:
-    devDependencies:
-      '@commit-generator/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
-      '@commit-generator/typescript-config':
-        specifier: workspace:^
-        version: link:../typescript-config
-      '@types/node':
-        specifier: ^22.10.2
-        version: 22.10.10
-
   packages/typescript-config: {}
 
   projects/cli:
@@ -132,6 +132,9 @@ importers:
 
   projects/core:
     dependencies:
+      '@commit-generator/commit-history':
+        specifier: workspace:^
+        version: link:../../packages/commit-history
       '@commit-generator/git':
         specifier: workspace:^
         version: link:../../packages/git

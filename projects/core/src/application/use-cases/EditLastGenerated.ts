@@ -1,34 +1,21 @@
-import AddHistory from '@/application/use-cases/AddHistory';
-import GetHistory from '@/application/use-cases/GetHistory';
-import { IGit } from '@commit-generator/git';
+import ICommitHistory from '@/application/interfaces/ICommitHistory';
 
 interface EditLastGeneratedProps {
-  getHistory: GetHistory;
-  addHistory: AddHistory;
-  git: IGit;
+  commitHistory: ICommitHistory;
   editMessage: (message: string) => Promise<string>;
 }
 
 export default class EditLastGenerated {
-  private getHistory: GetHistory;
-  private addHistory: AddHistory;
-  private git: IGit;
+  private commitHistory: ICommitHistory;
   private editMessage: (message: string) => Promise<string>;
 
-  constructor({
-    getHistory,
-    addHistory,
-    git,
-    editMessage,
-  }: EditLastGeneratedProps) {
-    this.getHistory = getHistory;
-    this.addHistory = addHistory;
-    this.git = git;
+  constructor({ commitHistory, editMessage }: EditLastGeneratedProps) {
+    this.commitHistory = commitHistory;
     this.editMessage = editMessage;
   }
 
   async execute(): Promise<void> {
-    const history = await this.getHistory.execute(1);
+    const history = await this.commitHistory.get(1);
 
     if (history.length === 0) {
       throw new Error('No commits found in history');
@@ -41,6 +28,6 @@ export default class EditLastGenerated {
       throw new Error('Commit message cannot be empty');
     }
 
-    await this.addHistory.execute(newMessage);
+    await this.commitHistory.add(newMessage);
   }
 }

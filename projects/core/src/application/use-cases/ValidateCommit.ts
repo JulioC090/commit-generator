@@ -1,14 +1,14 @@
+import ICommitHistory from '@/application/interfaces/ICommitHistory';
 import ICommitValidator, {
   IValidateResult,
 } from '@/application/interfaces/ICommitValidator';
-import AddHistory from '@/application/use-cases/AddHistory';
 import { IGit } from '@commit-generator/git';
 
 interface ValidateCommitProps {
   commitValidator: ICommitValidator;
+  commitHistory: ICommitHistory;
   git: IGit;
   excludeFiles?: string[];
-  addHistory: AddHistory;
 }
 
 interface ExecuteOptions {
@@ -19,18 +19,17 @@ export default class ValidateCommit {
   private commitValidator: ICommitValidator;
   private git: IGit;
   private excludeFiles?: string[];
-  private addHistory: AddHistory;
-
+  private commitHistory: ICommitHistory;
   constructor({
     commitValidator,
+    commitHistory,
     git,
     excludeFiles,
-    addHistory,
   }: ValidateCommitProps) {
     this.commitValidator = commitValidator;
     this.git = git;
     this.excludeFiles = excludeFiles;
-    this.addHistory = addHistory;
+    this.commitHistory = commitHistory;
   }
 
   public async execute(options: ExecuteOptions): Promise<IValidateResult> {
@@ -52,7 +51,7 @@ export default class ValidateCommit {
       diff,
     });
 
-    this.addHistory.execute(validateResult.recommendedMessage);
+    this.commitHistory.add(validateResult.recommendedMessage);
 
     return validateResult;
   }

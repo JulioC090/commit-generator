@@ -17,6 +17,7 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
+    "@commit-generator/commit-history": "workspace:^",
     "@commit-generator/git": "workspace:^",
     "openai": "^4.77.0"
   },

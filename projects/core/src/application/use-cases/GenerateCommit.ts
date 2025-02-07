@@ -1,12 +1,12 @@
 import ICommitGenerator from '@/application/interfaces/ICommitGenerator';
-import AddHistory from '@/application/use-cases/AddHistory';
+import ICommitHistory from '@/application/interfaces/ICommitHistory';
 import { IGit } from '@commit-generator/git';
 
 interface GenerateCommitProps {
   commitGenerator: ICommitGenerator;
+  commitHistory: ICommitHistory;
   git: IGit;
   excludeFiles?: string[];
-  addHistory: AddHistory;
 }
 
 interface ExecuteOptions {
@@ -15,20 +15,20 @@ interface ExecuteOptions {
 
 export default class GenerateCommit {
   private commitGenerator: ICommitGenerator;
+  private commitHistory: ICommitHistory;
   private git: IGit;
   private excludeFiles?: string[];
-  private addHistory: AddHistory;
 
   constructor({
     commitGenerator,
+    commitHistory,
     git,
     excludeFiles,
-    addHistory,
   }: GenerateCommitProps) {
     this.commitGenerator = commitGenerator;
     this.git = git;
     this.excludeFiles = excludeFiles;
-    this.addHistory = addHistory;
+    this.commitHistory = commitHistory;
   }
 
   public async execute(options: ExecuteOptions): Promise<string> {
@@ -49,7 +49,7 @@ export default class GenerateCommit {
       previousLogs,
     });
 
-    this.addHistory.execute(commitMessage);
+    this.commitHistory.add(commitMessage);
 
     return commitMessage;
   }

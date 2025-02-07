@@ -1,4 +1,4 @@
-import AddHistory from '@/application/use-cases/AddHistory';
+import ICommitHistory from '@/application/interfaces/ICommitHistory';
 import GenerateCommit from '@/application/use-cases/GenerateCommit';
 import { IGit } from '@commit-generator/git';
 import { describe, expect, it, vi } from 'vitest';
@@ -14,9 +14,10 @@ const mockCommitGenerator = {
   generate: vi.fn(),
 };
 
-const mockAddHistory = {
-  execute: vi.fn(),
-} as unknown as AddHistory;
+const mockCommitHistory = {
+  add: vi.fn(),
+  get: vi.fn(),
+} as unknown as ICommitHistory;
 
 describe('GenerateCommit', () => {
   it('should throw if there are no staged files', async () => {
@@ -25,8 +26,8 @@ describe('GenerateCommit', () => {
 
     const sut = new GenerateCommit({
       commitGenerator: mockCommitGenerator,
+      commitHistory: mockCommitHistory,
       git: mockGit,
-      addHistory: mockAddHistory,
     });
 
     await expect(sut.execute({})).rejects.toThrow(
@@ -42,11 +43,11 @@ describe('GenerateCommit', () => {
     const sut = new GenerateCommit({
       commitGenerator: mockCommitGenerator,
       git: mockGit,
-      addHistory: mockAddHistory,
+      commitHistory: mockCommitHistory,
     });
 
     await sut.execute({});
 
-    expect(mockAddHistory.execute).toHaveBeenCalledWith('commit message');
+    expect(mockCommitHistory.add).toHaveBeenCalledWith('commit message');
   });
 });
