@@ -27,5 +27,6 @@ export default async function validate(commitMessage?: string) {
     console.log(chalk.green.bold('✅ Commit message is valid.\n'));
   } else {
     console.log(chalk.red('❌ Commit message is not valid'));
+    process.exit(1);
   }
 }
