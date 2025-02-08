@@ -1,5 +1,5 @@
+import configManager from '@/config';
 import { historyPath } from '@/constants';
-import configManager from '@commit-generator/config';
 import { createGenerateCommit } from '@commit-generator/core';
 
 export default async function generate(options: { type?: string }) {

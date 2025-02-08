@@ -1,4 +1,4 @@
-import configManager from '@commit-generator/config';
+import configManager from '@/config';
 
 export default async function save(
   pairs: Array<{ key: string; value: string }>,

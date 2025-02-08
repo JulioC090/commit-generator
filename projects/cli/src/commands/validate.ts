@@ -1,6 +1,6 @@
+import configManager from '@/config';
 import { historyPath } from '@/constants';
 import wrapText from '@/utils/wrapText';
-import configManager from '@commit-generator/config';
 import { createValidateCommit } from '@commit-generator/core';
 import chalk from 'chalk';
 

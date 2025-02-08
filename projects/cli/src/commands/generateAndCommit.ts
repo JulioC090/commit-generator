@@ -1,7 +1,7 @@
+import configManager from '@/config';
 import { historyPath } from '@/constants';
 import promptCommitType from '@/prompts/promptCommitType';
 import promptInteractiveGeneration from '@/prompts/promptInterativeGeneration';
-import configManager from '@commit-generator/config';
 import { createGenerateCommit } from '@commit-generator/core';
 import { git } from '@commit-generator/git';
 import chalk from 'chalk';

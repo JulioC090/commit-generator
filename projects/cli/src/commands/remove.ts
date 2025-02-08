@@ -1,4 +1,4 @@
-import configManager from '@commit-generator/config';
+import configManager from '@/config';
 
 export default async function remove(keys: Array<string>) {
   for (const key of keys) {
