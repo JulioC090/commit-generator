@@ -185,41 +185,23 @@ describe('ConfigManager', () => {
       consoleErrorSpy.mockRestore();
     });
 
-    it('should save a single value as a string', async () => {
-      vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce({
+    it('should save a value', async () => {
+      vi.mocked(mockConfigSourceManager.load).mockResolvedValue({
         ...mockFileContent,
       });
 
       const sourceName = 'file';
 
-      await sut.set('openaiKey', 'new_openai_key', sourceName);
-
-      expect(mockConfigSourceManager.write).toHaveBeenCalledWith(sourceName, {
-        openaiKey: 'new_openai_key',
-        excludeFiles: ['node_modules', '.git'],
-      });
-      expect(mockConfigValidator.validateKey).toHaveBeenCalledWith(
-        'openaiKey',
-        'new_openai_key',
-      );
-    });
-
-    it('should save a comma-separated value as an array', async () => {
-      vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce({
-        ...mockFileContent,
-      });
-
-      const sourceName = 'file';
-
-      await sut.set('excludeFiles', 'src,dist', sourceName);
+      await sut.set('excludeFiles', ['test'], sourceName);
 
       expect(mockConfigSourceManager.write).toHaveBeenCalledWith(sourceName, {
         openaiKey: 'mock_openai_key',
-        excludeFiles: ['src', 'dist'],
+        excludeFiles: ['test'],
       });
+
       expect(mockConfigValidator.validateKey).toHaveBeenCalledWith(
         'excludeFiles',
-        ['src', 'dist'],
+        ['test'],
       );
     });
   });

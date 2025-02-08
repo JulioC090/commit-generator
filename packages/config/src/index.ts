@@ -38,5 +38,6 @@ export default function createConfigManager({
 }
 
 export { default as ConfigManager } from '@/ConfigManager';
+export { default as formatConfigValue } from '@/formatConfigValue';
 export { ConfigDefinitions } from '@/types/ConfigDefinitions';
 export { Source as ConfigSource } from '@/types/Source';
