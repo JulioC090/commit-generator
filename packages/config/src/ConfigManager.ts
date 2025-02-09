@@ -2,20 +2,25 @@ import ConfigSourceManager from '@/ConfigSourceManager';
 import ConfigValidator from '@/ConfigValidator';
 import { ConfigValue } from '@/types/ConfigValue';
 import IConfig from '@/types/IConfig';
-interface ConfigManagerProps {
+interface ConfigManagerProps<IConfigType> {
   configSourceManager: ConfigSourceManager;
-  configValidator: ConfigValidator;
+  configValidator: ConfigValidator<IConfigType>;
 }
 
-export default class ConfigManager implements IConfig {
+export default class ConfigManager<IConfigType>
+  implements IConfig<IConfigType>
+{
   private allConfigsLoaded = new Map<string, ConfigValue>();
   private config: ConfigValue = {};
   private isLoaded = false;
 
   private configSourceManager: ConfigSourceManager;
-  private configValidator: ConfigValidator;
+  private configValidator: ConfigValidator<IConfigType>;
 
-  constructor({ configSourceManager, configValidator }: ConfigManagerProps) {
+  constructor({
+    configSourceManager,
+    configValidator,
+  }: ConfigManagerProps<IConfigType>) {
     this.configSourceManager = configSourceManager;
     this.configValidator = configValidator;
   }
@@ -66,17 +71,22 @@ export default class ConfigManager implements IConfig {
     return undefined;
   }
 
-  async set<T>(key: string, value: T, sourceName: string) {
+  async set<K extends keyof IConfigType>(
+    key: K,
+    value: unknown,
+    sourceName: string,
+  ) {
     const validation = this.configValidator.validateKey(key, value);
 
     if (!validation.valid) {
-      console.error(validation.error?.message);
+      console.error('Config loaded with errors:');
+      validation.errors!.forEach((error) => console.error(error.message));
       return;
     }
 
     const fileConfig = await this.configSourceManager.load(sourceName);
 
-    fileConfig[key] = value;
+    fileConfig[key as string] = value;
 
     await this.configSourceManager.write(sourceName, fileConfig);
   }

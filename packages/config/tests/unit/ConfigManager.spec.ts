@@ -2,7 +2,13 @@ import ConfigManager from '@/ConfigManager';
 import ConfigSourceManager from '@/ConfigSourceManager';
 import ConfigValidator from '@/ConfigValidator';
 import { Source } from '@/types/Source';
+import { ErrorObject } from 'ajv';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+interface MyConfig {
+  openaiKey: string;
+  excludeFiles: Array<string>;
+}
 
 const mockFileContent = {
   openaiKey: 'mock_openai_key',
@@ -23,10 +29,10 @@ const mockConfigSourceManager = {
 const mockConfigValidator = {
   validate: vi.fn(),
   validateKey: vi.fn(),
-} as unknown as ConfigValidator;
+} as unknown as ConfigValidator<MyConfig>;
 
 describe('ConfigManager', () => {
-  let sut: ConfigManager;
+  let sut: ConfigManager<MyConfig>;
 
   beforeEach(() => {
     vi.resetAllMocks();
@@ -40,7 +46,10 @@ describe('ConfigManager', () => {
       valid: true,
       errors: [],
     });
-    vi.mocked(mockConfigValidator.validateKey).mockReturnValue({ valid: true });
+    vi.mocked(mockConfigValidator.validateKey).mockReturnValue({
+      valid: true,
+      errors: [],
+    });
   });
 
   describe('loadConfig', () => {
@@ -83,7 +92,7 @@ describe('ConfigManager', () => {
       vi.mocked(mockConfigValidator.validate).mockReturnValueOnce({
         valid: false,
         errors: [
-          { key: 'someKey', error: 'Missing', message: 'Missing somekey' },
+          { keyword: 'someKey', message: 'Missing somekey' } as ErrorObject,
         ],
       });
 
@@ -172,14 +181,16 @@ describe('ConfigManager', () => {
     it('should log an error and return when validation fails', async () => {
       vi.mocked(mockConfigValidator.validateKey).mockReturnValueOnce({
         valid: false,
-        error: { key: 'someKey', error: 'Missing', message: 'Missing somekey' },
+        errors: [
+          { keyword: 'someKey', message: 'Missing somekey' } as ErrorObject,
+        ],
       });
 
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      await sut.set('invalidKey', 'value', 'source');
+      await sut.set('invalidKey' as keyof MyConfig, 'value', 'source');
 
       expect(consoleErrorSpy).toHaveBeenCalled();
       consoleErrorSpy.mockRestore();

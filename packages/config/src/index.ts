@@ -7,15 +7,15 @@ import FileConfigLoader from '@/loaders/FileConfigLoader';
 import { ConfigDefinitions } from '@/types/ConfigDefinitions';
 import { Source } from '@/types/Source';
 
-interface createConfigManagerProps {
+interface createConfigManagerProps<IConfigType> {
   sources: Array<Source>;
-  definitions: ConfigDefinitions;
+  definitions: ConfigDefinitions<IConfigType>;
 }
 
-export default function createConfigManager({
+export default function createConfigManager<IConfigType>({
   sources,
   definitions,
-}: createConfigManagerProps): ConfigManager {
+}: createConfigManagerProps<IConfigType>): ConfigManager<IConfigType> {
   const fileConfigLoader = new FileConfigLoader();
   const envConfigLoader = new EnvConfigLoader();
   const argConfigLoader = new ArgConfigLoader();
@@ -27,9 +27,9 @@ export default function createConfigManager({
     argConfigLoader,
   });
 
-  const configValidator = new ConfigValidator({ definitions });
+  const configValidator = new ConfigValidator<IConfigType>({ definitions });
 
-  const configManager = new ConfigManager({
+  const configManager = new ConfigManager<IConfigType>({
     configSourceManager,
     configValidator,
   });

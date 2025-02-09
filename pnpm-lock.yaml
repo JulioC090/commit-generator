@@ -56,6 +56,10 @@ importers:
         version: 22.10.10
 
   packages/config:
+    dependencies:
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
     devDependencies:
       '@commit-generator/typescript-config':
         specifier: workspace:^

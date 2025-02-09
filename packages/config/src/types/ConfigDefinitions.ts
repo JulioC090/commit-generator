@@ -1,14 +1,3 @@
-export type ConfigType = string;
+import { JSONSchemaType } from 'ajv';
 
-export type ConditionalRequired = { key: string; value: unknown };
-
-export type ConfigDefinition = {
-  type: ConfigType;
-  fields?: ConfigDefinitions;
-  required?: boolean;
-  conditionalRequired?: ConditionalRequired;
-};
-
-export type ConfigDefinitions = {
-  [key: string]: ConfigDefinition;
-};
+export type ConfigDefinitions<IConfigType> = JSONSchemaType<IConfigType>;

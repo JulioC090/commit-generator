@@ -1,4 +1,4 @@
-import configManager from '@/config';
+import configManager, { IConfigType } from '@/config';
 import { formatConfigValue } from '@commit-generator/config';
 
 export default async function save(
@@ -6,6 +6,6 @@ export default async function save(
 ) {
   for (const { key, value } of pairs) {
     const formattedValue = formatConfigValue(value);
-    await configManager.set(key, formattedValue, 'local');
+    await configManager.set(key as keyof IConfigType, formattedValue, 'local');
   }
 }

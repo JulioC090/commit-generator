@@ -1,8 +1,12 @@
 import { ConfigValue } from '@/types/ConfigValue';
 
-export default interface IConfig {
+export default interface IConfig<IConfigType> {
   loadConfig(): Promise<ConfigValue>;
   get(key: string): Promise<unknown>;
-  set(key: string, value: string, sourceName: string): Promise<void>;
+  set<K extends keyof IConfigType>(
+    key: K,
+    value: unknown,
+    sourceName: string,
+  ): Promise<void>;
   unset(key: string, sourceName: string): Promise<void>;
 }

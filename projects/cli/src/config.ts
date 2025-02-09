@@ -1,4 +1,7 @@
-import createConfigManager, { ConfigSource } from '@commit-generator/config';
+import createConfigManager, {
+  ConfigDefinitions,
+  ConfigSource,
+} from '@commit-generator/config';
 import path from 'node:path';
 
 const configFileName = '.commitgen.json';
@@ -20,15 +23,19 @@ const sources: Array<ConfigSource> = [
   },
 ];
 
-const configDefinitions = {
-  openaiKey: {
-    type: 'string',
-    required: true,
+export interface IConfigType {
+  openaiKey: string;
+  excludeFiles?: string[];
+}
+
+const configDefinitions: ConfigDefinitions<IConfigType> = {
+  type: 'object',
+  properties: {
+    openaiKey: { type: 'string' },
+    excludeFiles: { type: 'array', items: { type: 'string' }, nullable: true },
   },
-  excludeFiles: {
-    type: 'array<string>',
-    required: false,
-  },
+  required: ['openaiKey'],
+  additionalProperties: false,
 };
 
 const configManager = createConfigManager({
