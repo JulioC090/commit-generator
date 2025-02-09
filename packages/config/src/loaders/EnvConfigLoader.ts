@@ -1,12 +1,14 @@
 import formatConfigValue from '@/formatConfigValue';
-import { ConfigValue } from '@/types/ConfigValue';
+import IConfigLoader from '@/types/IConfigLoader';
+import { IConfigValue } from '@/types/IConfigValue';
 
 interface EnvConfigLoaderProps {
   env?: NodeJS.ProcessEnv;
   prefix?: string;
 }
 
-export default class EnvConfigLoader {
+export default class EnvConfigLoader implements IConfigLoader {
+  public readonly isWritable: boolean = false;
   private env: NodeJS.ProcessEnv;
   private prefix?: string;
 
@@ -15,7 +17,11 @@ export default class EnvConfigLoader {
     this.prefix = props?.prefix;
   }
 
-  async load(): Promise<ConfigValue> {
+  public validate(): void {
+    return;
+  }
+
+  public async load(): Promise<IConfigValue> {
     const conf = Object.create(null);
 
     const prefixRegex = this.prefix ? new RegExp(`^${this.prefix}`, 'i') : null;

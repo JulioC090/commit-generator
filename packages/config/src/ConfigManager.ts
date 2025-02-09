@@ -1,7 +1,7 @@
 import ConfigSourceManager from '@/ConfigSourceManager';
 import ConfigValidator from '@/ConfigValidator';
-import { ConfigValue } from '@/types/ConfigValue';
 import IConfig from '@/types/IConfig';
+import { IConfigValue } from '@/types/IConfigValue';
 interface ConfigManagerProps<IConfigType> {
   configSourceManager: ConfigSourceManager;
   configValidator: ConfigValidator<IConfigType>;
@@ -10,8 +10,8 @@ interface ConfigManagerProps<IConfigType> {
 export default class ConfigManager<IConfigType>
   implements IConfig<IConfigType>
 {
-  private allConfigsLoaded = new Map<string, ConfigValue>();
-  private config: ConfigValue = {};
+  private allConfigsLoaded = new Map<string, IConfigValue>();
+  private config: IConfigValue = {};
   private isLoaded = false;
 
   private configSourceManager: ConfigSourceManager;
@@ -25,7 +25,7 @@ export default class ConfigManager<IConfigType>
     this.configValidator = configValidator;
   }
 
-  async loadConfig(): Promise<ConfigValue> {
+  async loadConfig(): Promise<IConfigValue> {
     if (this.isLoaded) return this.config;
 
     const sources = this.configSourceManager.getSources();

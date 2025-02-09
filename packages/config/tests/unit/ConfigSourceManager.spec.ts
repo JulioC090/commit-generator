@@ -2,23 +2,29 @@ import ConfigSourceManager from '@/ConfigSourceManager';
 import ArgConfigLoader from '@/loaders/ArgConfigLoader';
 import EnvConfigLoader from '@/loaders/EnvConfigLoader';
 import FileConfigLoader from '@/loaders/FileConfigLoader';
-import { Source } from '@/types/Source';
+import { ISource } from '@/types/ISource';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockFileConfigLoader = {
+  isWritable: true,
+  validate: vi.fn(),
   load: vi.fn(),
   write: vi.fn(),
 } as unknown as FileConfigLoader;
 
 const mockEnvConfigLoader = {
+  isWritable: false,
+  validate: vi.fn(),
   load: vi.fn(),
 } as unknown as EnvConfigLoader;
 
 const mockArgConfigLoader = {
+  isWritable: false,
+  validate: vi.fn(),
   load: vi.fn(),
 } as unknown as ArgConfigLoader;
 
-const mockSources: Array<Source> = [
+const mockSources: Array<ISource> = [
   { name: 'fileSource', type: 'file', path: '/path/to/config.json' },
   { name: 'envSource', type: 'env' },
   { name: 'argSource', type: 'arg' },
@@ -30,9 +36,11 @@ describe('ConfigSourceManager', () => {
   beforeEach(() => {
     sut = new ConfigSourceManager({
       sources: mockSources,
-      fileConfigLoader: mockFileConfigLoader,
-      envConfigLoader: mockEnvConfigLoader,
-      argConfigLoader: mockArgConfigLoader,
+      loaders: {
+        file: mockFileConfigLoader,
+        env: mockEnvConfigLoader,
+        arg: mockArgConfigLoader,
+      },
     });
 
     vi.resetAllMocks();
@@ -48,29 +56,27 @@ describe('ConfigSourceManager', () => {
         () =>
           new ConfigSourceManager({
             sources: [],
-            fileConfigLoader: mockFileConfigLoader,
-            envConfigLoader: mockEnvConfigLoader,
-            argConfigLoader: mockArgConfigLoader,
+            loaders: {
+              file: mockFileConfigLoader,
+              env: mockEnvConfigLoader,
+              arg: mockArgConfigLoader,
+            },
           }),
       ).toThrow('Config Error: No sources specified');
     });
 
-    it('should throw an error if a file source does not have a path', () => {
-      const invalidSource: Array<Source> = [
-        { name: 'fileSourceWithoutPath', type: 'file' },
-      ];
-
+    it('should throw an error if no loader is defined for source type', () => {
       expect(
         () =>
           new ConfigSourceManager({
-            sources: invalidSource,
-            fileConfigLoader: mockFileConfigLoader,
-            envConfigLoader: mockEnvConfigLoader,
-            argConfigLoader: mockArgConfigLoader,
+            sources: [{ name: 'invalidSource', type: 'invalidType' }],
+            loaders: {
+              file: mockFileConfigLoader,
+              env: mockEnvConfigLoader,
+              arg: mockArgConfigLoader,
+            },
           }),
-      ).toThrowError(
-        'Config Error: Source of type "file" must have a "path": fileSourceWithoutPath',
-      );
+      ).toThrow('No loader defined for source type "invalidType".');
     });
   });
 
@@ -95,7 +101,7 @@ describe('ConfigSourceManager', () => {
 
   describe('setSources', () => {
     it('should update the list of sources', () => {
-      const newSources: Array<Source> = [
+      const newSources: Array<ISource> = [
         { name: 'newFileSource', type: 'file', path: '/new/path/config.json' },
       ];
 
@@ -110,22 +116,16 @@ describe('ConfigSourceManager', () => {
         'Config Error: No sources specified',
       );
     });
-
-    it('should throw an error if a file source does not have a path', () => {
-      const invalidSources: Array<Source> = [
-        { name: 'invalidSource', type: 'file' },
-      ];
-
-      expect(() => sut.setSources(invalidSources)).toThrowError(
-        'Config Error: Source of type "file" must have a "path": invalidSource',
-      );
-    });
   });
 
   describe('isWritableSource', () => {
     it('should correctly identify writable sources', () => {
       expect(sut.isWritableSource('fileSource')).toBe(true);
       expect(sut.isWritableSource('envSource')).toBe(false);
+    });
+
+    it('should return false if source does not exist', () => {
+      expect(sut.isWritableSource('invalidSourceName')).toBe(false);
     });
   });
 
@@ -144,9 +144,11 @@ describe('ConfigSourceManager', () => {
 
       const config = await sut.load('fileSource');
       expect(config).toEqual(expectedConfig);
-      expect(mockFileConfigLoader.load).toHaveBeenCalledWith(
-        '/path/to/config.json',
-      );
+      expect(mockFileConfigLoader.load).toHaveBeenCalledWith({
+        name: 'fileSource',
+        path: '/path/to/config.json',
+        type: 'file',
+      });
     });
 
     it('should load config from an env source', async () => {
@@ -193,7 +195,11 @@ describe('ConfigSourceManager', () => {
       await sut.write('fileSource', configToWrite);
 
       expect(mockFileConfigLoader.write).toHaveBeenCalledWith(
-        '/path/to/config.json',
+        {
+          name: 'fileSource',
+          path: '/path/to/config.json',
+          type: 'file',
+        },
         configToWrite,
       );
     });

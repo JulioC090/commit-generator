@@ -16,6 +16,13 @@ describe('ArgConfigLoader', () => {
     });
   });
 
+  describe('validate', () => {
+    it('should validate', async () => {
+      const sut = new ArgConfigLoader();
+      await sut.validate();
+    });
+  });
+
   describe('load', () => {
     it('should parse single argument correctly', async () => {
       const args = ['--openaiKey=arg_openai_key'];

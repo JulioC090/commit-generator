@@ -1,18 +1,24 @@
 import formatConfigValue from '@/formatConfigValue';
-import { ConfigValue } from '@/types/ConfigValue';
+import IConfigLoader from '@/types/IConfigLoader';
+import { IConfigValue } from '@/types/IConfigValue';
 
 interface ArgConfigLoaderProps {
   arg?: Array<string>;
 }
 
-export default class ArgConfigLoader {
+export default class ArgConfigLoader implements IConfigLoader {
+  public readonly isWritable: boolean = false;
   private arg: Array<string>;
 
   constructor(props?: ArgConfigLoaderProps) {
     this.arg = props?.arg || process.argv.slice(2);
   }
 
-  async load(): Promise<ConfigValue> {
+  public validate(): void {
+    return;
+  }
+
+  async load(): Promise<IConfigValue> {
     const config = Object.create(null);
 
     this.arg.forEach((arg) => {

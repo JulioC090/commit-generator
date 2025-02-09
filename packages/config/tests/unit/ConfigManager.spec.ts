@@ -1,7 +1,7 @@
 import ConfigManager from '@/ConfigManager';
 import ConfigSourceManager from '@/ConfigSourceManager';
 import ConfigValidator from '@/ConfigValidator';
-import { Source } from '@/types/Source';
+import { ISource } from '@/types/ISource';
 import { ErrorObject } from 'ajv';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -15,7 +15,7 @@ const mockFileContent = {
   excludeFiles: ['node_modules', '.git'],
 };
 
-const mockSources: Array<Source> = [
+const mockSources: Array<ISource> = [
   { name: 'file', type: 'file', path: 'path/to/file' },
   { name: 'env', type: 'env' },
 ];

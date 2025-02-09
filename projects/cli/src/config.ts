@@ -1,13 +1,13 @@
 import createConfigManager, {
-  ConfigDefinitions,
-  ConfigSource,
+  IConfigDefinitions,
+  IConfigSource,
 } from '@commit-generator/config';
 import path from 'node:path';
 
 const configFileName = '.commitgen.json';
 const configFilePath = path.join(__dirname, '..', configFileName);
 
-const sources: Array<ConfigSource> = [
+const sources: Array<IConfigSource> = [
   {
     name: 'local',
     type: 'file',
@@ -28,7 +28,7 @@ export interface IConfigType {
   excludeFiles?: string[];
 }
 
-const configDefinitions: ConfigDefinitions<IConfigType> = {
+const configDefinitions: IConfigDefinitions<IConfigType> = {
   type: 'object',
   properties: {
     openaiKey: { type: 'string' },

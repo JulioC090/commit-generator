@@ -16,6 +16,13 @@ describe('EnvConfigLoader', async () => {
     });
   });
 
+  describe('validate', () => {
+    it('should validate', async () => {
+      const sut = new EnvConfigLoader();
+      await sut.validate();
+    });
+  });
+
   describe('load', async () => {
     it('should load variables with the correct prefix', async () => {
       const sut = new EnvConfigLoader({
