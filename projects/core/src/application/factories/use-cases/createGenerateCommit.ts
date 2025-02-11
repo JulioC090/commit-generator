@@ -1,16 +1,20 @@
+import createAIModel from '@/application/factories/ai/createAIModel';
+import { IAIModelParams } from '@/application/interfaces/IAIModel';
 import CommitGenerator from '@/application/services/CommitGenerator';
 import GenerateCommit from '@/application/use-cases/GenerateCommit';
-import OpenAIModel from '@/infrastructure/ai/OpenAIModel';
 import { CommitHistory } from '@commit-generator/commit-history';
 import { git } from '@commit-generator/git';
 
 export default function createGenerateCommit(
-  commitGeneratorConfig: { key: string },
+  config: {
+    provider: string;
+    params: IAIModelParams;
+  },
   historyPath: string,
   excludeFiles: string[],
 ) {
-  const openAIModel = new OpenAIModel(commitGeneratorConfig.key);
-  const commitGenerator = new CommitGenerator(openAIModel);
+  const aiModel = createAIModel(config.provider, config.params);
+  const commitGenerator = new CommitGenerator(aiModel);
 
   return new GenerateCommit({
     commitGenerator,

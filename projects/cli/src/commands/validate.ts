@@ -7,8 +7,15 @@ import chalk from 'chalk';
 export default async function validate(commitMessage?: string) {
   const config = await configManager.loadConfig();
 
+  const validateCommitConfig = {
+    provider: 'openai',
+    params: {
+      key: (config.openaiKey as string) ?? '',
+    },
+  };
+
   const validateCommit = createValidateCommit(
-    { key: (config.openaiKey as string) ?? '' },
+    validateCommitConfig,
     historyPath,
     config.excludeFiles as Array<string>,
   );

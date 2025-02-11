@@ -1,16 +1,20 @@
+import createAIModel from '@/application/factories/ai/createAIModel';
+import { IAIModelParams } from '@/application/interfaces/IAIModel';
 import CommitValidator from '@/application/services/CommitValidator';
 import ValidateCommit from '@/application/use-cases/ValidateCommit';
-import OpenAIModel from '@/infrastructure/ai/OpenAIModel';
 import { CommitHistory } from '@commit-generator/commit-history';
 import { git } from '@commit-generator/git';
 
 export default function createValidateCommit(
-  commitGeneratorConfig: { key: string },
+  config: {
+    provider: string;
+    params: IAIModelParams;
+  },
   historyPath: string,
   excludeFiles: string[],
 ) {
-  const openAIModel = new OpenAIModel(commitGeneratorConfig.key);
-  const commitValidator = new CommitValidator(openAIModel);
+  const aiModel = createAIModel(config.provider, config.params);
+  const commitValidator = new CommitValidator(aiModel);
 
   return new ValidateCommit({
     commitValidator,

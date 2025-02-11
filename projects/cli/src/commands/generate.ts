@@ -8,8 +8,15 @@ export default async function generate(options: {
 }) {
   const config = await configManager.loadConfig();
 
+  const generateCommitConfig = {
+    provider: 'openai',
+    params: {
+      key: (config.openaiKey as string) ?? '',
+    },
+  };
+
   const generateCommit = createGenerateCommit(
-    { key: (config.openaiKey as string) ?? '' },
+    generateCommitConfig,
     historyPath,
     config.excludeFiles as Array<string>,
   );
