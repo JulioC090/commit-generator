@@ -4,6 +4,10 @@
     ".": {
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./schemes": {
+      "default": "./dist/schemes.js",
+      "types": "./dist/schemes.d.ts"
     }
   },
   "scripts": {
@@ -19,6 +23,7 @@
   "dependencies": {
     "@commit-generator/commit-history": "workspace:^",
     "@commit-generator/git": "workspace:^",
+    "ajv": "^8.17.1",
     "openai": "^4.77.0"
   },
   "devDependencies": {

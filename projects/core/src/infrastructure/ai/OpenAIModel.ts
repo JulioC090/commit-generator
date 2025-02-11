@@ -1,15 +1,27 @@
 import IAIModel, { IAIModelParams } from '@/application/interfaces/IAIModel';
+import AIModel from '@/infrastructure/ai/AIModel';
 import OpenAI from 'openai';
 
-export default class OpenAIModel implements IAIModel {
+export type IOpenAIParams = {
+  key: string;
+};
+
+export const openAISchema = {
+  type: 'object',
+  properties: {
+    key: { type: 'string' },
+  },
+  required: ['key'],
+  additionalProperties: false,
+};
+
+export default class OpenAIModel extends AIModel implements IAIModel {
   private model: OpenAI;
 
   constructor(private params: IAIModelParams) {
-    if (!params.key) {
-      throw new Error('OpenAI API key is required');
-    }
-
-    this.model = new OpenAI({ apiKey: params.key });
+    super(params, openAISchema);
+    const openAIParams = params as IOpenAIParams;
+    this.model = new OpenAI({ apiKey: openAIParams.key });
   }
 
   async complete(prompt: string): Promise<string> {

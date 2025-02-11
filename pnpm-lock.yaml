@@ -145,6 +145,9 @@ importers:
       '@commit-generator/git':
         specifier: workspace:^
         version: link:../../packages/git
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
       openai:
         specifier: ^4.77.0
         version: 4.80.1
