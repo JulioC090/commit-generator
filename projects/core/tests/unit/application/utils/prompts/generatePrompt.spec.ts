@@ -5,13 +5,15 @@ describe('generatePrompt', () => {
   it('should generate a prompt with all provided inputs', () => {
     const diff = 'Added new functionality to the login module';
     const type = 'feat';
+    const context = 'Improve security';
     const previousLogs =
       'feat(auth): added login endpoint\nfix(auth): resolved login issue';
 
-    const result = generatePrompt({ diff, type, previousLogs });
+    const result = generatePrompt({ diff, type, context, previousLogs });
 
     expect(result.includes(diff)).toBeTruthy();
     expect(result.includes('Type: ' + type)).toBeTruthy();
+    expect(result.includes('Context: ' + context)).toBeTruthy();
     expect(result.includes(previousLogs)).toBeTruthy();
   });
 

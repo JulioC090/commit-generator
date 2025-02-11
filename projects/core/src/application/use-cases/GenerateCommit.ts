@@ -1,5 +1,6 @@
 import ICommitGenerator from '@/application/interfaces/ICommitGenerator';
 import ICommitHistory from '@/application/interfaces/ICommitHistory';
+import ICommitInfo from '@/application/interfaces/ICommitInfo';
 import { IGit } from '@commit-generator/git';
 
 interface GenerateCommitProps {
@@ -9,9 +10,7 @@ interface GenerateCommitProps {
   excludeFiles?: string[];
 }
 
-interface ExecuteOptions {
-  type?: string;
-}
+type ExecuteOptions = Omit<ICommitInfo, 'diff' | 'previousLogs'>;
 
 export default class GenerateCommit {
   private commitGenerator: ICommitGenerator;
@@ -45,8 +44,8 @@ export default class GenerateCommit {
 
     const commitMessage = await this.commitGenerator.generate({
       diff,
-      type: options.type,
       previousLogs,
+      ...options,
     });
 
     this.commitHistory.add(commitMessage);

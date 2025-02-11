@@ -20,6 +20,28 @@ const mockCommitHistory = {
 } as unknown as ICommitHistory;
 
 describe('GenerateCommit', () => {
+  it('should generate a commit', async () => {
+    vi.mocked(mockGit.isRepository).mockReturnValue(true);
+    vi.mocked(mockGit.diff).mockReturnValue('some diff');
+    mockCommitGenerator.generate.mockResolvedValue('commit message');
+
+    const sut = new GenerateCommit({
+      commitGenerator: mockCommitGenerator,
+      git: mockGit,
+      commitHistory: mockCommitHistory,
+    });
+
+    const result = await sut.execute({ type: 'feat', context: 'some context' });
+
+    expect(mockCommitHistory.add).toHaveBeenCalledWith('commit message');
+    expect(mockCommitGenerator.generate).toHaveBeenCalledWith({
+      diff: 'some diff',
+      type: 'feat',
+      context: 'some context',
+    });
+    expect(result).toBe('commit message');
+  });
+
   it('should throw if there are no staged files', async () => {
     vi.mocked(mockGit.isRepository).mockReturnValue(true);
     vi.mocked(mockGit.diff).mockReturnValue('');

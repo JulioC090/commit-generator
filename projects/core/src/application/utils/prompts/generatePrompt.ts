@@ -21,6 +21,7 @@ Expected output:
 
 [Input][Optional]
 Type: {type}
+Context: {context}
 
 [Input]
 Diff: {diff}
