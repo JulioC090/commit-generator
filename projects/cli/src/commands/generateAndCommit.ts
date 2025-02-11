@@ -1,5 +1,6 @@
 import configManager from '@/config';
 import { historyPath } from '@/constants';
+import promptCommitContext from '@/prompts/promptCommitContext';
 import promptCommitType from '@/prompts/promptCommitType';
 import promptInteractiveGeneration from '@/prompts/promptInterativeGeneration';
 import { createGenerateCommit } from '@commit-generator/core';
@@ -9,6 +10,7 @@ import ora from 'ora-classic';
 
 export default async function generateAndCommit(options: {
   type?: string;
+  context?: string;
   force?: boolean;
 }) {
   const spinner = ora('Generating commit message, please wait...');
@@ -18,6 +20,10 @@ export default async function generateAndCommit(options: {
 
     if (!options.type && !options.force) {
       options.type = await promptCommitType();
+    }
+
+    if (!options.context && !options.force) {
+      options.context = await promptCommitContext();
     }
 
     const generateCommit = createGenerateCommit(

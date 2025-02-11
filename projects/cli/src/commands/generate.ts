@@ -2,7 +2,10 @@ import configManager from '@/config';
 import { historyPath } from '@/constants';
 import { createGenerateCommit } from '@commit-generator/core';
 
-export default async function generate(options: { type?: string }) {
+export default async function generate(options: {
+  type?: string;
+  context?: string;
+}) {
   const config = await configManager.loadConfig();
 
   const generateCommit = createGenerateCommit(
