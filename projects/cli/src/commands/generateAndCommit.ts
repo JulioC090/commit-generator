@@ -18,6 +18,10 @@ export default async function generateAndCommit(options: {
   try {
     const config = await configManager.loadConfig();
 
+    if (!config.provider || !config[config.provider as string]) {
+      throw new Error(`Invalid provider: ${config.provider ?? 'unknown'}`);
+    }
+
     if (!options.type && !options.force) {
       options.type = await promptCommitType();
     }
@@ -27,10 +31,8 @@ export default async function generateAndCommit(options: {
     }
 
     const generateCommitConfig = {
-      provider: 'openai',
-      params: {
-        key: (config.openaiKey as string) ?? '',
-      },
+      provider: config.provider as string,
+      params: config[config.provider as string] as { [key: string]: unknown },
     };
 
     const generateCommit = createGenerateCommit(

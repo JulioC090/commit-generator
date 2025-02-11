@@ -7,11 +7,13 @@ import chalk from 'chalk';
 export default async function validate(commitMessage?: string) {
   const config = await configManager.loadConfig();
 
+  if (!config.provider || !config[config.provider as string]) {
+    throw new Error(`Invalid provider: ${config.provider ?? 'unknown'}`);
+  }
+
   const validateCommitConfig = {
-    provider: 'openai',
-    params: {
-      key: (config.openaiKey as string) ?? '',
-    },
+    provider: config.provider as string,
+    params: config[config.provider as string] as { [key: string]: unknown },
   };
 
   const validateCommit = createValidateCommit(

@@ -2,6 +2,10 @@ import createConfigManager, {
   IConfigDefinitions,
   IConfigSource,
 } from '@commit-generator/config';
+import {
+  aiModelSchemes,
+  IAIModelSchemes,
+} from '@commit-generator/core/schemes';
 import path from 'node:path';
 
 const configFileName = '.commitgen.json';
@@ -23,24 +27,32 @@ const sources: Array<IConfigSource> = [
   },
 ];
 
-export interface IConfigType {
-  openaiKey: string;
+export type IConfigType = {
   excludeFiles?: string[];
-}
+} & Partial<IAIModelSchemes>;
 
-const configDefinitions: IConfigDefinitions<IConfigType> = {
+const providers = Object.entries(aiModelSchemes).map(([provider, schema]) => ({
+  properties: {
+    provider: { const: provider },
+    [provider]: schema,
+  },
+  required: [provider],
+}));
+
+const configDefinitions = {
   type: 'object',
   properties: {
-    openaiKey: { type: 'string' },
+    provider: { type: 'string' },
     excludeFiles: { type: 'array', items: { type: 'string' }, nullable: true },
   },
-  required: ['openaiKey'],
+  required: ['provider'],
+  anyOf: providers,
   additionalProperties: false,
 };
 
 const configManager = createConfigManager({
   sources,
-  definitions: configDefinitions,
+  definitions: configDefinitions as unknown as IConfigDefinitions<IConfigType>,
 });
 
 export default configManager;
