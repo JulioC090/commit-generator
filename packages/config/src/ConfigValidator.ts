@@ -28,17 +28,26 @@ export default class ConfigValidator<IConfigType> {
     };
   }
 
-  public validateKey<K extends keyof IConfigType>(
-    key: K,
-    value: unknown,
-  ): ValidateOutput {
-    if (!this.definitions.properties || !(key in this.definitions.properties)) {
-      throw new Error(`The key "${String(key)}" is not defined in the schema.`);
+  public validateKey(key: string, value: unknown): ValidateOutput {
+    const path = key.toString().split('.');
+
+    let keySchema: JSONSchemaType<IConfigType> | undefined = this.definitions;
+
+    for (const segment of path) {
+      if (
+        keySchema &&
+        'properties' in keySchema &&
+        keySchema.properties &&
+        segment in keySchema.properties
+      ) {
+        keySchema = keySchema.properties[segment] as JSONSchemaType<unknown>;
+      } else {
+        throw new Error(
+          `The key "${String(key)}" is not defined in the schema.`,
+        );
+      }
     }
 
-    const keySchema = this.definitions.properties[key] as JSONSchemaType<
-      IConfigType[K]
-    >;
     const validate = this.ajv.compile(keySchema);
 
     const isValid = validate(value);

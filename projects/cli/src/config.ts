@@ -43,6 +43,7 @@ const configDefinitions = {
   type: 'object',
   properties: {
     provider: { type: 'string' },
+    ...aiModelSchemes,
     excludeFiles: { type: 'array', items: { type: 'string' }, nullable: true },
   },
   required: ['provider'],

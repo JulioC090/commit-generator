@@ -6,12 +6,12 @@ import { ErrorObject } from 'ajv';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 interface MyConfig {
-  openaiKey: string;
+  openai: { key: string };
   excludeFiles: Array<string>;
 }
 
 const mockFileContent = {
-  openaiKey: 'mock_openai_key',
+  openai: { key: 'mock_openai_key' },
   excludeFiles: ['node_modules', '.git'],
 };
 
@@ -65,13 +65,13 @@ describe('ConfigManager', () => {
         mockFileContent,
       );
       vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce({
-        openaiKey: 'env_openai_key',
+        openai: { key: 'env_openai_key' },
       });
 
       const result = await sut.loadConfig();
 
       expect(result).toEqual({
-        openaiKey: 'env_openai_key',
+        openai: { key: 'env_openai_key' },
         excludeFiles: ['node_modules', '.git'],
       });
     });
@@ -110,16 +110,16 @@ describe('ConfigManager', () => {
 
   describe('get', () => {
     it('should return the value from config when isLoaded is true', async () => {
-      vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce(
-        mockFileContent,
-      );
       vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce({
-        openaiKey: 'env_openai_key',
+        ...mockFileContent,
+      });
+      vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce({
+        openai: { key: 'env_openai_key' },
       });
 
       await sut.loadConfig();
       expect(mockConfigSourceManager.getSources).toHaveBeenCalled();
-      expect(await sut.get('excludeFiles')).toEqual(['node_modules', '.git']);
+      expect(await sut.get('openai.key')).toEqual('env_openai_key');
       expect(mockConfigSourceManager.getSources).toHaveBeenCalledTimes(1);
     });
 
@@ -133,30 +133,30 @@ describe('ConfigManager', () => {
 
     it('should return the value from the first matching source', async () => {
       const mockEnvConfig = {
-        openaiKey: 'env_key',
+        openai: { key: 'env_openai_key' },
       };
 
       vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce(
         mockEnvConfig,
       );
 
-      const result = await sut.get('openaiKey');
-      expect(result).toBe(mockEnvConfig.openaiKey);
+      const result = await sut.get('openai.key');
+      expect(result).toBe(mockEnvConfig.openai.key);
       expect(mockConfigSourceManager.load).toHaveBeenCalledTimes(1);
     });
 
     it('should cache the result after loading a source', async () => {
       const mockEnvConfig = {
-        openaiKey: 'env_key',
+        openai: { key: 'env_openai_key' },
       };
 
       vi.mocked(mockConfigSourceManager.load).mockResolvedValueOnce(
         mockEnvConfig,
       );
 
-      await sut.get('openaiKey');
+      await sut.get('openai.key');
       expect(mockConfigSourceManager.load).toHaveBeenCalled();
-      expect(await sut.get('openaiKey')).toBe(mockEnvConfig.openaiKey);
+      expect(await sut.get('openai.key')).toBe(mockEnvConfig.openai.key);
       expect(mockConfigSourceManager.load).toHaveBeenCalledTimes(1);
     });
 
@@ -206,7 +206,7 @@ describe('ConfigManager', () => {
       await sut.set('excludeFiles', ['test'], sourceName);
 
       expect(mockConfigSourceManager.write).toHaveBeenCalledWith(sourceName, {
-        openaiKey: 'mock_openai_key',
+        openai: { key: 'mock_openai_key' },
         excludeFiles: ['test'],
       });
 
@@ -214,23 +214,35 @@ describe('ConfigManager', () => {
         'excludeFiles',
         ['test'],
       );
+
+      vi.mocked(mockConfigSourceManager.load).mockResolvedValue({
+        ...mockFileContent,
+      });
+
+      await sut.set('openai.key', 'key', sourceName);
+
+      expect(mockConfigSourceManager.write).toHaveBeenCalledWith(sourceName, {
+        openai: { key: 'key' },
+        excludeFiles: ['test'],
+      });
     });
   });
 
   describe('unset', () => {
     it('should remove an existing configuration from the file', async () => {
-      vi.mocked(mockConfigSourceManager.load).mockResolvedValue(
-        mockFileContent,
-      );
+      vi.mocked(mockConfigSourceManager.load).mockResolvedValue({
+        ...mockFileContent,
+      });
 
       const sourceName = 'file';
 
-      await sut.unset('excludeFiles', sourceName);
+      await sut.unset('openai.key', sourceName);
 
       expect(mockConfigSourceManager.load).toHaveBeenCalled();
 
       expect(mockConfigSourceManager.write).toHaveBeenCalledWith(sourceName, {
-        openaiKey: 'mock_openai_key',
+        openai: {},
+        excludeFiles: ['node_modules', '.git'],
       });
     });
   });

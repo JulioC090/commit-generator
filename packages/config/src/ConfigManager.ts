@@ -2,14 +2,14 @@ import ConfigSourceManager from '@/ConfigSourceManager';
 import ConfigValidator from '@/ConfigValidator';
 import IConfig from '@/types/IConfig';
 import { IConfigValue } from '@/types/IConfigValue';
+import _ from 'lodash';
+
 interface ConfigManagerProps<IConfigType> {
   configSourceManager: ConfigSourceManager;
   configValidator: ConfigValidator<IConfigType>;
 }
 
-export default class ConfigManager<IConfigType>
-  implements IConfig<IConfigType>
-{
+export default class ConfigManager<IConfigType> implements IConfig {
   private allConfigsLoaded = new Map<string, IConfigValue>();
   private config: IConfigValue = {};
   private isLoaded = false;
@@ -49,7 +49,7 @@ export default class ConfigManager<IConfigType>
 
   async get(key: string) {
     if (this.isLoaded) {
-      return this.config[key] ?? undefined;
+      return _.get(this.config, key) ?? undefined;
     }
 
     const sources = this.configSourceManager.getSources();
@@ -63,20 +63,18 @@ export default class ConfigManager<IConfigType>
       }
 
       const cachedConfig = this.allConfigsLoaded.get(source.name)!;
-      if (key in cachedConfig) {
-        return cachedConfig[key];
+      const value = _.get(cachedConfig, key, undefined);
+
+      if (value !== undefined) {
+        return value;
       }
     }
 
     return undefined;
   }
 
-  async set<K extends keyof IConfigType>(
-    key: K,
-    value: unknown,
-    sourceName: string,
-  ) {
-    const validation = this.configValidator.validateKey(key, value);
+  async set(key: string, value: unknown, sourceName: string) {
+    const validation = this.configValidator.validateKey(key as string, value);
 
     if (!validation.valid) {
       console.error('Config loaded with errors:');
@@ -86,7 +84,7 @@ export default class ConfigManager<IConfigType>
 
     const fileConfig = await this.configSourceManager.load(sourceName);
 
-    fileConfig[key as string] = value;
+    _.set(fileConfig, key, value);
 
     await this.configSourceManager.write(sourceName, fileConfig);
   }
@@ -94,7 +92,7 @@ export default class ConfigManager<IConfigType>
   async unset(key: string, sourceName: string) {
     const fileConfig = await this.configSourceManager.load(sourceName);
 
-    delete fileConfig[key];
+    _.unset(fileConfig, key);
 
     await this.configSourceManager.write(sourceName, fileConfig);
   }
