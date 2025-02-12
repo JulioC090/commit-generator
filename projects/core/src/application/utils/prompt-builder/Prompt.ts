@@ -37,6 +37,7 @@ export default class Prompt {
     }
 
     if (this.examples) {
+      output += 'Examples:\n';
       output += this.examples + '\n\n';
     }
 

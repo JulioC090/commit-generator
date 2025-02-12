@@ -32,6 +32,7 @@ Follow the rules strictly.
 
 Expected result format.
 
+Examples:
 Example 1: Input -> Output
 
 Inputs:
