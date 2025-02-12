@@ -3,7 +3,7 @@ import AIModel from '@/infrastructure/ai/AIModel';
 import { JSONSchemaType } from 'ajv';
 import { describe, expect, it } from 'vitest';
 
-class TestModel extends AIModel {
+class TestModel extends AIModel<IAIModelParams> {
   constructor(parameters: IAIModelParams, schema: unknown) {
     super(parameters, schema);
   }

@@ -15,13 +15,15 @@ export const openAISchema = {
   additionalProperties: false,
 };
 
-export default class OpenAIModel extends AIModel implements IAIModel {
+export default class OpenAIModel
+  extends AIModel<IOpenAIParams>
+  implements IAIModel
+{
   private model: OpenAI;
 
   constructor(private params: IAIModelParams) {
     super(params, openAISchema);
-    const openAIParams = params as IOpenAIParams;
-    this.model = new OpenAI({ apiKey: openAIParams.key });
+    this.model = new OpenAI({ apiKey: this.parameters.key });
   }
 
   async complete(prompt: string): Promise<string> {

@@ -24,6 +24,7 @@
     "@commit-generator/commit-history": "workspace:^",
     "@commit-generator/git": "workspace:^",
     "ajv": "^8.17.1",
+    "ollama": "^0.5.13",
     "openai": "^4.77.0"
   },
   "devDependencies": {
