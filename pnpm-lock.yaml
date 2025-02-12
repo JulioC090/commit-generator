@@ -103,6 +103,9 @@ importers:
 
   packages/git:
     devDependencies:
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
