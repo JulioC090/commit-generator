@@ -28,6 +28,7 @@ const sources: Array<IConfigSource> = [
 ];
 
 export type IConfigType = {
+  provider: keyof IAIModelSchemes;
   excludeFiles?: string[];
 } & Partial<IAIModelSchemes>;
 

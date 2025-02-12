@@ -8,19 +8,19 @@ export default async function generate(options: {
 }) {
   const config = await configManager.loadConfig();
 
-  if (!config.provider || !config[config.provider as string]) {
+  if (!config.provider || !config[config.provider]) {
     throw new Error(`Invalid provider: ${config.provider ?? 'unknown'}`);
   }
 
   const generateCommitConfig = {
-    provider: config.provider as string,
-    params: config[config.provider as string] as { [key: string]: unknown },
+    provider: config.provider,
+    params: config[config.provider]!,
   };
 
   const generateCommit = createGenerateCommit(
     generateCommitConfig,
     historyPath,
-    config.excludeFiles as Array<string>,
+    config.excludeFiles ?? [],
   );
 
   console.log(await generateCommit.execute(options));

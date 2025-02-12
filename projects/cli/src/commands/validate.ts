@@ -7,19 +7,19 @@ import chalk from 'chalk';
 export default async function validate(commitMessage?: string) {
   const config = await configManager.loadConfig();
 
-  if (!config.provider || !config[config.provider as string]) {
+  if (!config.provider || !config[config.provider]) {
     throw new Error(`Invalid provider: ${config.provider ?? 'unknown'}`);
   }
 
   const validateCommitConfig = {
-    provider: config.provider as string,
-    params: config[config.provider as string] as { [key: string]: unknown },
+    provider: config.provider,
+    params: config[config.provider]!,
   };
 
   const validateCommit = createValidateCommit(
     validateCommitConfig,
     historyPath,
-    config.excludeFiles as Array<string>,
+    config.excludeFiles ?? [],
   );
 
   const result = await validateCommit.execute({ commitMessage });

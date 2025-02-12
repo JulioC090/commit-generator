@@ -9,7 +9,9 @@ interface ConfigManagerProps<IConfigType> {
   configValidator: ConfigValidator<IConfigType>;
 }
 
-export default class ConfigManager<IConfigType> implements IConfig {
+export default class ConfigManager<IConfigType>
+  implements IConfig<IConfigType>
+{
   private allConfigsLoaded = new Map<string, IConfigValue>();
   private config: IConfigValue = {};
   private isLoaded = false;
@@ -25,8 +27,8 @@ export default class ConfigManager<IConfigType> implements IConfig {
     this.configValidator = configValidator;
   }
 
-  async loadConfig(): Promise<IConfigValue> {
-    if (this.isLoaded) return this.config;
+  async loadConfig(): Promise<IConfigType> {
+    if (this.isLoaded) return this.config as IConfigType;
 
     const sources = this.configSourceManager.getSources();
 
@@ -44,7 +46,7 @@ export default class ConfigManager<IConfigType> implements IConfig {
       validation.errors!.forEach((error) => console.error(error.message));
     }
 
-    return this.config;
+    return this.config as IConfigType;
   }
 
   async get(key: string) {
