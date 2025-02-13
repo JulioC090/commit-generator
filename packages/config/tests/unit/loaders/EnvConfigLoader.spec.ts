@@ -8,7 +8,7 @@ describe('EnvConfigLoader', async () => {
       process.env = { OPENAI_KEY: 'env_openai_key' };
 
       const sut = new EnvConfigLoader();
-      const config = await sut.load();
+      const config = await sut.load({ name: 'env-source', type: 'env' });
 
       expect(config).toEqual({ openaiKey: 'env_openai_key' });
 
@@ -30,10 +30,13 @@ describe('EnvConfigLoader', async () => {
           COMMIT_GEN_CONFIG_OPENAI_KEY: 'env_openai_key',
           COMMIT_GEN_CONFIG_EXCLUDE_FILES: 'env_file1,env_file2',
         },
-        prefix: 'commit_gen_config_',
       });
 
-      const result = await sut.load();
+      const result = await sut.load({
+        name: 'env-source',
+        type: 'env',
+        prefix: 'commit_gen_config_',
+      });
 
       expect(result).toEqual({
         openaiKey: 'env_openai_key',
@@ -50,7 +53,9 @@ describe('EnvConfigLoader', async () => {
 
       const sut = new EnvConfigLoader({ env: mockEnv });
 
-      const result = (await sut.load()) as { [key: string]: unknown };
+      const result = (await sut.load({ name: 'env-source', type: 'env' })) as {
+        [key: string]: unknown;
+      };
 
       expect(result.openaiKey).toBeUndefined();
       expect(result.myAppSecret).toBe('supersecretvalue');
@@ -59,10 +64,13 @@ describe('EnvConfigLoader', async () => {
     it('should ignore irrelevant environment variables', async () => {
       const sut = new EnvConfigLoader({
         env: { UNRELATED_ENV_VAR: 'value' },
-        prefix: 'commit_gen_config_',
       });
 
-      const result = await sut.load();
+      const result = await sut.load({
+        name: 'env-source',
+        type: 'env',
+        prefix: 'commit_gen_config_',
+      });
 
       expect(result).toEqual({});
     });
@@ -72,7 +80,7 @@ describe('EnvConfigLoader', async () => {
         env: { OPENAI_KEY: 'openai-key-value' },
       });
 
-      const result = await sut.load();
+      const result = await sut.load({ name: 'env-source', type: 'env' });
 
       expect(result.openaiKey).toBe('openai-key-value');
     });
@@ -84,9 +92,14 @@ describe('EnvConfigLoader', async () => {
 
       const sut = new EnvConfigLoader({
         env: mockEnv,
-        prefix: 'commit_gen_config_',
       });
-      const result = (await sut.load()) as { [key: string]: unknown };
+      const result = (await sut.load({
+        name: 'env-source',
+        type: 'env',
+        prefix: 'commit_gen_config_',
+      })) as {
+        [key: string]: unknown;
+      };
 
       expect(result.emptyKey).toBeUndefined();
     });
