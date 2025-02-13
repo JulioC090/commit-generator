@@ -20,6 +20,7 @@ const sources: Array<IConfigSource> = [
   {
     name: 'env',
     type: 'env',
+    prefix: 'commit_gen_config_',
   },
   {
     name: 'arg',
