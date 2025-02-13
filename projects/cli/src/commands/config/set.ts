@@ -1,7 +1,7 @@
 import configManager, { IConfigType } from '@/config';
 import { formatConfigValue } from '@commit-generator/config';
 
-export default async function save(
+export default async function set(
   pairs: Array<{ key: string; value: string }>,
 ) {
   for (const { key, value } of pairs) {

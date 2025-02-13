@@ -2,11 +2,11 @@
 
 import amend from '@/commands/amend';
 import commit from '@/commands/commit';
+import set from '@/commands/config/set';
+import unset from '@/commands/config/unset';
 import edit from '@/commands/edit';
 import generate from '@/commands/generate';
 import generateAndCommit from '@/commands/generateAndCommit';
-import remove from '@/commands/remove';
-import save from '@/commands/save';
 import validate from '@/commands/validate';
 import keyValueParser from '@/parsers/keyValueParser';
 import { program } from '@commander-js/extra-typings';
@@ -73,19 +73,19 @@ program
   )
   .action(validate);
 
-program
-  .command('save')
-  .argument(
-    '<keyValue...>',
-    'Key-value pairs in the format key=value',
-    keyValueParser,
-  )
-  .description('Save configuration keys with their specified values')
-  .action(save);
+const configCommand = program
+  .command('config')
+  .description('Manage configuration');
 
-program
-  .command('remove <key...>')
-  .description('Remove a configuration key')
-  .action(remove);
+configCommand
+  .command('set')
+  .argument('<keyValue...>', 'Key-value pairs (key=value)', keyValueParser)
+  .description('Set configuration keys with values')
+  .action(set);
+
+configCommand
+  .command('unset <key...>')
+  .description('Remove configuration keys')
+  .action(unset);
 
 program.parse(process.argv);
