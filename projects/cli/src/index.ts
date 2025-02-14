@@ -96,6 +96,8 @@ configCommand
   )
   .action(list);
 
-const commanderArgs = process.argv.filter((arg) => !arg.includes('='));
+const commanderArgs = process.argv.filter(
+  (arg) => !/--[\w.]+=[\w.]+/g.test(arg),
+);
 
 program.parse(commanderArgs);
