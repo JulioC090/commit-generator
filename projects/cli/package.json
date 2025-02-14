@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@commander-js/extra-typings": "^13.1.0",
+    "@commit-generator/commit-history": "workspace:^",
     "@commit-generator/config": "workspace:^",
     "@commit-generator/core": "workspace:^",
     "@commit-generator/git": "workspace:^",
