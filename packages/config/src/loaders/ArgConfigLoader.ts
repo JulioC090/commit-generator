@@ -1,6 +1,7 @@
 import formatConfigValue from '@/formatConfigValue';
 import IConfigLoader from '@/types/IConfigLoader';
 import { IConfigValue } from '@/types/IConfigValue';
+import _ from 'lodash';
 
 interface ArgConfigLoaderProps {
   arg?: Array<string>;
@@ -25,7 +26,7 @@ export default class ArgConfigLoader implements IConfigLoader {
       const match = arg.match(/^--([^=]+)=(.+)$/);
       if (match) {
         const [, key, value] = match;
-        config[key] = formatConfigValue(value);
+        _.set(config, key, formatConfigValue(value));
       }
     });
 
