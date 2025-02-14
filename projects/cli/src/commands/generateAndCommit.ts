@@ -38,7 +38,7 @@ export default async function generateAndCommit(options: {
     const generateCommit = createGenerateCommit(
       generateCommitConfig,
       historyPath,
-      config.excludeFiles ?? [],
+      config.exclude?.files ?? [],
     );
 
     console.clear();

@@ -20,7 +20,7 @@ export default async function generate(options: {
   const generateCommit = createGenerateCommit(
     generateCommitConfig,
     historyPath,
-    config.excludeFiles ?? [],
+    config.exclude?.files ?? [],
   );
 
   console.log(await generateCommit.execute(options));

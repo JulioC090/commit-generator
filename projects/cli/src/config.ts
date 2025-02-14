@@ -30,7 +30,7 @@ const sources: Array<IConfigSource> = [
 
 export type IConfigType = {
   provider: keyof IAIModelSchemes;
-  excludeFiles?: string[];
+  exclude?: { files: Array<string> };
 } & Partial<IAIModelSchemes>;
 
 const providers = Object.entries(aiModelSchemes).map(([provider, schema]) => ({
@@ -46,7 +46,14 @@ const configDefinitions = {
   properties: {
     provider: { type: 'string' },
     ...aiModelSchemes,
-    excludeFiles: { type: 'array', items: { type: 'string' }, nullable: true },
+    exclude: {
+      type: 'object',
+      properties: {
+        files: { type: 'array', items: { type: 'string' } },
+      },
+      required: ['files'],
+      additionalProperties: false,
+    },
   },
   required: ['provider'],
   anyOf: providers,

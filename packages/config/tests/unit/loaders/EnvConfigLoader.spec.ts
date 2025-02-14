@@ -10,7 +10,7 @@ describe('EnvConfigLoader', async () => {
       const sut = new EnvConfigLoader();
       const config = await sut.load({ name: 'env-source', type: 'env' });
 
-      expect(config).toEqual({ openaiKey: 'env_openai_key' });
+      expect(config).toEqual({ openai: { key: 'env_openai_key' } });
 
       process.env = originalEnv;
     });
@@ -39,8 +39,8 @@ describe('EnvConfigLoader', async () => {
       });
 
       expect(result).toEqual({
-        openaiKey: 'env_openai_key',
-        excludeFiles: ['env_file1', 'env_file2'],
+        openai: { key: 'env_openai_key' },
+        exclude: { files: ['env_file1', 'env_file2'] },
       });
     });
 
@@ -48,7 +48,7 @@ describe('EnvConfigLoader', async () => {
       const mockEnv = {
         commit_gen_config_openaiKey: 'openai-key-value',
         commit_gen_config_excludeFiles: 'node_modules,.git',
-        MY_APP_SECRET: 'supersecretvalue',
+        APPSECRET: 'supersecretvalue',
       };
 
       const sut = new EnvConfigLoader({ env: mockEnv });
@@ -58,7 +58,7 @@ describe('EnvConfigLoader', async () => {
       };
 
       expect(result.openaiKey).toBeUndefined();
-      expect(result.myAppSecret).toBe('supersecretvalue');
+      expect(result.appsecret).toBe('supersecretvalue');
     });
 
     it('should ignore irrelevant environment variables', async () => {
@@ -75,14 +75,16 @@ describe('EnvConfigLoader', async () => {
       expect(result).toEqual({});
     });
 
-    it('should format the env variable keys in camelCase', async () => {
+    it('should format the env variable keys using dots to represent object properties', async () => {
       const sut = new EnvConfigLoader({
         env: { OPENAI_KEY: 'openai-key-value' },
       });
 
-      const result = await sut.load({ name: 'env-source', type: 'env' });
+      const result = (await sut.load({ name: 'env-source', type: 'env' })) as {
+        openai: { key: string };
+      };
 
-      expect(result.openaiKey).toBe('openai-key-value');
+      expect(result.openai.key).toBe('openai-key-value');
     });
 
     it('should skip empty env variables with prefix', async () => {

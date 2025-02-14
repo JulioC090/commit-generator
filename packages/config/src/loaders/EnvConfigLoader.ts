@@ -2,6 +2,7 @@ import formatConfigValue from '@/formatConfigValue';
 import IConfigLoader from '@/types/IConfigLoader';
 import { IConfigValue } from '@/types/IConfigValue';
 import { ISource } from '@/types/ISource';
+import _ from 'lodash';
 
 interface EnvConfigLoaderProps {
   env?: NodeJS.ProcessEnv;
@@ -35,9 +36,9 @@ export default class EnvConfigLoader implements IConfigLoader {
       }
 
       let key = source.prefix ? envKey.slice(source.prefix.length) : envKey;
-      key = key.toLowerCase().replace(/_(.)/g, (_, char) => char.toUpperCase());
+      key = key.toLowerCase().replace(/_/g, '.');
 
-      conf[key] = formatConfigValue(envValue);
+      _.set(conf, key, formatConfigValue(envValue));
     }
 
     return conf;

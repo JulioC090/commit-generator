@@ -32,9 +32,9 @@ export default async function list(): Promise<void> {
     console.log('');
   }
 
-  if (config.excludeFiles && config.excludeFiles.length > 0) {
+  if (config.exclude && config.exclude.files.length > 0) {
     console.log(chalk.white('📂 Excluded Files:'));
-    config.excludeFiles.forEach((file) =>
+    config.exclude.files.forEach((file) =>
       console.log(`  - ${chalk.green(file)}`),
     );
     console.log('');

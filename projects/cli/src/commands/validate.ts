@@ -19,7 +19,7 @@ export default async function validate(commitMessage?: string) {
   const validateCommit = createValidateCommit(
     validateCommitConfig,
     historyPath,
-    config.excludeFiles ?? [],
+    config.exclude?.files ?? [],
   );
 
   const result = await validateCommit.execute({ commitMessage });
