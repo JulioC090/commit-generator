@@ -2,6 +2,7 @@
 
 import amend from '@/commands/amend';
 import commit from '@/commands/commit';
+import init from '@/commands/config/init';
 import list from '@/commands/config/list';
 import set from '@/commands/config/set';
 import unset from '@/commands/config/unset';
@@ -77,6 +78,17 @@ program
 const configCommand = program
   .command('config')
   .description('Manage configuration');
+
+configCommand
+  .command('init')
+  .argument(
+    '[provider]',
+    'Specify an AI provider to configure. If omitted, you will be prompted to choose one.',
+  )
+  .description(
+    'Initialize and configure an AI provider. This will overwrite existing configurations.',
+  )
+  .action(init);
 
 configCommand
   .command('set')
