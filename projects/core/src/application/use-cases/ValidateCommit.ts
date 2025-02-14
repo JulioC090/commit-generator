@@ -47,6 +47,10 @@ export default class ValidateCommit {
       commitMessage = this.git.log(1);
     }
 
+    if (!diff) {
+      throw new Error('No staged files found.');
+    }
+
     const validateResult = await this.commitValidator.validate(commitMessage, {
       diff,
     });

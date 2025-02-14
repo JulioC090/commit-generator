@@ -34,6 +34,16 @@ describe('ValidateCommit', () => {
     });
   });
 
+  it('should throw if there are no staged files', async () => {
+    vi.mocked(mockGit.diff).mockReturnValueOnce('');
+
+    await expect(
+      sut.execute({
+        commitMessage: 'fix: adjust login flow',
+      }),
+    ).rejects.toThrow('No staged files found.');
+  });
+
   it('should validate a staged commit message', async () => {
     vi.mocked(mockGit.diff).mockReturnValueOnce('mocked diff');
     vi.mocked(mockCommitValidator.validate).mockResolvedValueOnce({
