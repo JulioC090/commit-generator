@@ -2,6 +2,7 @@
 
 import amend from '@/commands/amend';
 import commit from '@/commands/commit';
+import list from '@/commands/config/list';
 import set from '@/commands/config/set';
 import unset from '@/commands/config/unset';
 import edit from '@/commands/edit';
@@ -87,5 +88,12 @@ configCommand
   .command('unset <key...>')
   .description('Remove configuration keys')
   .action(unset);
+
+configCommand
+  .command('list')
+  .description(
+    'Display the active provider configuration with its parameters and additional settings',
+  )
+  .action(list);
 
 program.parse(process.argv);
