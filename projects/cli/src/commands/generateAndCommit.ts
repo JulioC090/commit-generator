@@ -3,6 +3,7 @@ import { historyPath } from '@/constants';
 import promptCommitContext from '@/prompts/promptCommitContext';
 import promptCommitType from '@/prompts/promptCommitType';
 import promptInteractiveGeneration from '@/prompts/promptInterativeGeneration';
+import checkStagedFiles from '@/utils/checkStagedFiles';
 import { createGenerateCommit } from '@commit-generator/core';
 import { git } from '@commit-generator/git';
 import chalk from 'chalk';
@@ -21,6 +22,8 @@ export default async function generateAndCommit(options: {
     if (!config.provider || !config[config.provider]) {
       throw new Error(`Invalid provider: ${config.provider ?? 'unknown'}`);
     }
+
+    await checkStagedFiles(config.exclude?.files ?? [], options.force);
 
     if (!options.type && !options.force) {
       options.type = await promptCommitType();

@@ -1,5 +1,6 @@
 import configManager from '@/config';
 import { historyPath } from '@/constants';
+import checkStagedFiles from '@/utils/checkStagedFiles';
 import { createGenerateCommit } from '@commit-generator/core';
 
 export default async function generate(options: {
@@ -11,6 +12,8 @@ export default async function generate(options: {
   if (!config.provider || !config[config.provider]) {
     throw new Error(`Invalid provider: ${config.provider ?? 'unknown'}`);
   }
+
+  await checkStagedFiles(config.exclude?.files ?? [], true);
 
   const generateCommitConfig = {
     provider: config.provider,
