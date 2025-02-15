@@ -45,10 +45,19 @@ export default async function promptInteractiveGeneration(
 
     switch (action) {
       case 'regenerate':
-        console.clear();
-        spinner.start();
-        commitMessage = await generateCommit();
-        spinner.stop();
+        try {
+          console.clear();
+          spinner.start();
+          commitMessage = await generateCommit();
+        } catch (error) {
+          console.clear();
+          console.error(
+            chalk.red('An error occurred:'),
+            (error as Error).message,
+          );
+        } finally {
+          spinner.stop();
+        }
         break;
       case 'edit': {
         const { newMessage } = await inquirer.prompt([
