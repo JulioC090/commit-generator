@@ -66,4 +66,14 @@ export default class Git implements IGit {
       return '';
     }
   }
+
+  public add(): void {
+    if (!this.isRepository()) {
+      throw new Error(
+        'Error: The current directory is not a valid Git repository.',
+      );
+    }
+
+    execSync('git add .');
+  }
 }
