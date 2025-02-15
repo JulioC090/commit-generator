@@ -4,6 +4,10 @@
     "transit": {
       "dependsOn": ["^transit"]
     },
+    "precommit": {
+      "dependsOn": ["^transit"],
+      "cache": true
+    },
     "clean": {
       "cache": false
     },

@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "prepare": "husky",
+    "precommit": "turbo run precommit",
     "build": "turbo run build",
     "clean": "turbo run clean",
     "lint": "turbo run lint",

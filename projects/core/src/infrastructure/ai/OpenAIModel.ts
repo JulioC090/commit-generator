@@ -6,7 +6,7 @@ export type IOpenAIParams = {
   key: string;
 };
 
-export const openAISchema = {
+export const OpenAISchema = {
   type: 'object',
   properties: {
     key: { type: 'string' },
@@ -22,7 +22,7 @@ export default class OpenAIModel
   private model: OpenAI;
 
   constructor(private params: IAIModelParams) {
-    super(params, openAISchema);
+    super(params, OpenAISchema);
     this.model = new OpenAI({ apiKey: this.parameters.key });
   }
 

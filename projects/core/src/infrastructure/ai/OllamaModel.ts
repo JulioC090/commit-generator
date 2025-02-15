@@ -6,7 +6,7 @@ export type IOllamaParams = {
   model: string;
 };
 
-export const ollamaSchema = {
+export const OllamaSchema = {
   type: 'object',
   properties: {
     model: { type: 'string' },
@@ -20,7 +20,7 @@ export default class OllamaModel
   implements IAIModel
 {
   constructor(parameters: IAIModelParams) {
-    super(parameters, ollamaSchema);
+    super(parameters, OllamaSchema);
   }
 
   public async complete(prompt: string): Promise<string> {
