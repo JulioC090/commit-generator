@@ -6,6 +6,12 @@
   <img src="./docs/static/demo.gif">
 </p>
 
+<p align="center">
+  English
+  | 
+  <a href="./docs/readme/pt-BR/README.md">Português</a>
+</p>
+
 **Commit Generator** is a tool that leverages AI to automatically generate commit messages based on changes in your code.
 
 ## 📌 Table of Contents
