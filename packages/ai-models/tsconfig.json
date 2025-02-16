@@ -1,0 +1,14 @@
+{
+  "extends": "@commit-generator/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "rootDirs": ["src", "tests"],
+    "outDir": "dist",
+    "paths": {
+      "@/tests/*": ["../tests/*"],
+      "@/*": ["*"]
+    },
+  },
+  "include": ["src", "tests"],
+  "exclude": []
+}

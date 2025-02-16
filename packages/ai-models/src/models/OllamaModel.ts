@@ -1,5 +1,5 @@
-import IAIModel, { IAIModelParams } from '@/application/interfaces/IAIModel';
-import AIModel from '@/infrastructure/ai/AIModel';
+import AIModel from '@/AIModel';
+import { IAIModelParams } from '@/types/IAIModelsParams';
 import ollama from 'ollama';
 
 export type IOllamaParams = {
@@ -15,10 +15,7 @@ export const OllamaSchema = {
   additionalProperties: false,
 };
 
-export default class OllamaModel
-  extends AIModel<IOllamaParams>
-  implements IAIModel
-{
+export default class OllamaModel extends AIModel<IOllamaParams> {
   constructor(parameters: IAIModelParams) {
     super(parameters, OllamaSchema);
   }

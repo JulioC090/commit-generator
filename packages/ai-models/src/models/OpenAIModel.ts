@@ -1,5 +1,5 @@
-import IAIModel, { IAIModelParams } from '@/application/interfaces/IAIModel';
-import AIModel from '@/infrastructure/ai/AIModel';
+import AIModel from '@/AIModel';
+import { IAIModelParams } from '@/types/IAIModelsParams';
 import OpenAI from 'openai';
 
 export type IOpenAIParams = {
@@ -15,10 +15,7 @@ export const OpenAISchema = {
   additionalProperties: false,
 };
 
-export default class OpenAIModel
-  extends AIModel<IOpenAIParams>
-  implements IAIModel
-{
+export default class OpenAIModel extends AIModel<IOpenAIParams> {
   private model: OpenAI;
 
   constructor(private params: IAIModelParams) {

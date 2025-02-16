@@ -7,7 +7,9 @@ export const getAIModelsOutput = () => {
     console.error(
       '❌ AI Models output directory not found. You may have refactored and forgot to update the generation scripts.',
     );
-    console.error(`❌ Please update aiModelsOutput in ${constantsPath}`);
+    console.error(
+      `❌ Please update relativeAIModelsOutput in ${constantsPath}`,
+    );
     process.exit(1);
   }
 

@@ -1,11 +1,16 @@
-import { IAIModelParams } from '@/application/interfaces/IAIModel';
-import AIModel from '@/infrastructure/ai/AIModel';
+import AIModel from '@/AIModel';
+import { IAIModelParams } from '@/types/IAIModelsParams';
 import { JSONSchemaType } from 'ajv';
 import { describe, expect, it } from 'vitest';
 
 class TestModel extends AIModel<IAIModelParams> {
   constructor(parameters: IAIModelParams, schema: unknown) {
     super(parameters, schema);
+  }
+
+  public async complete(): Promise<string> {
+    // Implementation not relevant for this test
+    return '';
   }
 }
 

@@ -1,8 +1,9 @@
-import { IAIModelParams } from '@/application/interfaces/IAIModel';
-import ISchemeValidator from '@/application/interfaces/ISchemeValidator';
-import AjvSchemeValidator from '@/infrastructure/scheme-validator/AjvSchemeValidator';
+import AjvSchemeValidator from '@/AjvSchemeValidator';
+import IAIModel from '@/types/IAIModel';
+import { IAIModelParams } from '@/types/IAIModelsParams';
+import ISchemeValidator from '@/types/ISchemeValidator';
 
-export default abstract class AIModel<ParamsType> {
+export default abstract class AIModel<ParamsType> implements IAIModel {
   protected parameters: ParamsType;
   private schemeValidator: ISchemeValidator;
 
@@ -20,4 +21,6 @@ export default abstract class AIModel<ParamsType> {
   ): boolean {
     return this.schemeValidator.validate(parameters, schema);
   }
+
+  public abstract complete(prompt: string): Promise<string>;
 }

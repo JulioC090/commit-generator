@@ -1,10 +1,10 @@
-import aiModels from '@/application/factories/ai/aiModels';
-import IAIModel, { IAIModelParams } from '@/application/interfaces/IAIModel';
+import aiModels from '@/models';
+import { IAIModelParams } from '@/types/IAIModelsParams';
 
 export default function createAIModel(
   provider: string,
   parameters: IAIModelParams,
-): IAIModel {
+) {
   const modelClass =
     aiModels[provider.toLowerCase() as keyof typeof aiModels] ?? '';
 

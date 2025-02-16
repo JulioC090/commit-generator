@@ -1,4 +1,4 @@
-import AjvSchemeValidator from '@/infrastructure/scheme-validator/AjvSchemeValidator';
+import AjvSchemeValidator from '@/AjvSchemeValidator';
 import { JSONSchemaType } from 'ajv';
 import { describe, expect, it } from 'vitest';
 

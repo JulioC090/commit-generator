@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { relativeModelsDir } from './config/constants.mjs';
 import { getModelsFiles } from './utils/getModelsFiles.mjs';
 import { getSchemeOutput } from './utils/getSchemeOutput.mjs';
 
@@ -9,7 +10,7 @@ const files = getModelsFiles();
 const imports = files
   .map((file) => {
     const modelName = file.replace('Model.ts', '');
-    return `import { ${modelName}Schema, I${modelName}Params } from './infrastructure/ai/${file.replace('.ts', '')}';`;
+    return `import { ${modelName}Schema, I${modelName}Params } from '${relativeModelsDir.replace('src', '@')}/${file.replace('.ts', '')}';`;
   })
   .join('\n');
 

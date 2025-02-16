@@ -1,5 +1,5 @@
 {
-  "name": "@commit-generator/core",
+  "name": "@commit-generator/ai-models",
   "exports": {
     ".": {
       "default": "./dist/index.js",
@@ -11,6 +11,9 @@
     }
   },
   "scripts": {
+    "prepare": "node scripts/generateDynamicFiles.mjs",
+    "precommit": "node scripts/validateAIModels.mjs",
+    "prebuild": "node scripts/generateDynamicFiles.mjs",
     "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
     "clean": "rimraf dist",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
@@ -21,14 +24,14 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
-    "@commit-generator/ai-models":"workspace:^",
-    "@commit-generator/commit-history": "workspace:^",
-    "@commit-generator/git": "workspace:^",
-    "@commit-generator/prompt-parser": "workspace:^"
+    "ajv": "^8.17.1",
+    "ollama": "^0.5.13",
+    "openai": "^4.77.0"
   },
   "devDependencies": {
     "@commit-generator/typescript-config": "workspace:^",
     "@commit-generator/eslint-config": "workspace:^",
-    "@types/node": "^22.10.2"
+    "@types/node": "^22.10.2",
+    "ts-morph": "^25.0.1"
   }
 }

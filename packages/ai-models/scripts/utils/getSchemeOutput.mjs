@@ -7,7 +7,7 @@ export const getSchemeOutput = () => {
     console.error(
       '❌ Scheme output directory not found. You may have refactored and forgot to update the generation scripts.',
     );
-    console.error(`❌ Please update schemeOutput in ${constantsPath}`);
+    console.error(`❌ Please update relativeSchemeOutput in ${constantsPath}`);
     process.exit(1);
   }
 

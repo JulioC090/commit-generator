@@ -1,4 +1,4 @@
-import ISchemeValidator from '@/application/interfaces/ISchemeValidator';
+import ISchemeValidator from '@/types/ISchemeValidator';
 import Ajv, { JSONSchemaType } from 'ajv';
 
 export default class AjvSchemeValidator implements ISchemeValidator {

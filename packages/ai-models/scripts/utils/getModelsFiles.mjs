@@ -10,7 +10,7 @@ export const getModelsFiles = () => {
     console.error(
       '❌ AI Models Dir not found. You may have refactored and forgot to update the generation scripts.',
     );
-    console.error(`❌ Please update modelsDir in ${constantsPath}`);
+    console.error(`❌ Please update relativeModelsDir in ${constantsPath}`);
     process.exit(1);
   }
 

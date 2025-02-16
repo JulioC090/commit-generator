@@ -1,7 +1,7 @@
-import createAIModel from '@/application/factories/ai/createAIModel';
 import { IAIModelParams } from '@/application/interfaces/IAIModel';
 import CommitValidator from '@/application/services/CommitValidator';
 import ValidateCommit from '@/application/use-cases/ValidateCommit';
+import { createAIModel } from '@commit-generator/ai-models';
 import { CommitHistory } from '@commit-generator/commit-history';
 import { git } from '@commit-generator/git';
 

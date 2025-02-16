@@ -43,6 +43,31 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@22.10.10)
 
+  packages/ai-models:
+    dependencies:
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
+      ollama:
+        specifier: ^0.5.13
+        version: 0.5.13
+      openai:
+        specifier: ^4.77.0
+        version: 4.80.1
+    devDependencies:
+      '@commit-generator/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.10.10
+      ts-morph:
+        specifier: ^25.0.1
+        version: 25.0.1
+
   packages/commit-history:
     devDependencies:
       '@commit-generator/eslint-config':
@@ -160,6 +185,9 @@ importers:
 
   projects/core:
     dependencies:
+      '@commit-generator/ai-models':
+        specifier: workspace:^
+        version: link:../../packages/ai-models
       '@commit-generator/commit-history':
         specifier: workspace:^
         version: link:../../packages/commit-history
@@ -169,15 +197,6 @@ importers:
       '@commit-generator/prompt-parser':
         specifier: workspace:^
         version: link:../../packages/prompt-parser
-      ajv:
-        specifier: ^8.17.1
-        version: 8.17.1
-      ollama:
-        specifier: ^0.5.13
-        version: 0.5.13
-      openai:
-        specifier: ^4.77.0
-        version: 4.80.1
     devDependencies:
       '@commit-generator/typescript-config':
         specifier: workspace:^
@@ -185,9 +204,6 @@ importers:
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
-      ts-morph:
-        specifier: ^25.0.1
-        version: 25.0.1
 
 packages:
 
