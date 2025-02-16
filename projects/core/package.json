@@ -2,16 +2,20 @@
   "name": "@commit-generator/core",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./schemes": {
-      "default": "./dist/schemes.js",
-      "types": "./dist/schemes.d.ts"
+      "types": "./dist/schemes.d.ts",
+      "import": "./dist/schemes.mjs",
+      "require": "./dist/schemes.js",
+      "default": "./dist/schemes.js"
     }
   },
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
+    "build": "tsup --format cjs,esm",
     "clean": "rimraf dist",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",

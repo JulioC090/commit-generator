@@ -2,12 +2,14 @@
   "name": "@commit-generator/prompt-parser",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
+    "build": "tsup --format cjs,esm",
     "clean": "rimraf dist",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",

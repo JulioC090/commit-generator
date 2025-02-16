@@ -2,20 +2,23 @@
   "name": "@commit-generator/ai-models",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./schemes": {
-      "default": "./dist/schemes.js",
-      "types": "./dist/schemes.d.ts"
+      "types": "./dist/schemes.d.ts",
+      "import": "./dist/schemes.mjs",
+      "require": "./dist/schemes.js",
+      "default": "./dist/schemes.js"
     }
   },
   "scripts": {
     "prepare": "node scripts/generateDynamicFiles.mjs",
     "precommit": "node scripts/validateAIModels.mjs",
     "prebuild": "node scripts/generateDynamicFiles.mjs",
-    "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
-    "clean": "rimraf dist",
+    "build": "tsup --format cjs,esm",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",

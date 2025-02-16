@@ -2,13 +2,14 @@
   "name": "@commit-generator/git",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
-    "clean": "rimraf dist",
+    "build": "tsup --format cjs,esm",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
