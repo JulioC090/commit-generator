@@ -123,6 +123,7 @@ commit-generator/
 │── docs/                   # Arquivos de documentação
 │── packages/
 │   ├── git/                # Integração com Git
+│   ├── prompt-parser/      # Converte templates de texto em prompts estruturados
 │   ├── commit-history/     # Registra mensagens de commit geradas anteriormente
 │   ├── config/             # Gerenciador de configurações
 │   ├── eslint-config/      # Configurações do ESLint pré-configuradas
@@ -139,6 +140,7 @@ Cada pacote é documentado separadamente. Veja:
 - [Core](../../../projects/core)
 - [Cli](../../../projects/cli)
 - [Git](../../../packages/git)
+- [Prompt Parser](../../../packages/prompt-parser/)
 - [Commit History](../../../packages/commit-history)
 - [Config Manager](../../../packages/config)
 
