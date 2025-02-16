@@ -1,0 +1,23 @@
+{
+  "name": "@commit-generator/prompt-parser",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.build.json --declaration && tsc-alias -p tsconfig.build.json",
+    "clean": "rimraf dist",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit -p ."
+  },
+  "devDependencies": {
+    "@commit-generator/typescript-config": "workspace:^",
+    "@commit-generator/eslint-config": "workspace:^"
+  }
+}

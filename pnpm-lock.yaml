@@ -110,6 +110,15 @@ importers:
         specifier: ^22.10.2
         version: 22.10.10
 
+  packages/prompt-parser:
+    devDependencies:
+      '@commit-generator/eslint-config':
+        specifier: workspace:^
+        version: link:../eslint-config
+      '@commit-generator/typescript-config':
+        specifier: workspace:^
+        version: link:../typescript-config
+
   packages/typescript-config: {}
 
   projects/cli:
@@ -157,6 +166,9 @@ importers:
       '@commit-generator/git':
         specifier: workspace:^
         version: link:../../packages/git
+      '@commit-generator/prompt-parser':
+        specifier: workspace:^
+        version: link:../../packages/prompt-parser
       ajv:
         specifier: ^8.17.1
         version: 8.17.1

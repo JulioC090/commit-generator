@@ -1,5 +1,5 @@
-import PromptBuilder from '@/application/utils/prompt-builder/PromptBuilder';
-import PromptTemplateParser from '@/application/utils/prompt-builder/PromptTemplateParser';
+import PromptBuilder from '@/PromptBuilder';
+import PromptTemplateParser from '@/PromptTemplateParser';
 import { describe, expect, it } from 'vitest';
 
 describe('PromptTemplateParser', () => {

@@ -1,4 +1,4 @@
-import Prompt from '@/application/utils/prompt-builder/Prompt';
+import Prompt from '@/Prompt';
 
 export default class PromptBuilder {
   private intro: string = '';
@@ -41,12 +41,20 @@ export default class PromptBuilder {
   }
 
   public build(): Prompt {
-    return new Prompt({
+    const prompt = new Prompt({
       intro: this.intro,
       rules: this.rules,
       output: this.output,
       examples: this.examples,
       inputs: this.inputs,
     });
+
+    this.intro = '';
+    this.rules = '';
+    this.output = '';
+    this.examples = '';
+    this.inputs = [];
+
+    return prompt;
   }
 }

@@ -1,5 +1,5 @@
-import Prompt from '@/application/utils/prompt-builder/Prompt';
-import PromptBuilder from '@/application/utils/prompt-builder/PromptBuilder';
+import Prompt from '@/Prompt';
+import PromptBuilder from '@/PromptBuilder';
 
 const sections = ['Intro', 'Rules', 'Output', 'Examples', 'Input'];
 

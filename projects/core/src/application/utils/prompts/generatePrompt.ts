@@ -1,5 +1,5 @@
 import ICommitInfo from '@/application/interfaces/ICommitInfo';
-import PromptTemplateParser from '@/application/utils/prompt-builder/PromptTemplateParser';
+import { promptParser } from '@commit-generator/prompt-parser';
 
 const template = `
 [Intro]
@@ -28,6 +28,6 @@ Diff: {diff}
 `;
 
 export function generatePrompt(commitInfo: ICommitInfo): string {
-  const prompt = new PromptTemplateParser().parse(template, { ...commitInfo });
+  const prompt = promptParser.parse(template, { ...commitInfo });
   return prompt.toString();
 }

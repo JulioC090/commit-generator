@@ -1,5 +1,5 @@
-import Prompt from '@/application/utils/prompt-builder/Prompt';
-import PromptBuilder from '@/application/utils/prompt-builder/PromptBuilder';
+import Prompt from '@/Prompt';
+import PromptBuilder from '@/PromptBuilder';
 import { describe, expect, it } from 'vitest';
 
 describe('PromptBuilder', () => {
@@ -52,5 +52,24 @@ describe('PromptBuilder', () => {
 
     expect(prompt).toBeInstanceOf(Prompt);
     expect(prompt.toString()).toBe(`Intro only.`);
+  });
+
+  it('should reset instance values after building', () => {
+    const builder = new PromptBuilder();
+
+    const prompt = builder
+      .addIntro('Intro only.')
+      .addRules('')
+      .addOutput('')
+      .addExamples('')
+      .build();
+
+    expect(prompt).toBeInstanceOf(Prompt);
+    expect(prompt.toString()).toBe(`Intro only.`);
+
+    const newPrompt = builder.build();
+
+    expect(prompt).toBeInstanceOf(Prompt);
+    expect(newPrompt.toString()).toBe('');
   });
 });

@@ -1,5 +1,5 @@
 import ICommitInfo from '@/application/interfaces/ICommitInfo';
-import PromptTemplateParser from '@/application/utils/prompt-builder/PromptTemplateParser';
+import { promptParser } from '@commit-generator/prompt-parser';
 
 const template = `
 [Intro]
@@ -30,7 +30,7 @@ export default function validatePrompt(
   commitMessage: string,
   { diff }: ICommitInfo,
 ) {
-  const prompt = new PromptTemplateParser().parse(template, {
+  const prompt = promptParser.parse(template, {
     commitMessage,
     diff,
   });
