@@ -198,6 +198,9 @@ importers:
         specifier: workspace:^
         version: link:../../packages/prompt-parser
     devDependencies:
+      '@commit-generator/eslint-config':
+        specifier: workspace:^
+        version: link:../../packages/eslint-config
       '@commit-generator/typescript-config':
         specifier: workspace:^
         version: link:../../packages/typescript-config
