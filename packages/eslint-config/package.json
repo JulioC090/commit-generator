@@ -1,9 +1,21 @@
 {
   "name": "@commit-generator/eslint-config",
+  "version": "0.0.0",
+  "description": "ESLint configuration package for the Commit Generator project",
+  "author": "JulioC090",
+  "type": "module",
   "files": [
     "node.mjs"
   ],
-  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulioC090/commit-generator.git",
+    "directory": "packages/eslint-config"
+  },
+  "bugs": {
+    "url": "https://github.com/JulioC090/commit-generator/issues"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "eslint": "^9.19.0",
