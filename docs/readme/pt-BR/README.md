@@ -123,6 +123,7 @@ commit-generator/
 │── docs/                   # Arquivos de documentação
 │── packages/
 │   ├── git/                # Integração com Git
+│   ├── ai-models/          # Gerencia interações com modelos de IA
 │   ├── prompt-parser/      # Converte templates de texto em prompts estruturados
 │   ├── commit-history/     # Registra mensagens de commit geradas anteriormente
 │   ├── config/             # Gerenciador de configurações
@@ -140,6 +141,7 @@ Cada pacote é documentado separadamente. Veja:
 - [Core](../../../projects/core)
 - [Cli](../../../projects/cli)
 - [Git](../../../packages/git)
+- [AI Models](../../../packages/ai-models/)
 - [Prompt Parser](../../../packages/prompt-parser/)
 - [Commit History](../../../packages/commit-history)
 - [Config Manager](../../../packages/config)
