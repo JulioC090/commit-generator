@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "@commit-generator/typescript-config": "workspace:^",
-    "@commit-generator/eslint-config": "workspace:^"
+    "@commit-generator/typescript-config": "0.1.0",
+    "@commit-generator/eslint-config": "0.1.0"
   }
 }

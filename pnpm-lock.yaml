@@ -71,11 +71,11 @@ importers:
   packages/commit-history:
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
+        specifier: 0.1.0
+        version: 0.1.0
       '@commit-generator/typescript-config':
-        specifier: workspace:^
-        version: link:../typescript-config
+        specifier: 0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
