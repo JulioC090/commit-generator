@@ -1,5 +1,17 @@
 {
   "name": "@commit-generator/cli",
+  "version": "0.0.0",
+  "description": "CLI for generating commit messages using AI.",
+  "author": "JulioC090",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulioC090/commit-generator.git",
+    "directory": "projects/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/JulioC090/commit-generator/issues"
+  },
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
