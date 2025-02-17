@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/eslint-config",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "ESLint configuration package for the Commit Generator project",
   "author": "JulioC090",
   "type": "module",
