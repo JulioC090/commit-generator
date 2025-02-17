@@ -158,17 +158,17 @@ importers:
         specifier: ^13.1.0
         version: 13.1.0(commander@13.1.0)
       '@commit-generator/commit-history':
-        specifier: workspace:^
-        version: link:../../packages/commit-history
+        specifier: 1.0.0
+        version: 1.0.0
       '@commit-generator/config':
-        specifier: workspace:^
-        version: link:../../packages/config
+        specifier: 1.0.0
+        version: 1.0.0
       '@commit-generator/core':
-        specifier: workspace:^
-        version: link:../core
+        specifier: 1.0.0
+        version: 1.0.0
       '@commit-generator/git':
-        specifier: workspace:^
-        version: link:../../packages/git
+        specifier: 1.0.0
+        version: 1.0.0
       chalk:
         specifier: ^4
         version: 4.1.2
@@ -182,9 +182,12 @@ importers:
         specifier: ^5.4.2
         version: 5.4.2
     devDependencies:
+      '@commit-generator/eslint-config':
+        specifier: 0.1.0
+        version: 0.1.0
       '@commit-generator/typescript-config':
-        specifier: workspace:^
-        version: link:../../packages/typescript-config
+        specifier: 0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
@@ -313,6 +316,12 @@ packages:
 
   '@commit-generator/commit-history@1.0.0':
     resolution: {integrity: sha512-JfVL9g8R44kVYwCh90JumXlqYFg0LUJLRNH27lTiBu1APCnzUMjllhq0EpCiPsGJG2dFVsGOWq+g3Yn2WdA4Jg==}
+
+  '@commit-generator/config@1.0.0':
+    resolution: {integrity: sha512-Uw8jBqUcukmvy5xQZZXG7kjVi0Wa0ONbNr7VoHE1EzecMAGDXYlyJ+0EX0wQa7fph4JmEPabN+mmFM5B1193XQ==}
+
+  '@commit-generator/core@1.0.0':
+    resolution: {integrity: sha512-0Rtlhn1x/7x9mPFW8diicYy9kJDa9qVi43tlm6VeUK3dOm0BBYP9F/3rt4YqJ6ljF5+go2mxFILIgQfARmHbTQ==}
 
   '@commit-generator/eslint-config@0.1.0':
     resolution: {integrity: sha512-M4/M2rwQ4H/K4kgE3Lmi82CtvKrQfjn/6kYHzNtfs2BCEb1MwwbqHRgcAo0BhUT/diPbdP8CCzsg+jaKeN7XtQ==}
@@ -3064,6 +3073,22 @@ snapshots:
       - zod
 
   '@commit-generator/commit-history@1.0.0': {}
+
+  '@commit-generator/config@1.0.0':
+    dependencies:
+      ajv: 8.17.1
+      lodash: 4.17.21
+
+  '@commit-generator/core@1.0.0':
+    dependencies:
+      '@commit-generator/ai-models': 1.0.1
+      '@commit-generator/commit-history': 1.0.0
+      '@commit-generator/git': 1.0.0
+      '@commit-generator/prompt-parser': 1.0.0
+    transitivePeerDependencies:
+      - encoding
+      - ws
+      - zod
 
   '@commit-generator/eslint-config@0.1.0': {}
 
