@@ -29,53 +29,24 @@ Writing meaningful commit messages can be tedious, and inconsistent messages mak
 
 ## 🚀 Getting started
 
-Currently, **Commit Generator** is not yet available as an NPM package, so it requires manual installation.  
-The primary way to interact with it is through the **CLI**.
+Currently, the primary way to interact with **Commit Generator** is through the **CLI**.
 
 ### 📋 Requirements
 
 Before installing, ensure you have the following dependencies:
 - [Node.js](https://nodejs.org/en) (Required for running the CLI) 
-- [pnpm](https://pnpm.io/) (Used for managing monorepo workspaces) 
 - [Git](https://git-scm.com/) (Used for repository management)  
 
 ### 🔧 Installation
 
 Follow these steps to install and set up **Commit Generator**:
 
-1. Clone the repository
+1. Install the package
 ```bash
-git clone https://github.com/JulioC090/commit-generator.git
-cd commit-generator
+npm install --global @commit-generator/cli
 ```
 
-2. Ensure [pnpm](https://pnpm.io/) is installed
-```bash
-npm install --global pnpm
-pnpm --version
-```
-
-3. Install dependencies
-```bash
-pnpm install
-```
-
-4. Build the project
-```bash
-pnpm build
-```
-
-5. Navigate to the CLI package
-```bash
-cd ./projects/cli
-```
-
-6. Create a global symbolic link
-```bash
-npm link
-```
-
-7. Initialize AI configuration
+2. Initialize AI configuration
 ```bash
 commitgen config init
 ```
