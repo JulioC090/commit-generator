@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "AI models factory and schemas for the Commit Generator project",
   "author": "JulioC090",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
