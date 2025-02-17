@@ -5,7 +5,7 @@
   "author": "JulioC090",
   "type": "module",
   "files": [
-    "node.mjs"
+    "node.js"
   ],
   "repository": {
     "type": "git",
