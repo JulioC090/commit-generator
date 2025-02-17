@@ -1,5 +1,8 @@
 {
   "name": "@commit-generator/ai-models",
+  "version": "0.0.0",
+  "description": "AI models factory and schemas for the Commit Generator project",
+  "author": "JulioC090",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -14,6 +17,15 @@
       "default": "./dist/schemes.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulioC090/commit-generator.git",
+    "directory": "packages/ai-models"
+  },
+  "bugs": {
+    "url": "https://github.com/JulioC090/commit-generator/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "prepare": "node scripts/generateDynamicFiles.mjs",
     "precommit": "node scripts/validateAIModels.mjs",
