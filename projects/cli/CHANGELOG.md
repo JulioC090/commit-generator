@@ -1,5 +1,18 @@
 # @commit-generator/cli
 
+## 1.0.0
+
+### Major Changes
+
+- - Initial release of `@commit-generator/cli` package.
+  - Integrated an interactive CLI workflow for generating commit messages based on Git diffs.
+  - Support for manual commit message generation and editing.
+  - Ability to commit, regenerate, or amend messages.
+  - Added functionality for validating commit messages based on best practices.
+  - Includes the ability to validate both custom and the last commit message.
+  - Introduced a configuration setup with persistent options such as AI provider and excluded files.
+  - Configuration can be dynamically changed through environment variables and CLI flags.
+
 ## 0.0.7
 
 ### Patch Changes
