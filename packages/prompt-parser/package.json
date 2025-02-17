@@ -1,5 +1,8 @@
 {
   "name": "@commit-generator/prompt-parser",
+  "version": "0.0.0",
+  "description": "A parser that converts structured templates into AI-friendly prompts.",
+  "author": "JulioC090",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -8,6 +11,15 @@
       "default": "./dist/index.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulioC090/commit-generator.git",
+    "directory": "packages/prompt-parser"
+  },
+  "bugs": {
+    "url": "https://github.com/JulioC090/commit-generator/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "tsup --format cjs,esm",
     "clean": "rimraf dist",
