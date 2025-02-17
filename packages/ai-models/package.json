@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/ai-models",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "AI models factory and schemas for the Commit Generator project",
   "author": "JulioC090",
   "exports": {
