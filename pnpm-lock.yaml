@@ -56,11 +56,11 @@ importers:
         version: 4.80.1
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: workspace:^
-        version: link:../eslint-config
+        specifier: 0.1.0
+        version: 0.1.0
       '@commit-generator/typescript-config':
-        specifier: workspace:^
-        version: link:../typescript-config
+        specifier: 0.1.0
+        version: 0.1.0
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
@@ -301,6 +301,12 @@ packages:
     resolution: {integrity: sha512-q5P52BYb1hwVWE6dtID7VvuJWrlfbCv4klj7BjUUOqMz4jbSZD4C9fJ9lRjL2jnBGTg+gDDlaXN51rkWcLk4fg==}
     peerDependencies:
       commander: ~13.1.0
+
+  '@commit-generator/eslint-config@0.1.0':
+    resolution: {integrity: sha512-M4/M2rwQ4H/K4kgE3Lmi82CtvKrQfjn/6kYHzNtfs2BCEb1MwwbqHRgcAo0BhUT/diPbdP8CCzsg+jaKeN7XtQ==}
+
+  '@commit-generator/typescript-config@0.1.0':
+    resolution: {integrity: sha512-B4wVzLGjvwQfFlj9ABltJ9ZGDRzn0Ehdzq1ZdQF86MXCGtn0ffxLx6Me3KPUle0UZvuCx08F2ZLrfpD2NnTihA==}
 
   '@commitlint/cli@19.6.1':
     resolution: {integrity: sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ==}
@@ -3028,6 +3034,10 @@ snapshots:
   '@commander-js/extra-typings@13.1.0(commander@13.1.0)':
     dependencies:
       commander: 13.1.0
+
+  '@commit-generator/eslint-config@0.1.0': {}
+
+  '@commit-generator/typescript-config@0.1.0': {}
 
   '@commitlint/cli@19.6.1(@types/node@22.10.10)(typescript@5.7.3)':
     dependencies:
