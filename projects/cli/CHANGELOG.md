@@ -1,5 +1,12 @@
 # @commit-generator/cli
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - @commit-generator/core@1.0.0
+
 ## 0.0.6
 
 ### Patch Changes

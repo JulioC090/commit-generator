@@ -1,5 +1,11 @@
 # @commit-generator/core
 
+## 1.0.0
+
+### Major Changes
+
+- - Initial release of `@commit-generator/core` package.
+
 ## 0.0.5
 
 ### Patch Changes
