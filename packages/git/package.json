@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/git",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Git integration utilities",
   "author": "JulioC090",
   "files": [
