@@ -12,12 +12,14 @@
     "test": "turbo run test",
     "test:watch": "vitest watch",
     "test:coverage": "turbo run test:coverage",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "publish": "turbo run build typecheck test && changeset version && changeset publish"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.27.12",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@vitest/coverage-v8": "^1.6.0",
