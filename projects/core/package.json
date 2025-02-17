@@ -1,5 +1,8 @@
 {
   "name": "@commit-generator/core",
+  "version": "0.0.0",
+  "description": "Core module for the Commit Generator, providing essential operations and AI model schemes.",
+  "author": "JulioC090",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -14,6 +17,15 @@
       "default": "./dist/schemes.js"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulioC090/commit-generator.git",
+    "directory": "projects/core"
+  },
+  "bugs": {
+    "url": "https://github.com/JulioC090/commit-generator/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "tsup --format cjs,esm",
     "clean": "rimraf dist",
@@ -25,7 +37,7 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
-    "@commit-generator/ai-models":"workspace:^",
+    "@commit-generator/ai-models": "workspace:^",
     "@commit-generator/commit-history": "workspace:^",
     "@commit-generator/git": "workspace:^",
     "@commit-generator/prompt-parser": "workspace:^"
