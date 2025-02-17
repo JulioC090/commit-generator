@@ -3,6 +3,9 @@
   "version": "0.0.5",
   "description": "Core module for the Commit Generator, providing essential operations and AI model schemes.",
   "author": "JulioC090",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -37,14 +40,14 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
-    "@commit-generator/ai-models": "workspace:^",
-    "@commit-generator/commit-history": "workspace:^",
-    "@commit-generator/git": "workspace:^",
-    "@commit-generator/prompt-parser": "workspace:^"
+    "@commit-generator/ai-models": "1.0.1",
+    "@commit-generator/commit-history": "1.0.0",
+    "@commit-generator/git": "1.0.0",
+    "@commit-generator/prompt-parser": "1.0.0"
   },
   "devDependencies": {
-    "@commit-generator/typescript-config": "workspace:^",
-    "@commit-generator/eslint-config": "workspace:^",
+    "@commit-generator/typescript-config": "0.1.0",
+    "@commit-generator/eslint-config": "0.1.0",
     "@types/node": "^22.10.2"
   }
 }
