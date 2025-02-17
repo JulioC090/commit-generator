@@ -1,5 +1,11 @@
 # @commit-generator/ai-models
 
+## 1.0.1
+
+### Patch Changes
+
+- - Unused and redundant files have been removed to optimize the package.
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Core module for the Commit Generator, providing essential operations and AI model schemes.",
   "author": "JulioC090",
   "exports": {
