@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "A utility for managing commit message history.",
   "author": "JulioC090",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
