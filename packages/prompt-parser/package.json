@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/prompt-parser",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A parser that converts structured templates into AI-friendly prompts.",
   "author": "JulioC090",
   "files": [
