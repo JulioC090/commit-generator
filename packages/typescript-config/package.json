@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/typescript-config",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "TypeScript Shared Configuration for Commit Generator",
   "author": "JulioC090",
   "files": [
