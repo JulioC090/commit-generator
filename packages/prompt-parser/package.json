@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "A parser that converts structured templates into AI-friendly prompts.",
   "author": "JulioC090",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -31,7 +34,7 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "devDependencies": {
-    "@commit-generator/typescript-config": "workspace:^",
-    "@commit-generator/eslint-config": "workspace:^"
+    "@commit-generator/typescript-config": "0.1.0",
+    "@commit-generator/eslint-config": "0.1.0"
   }
 }
