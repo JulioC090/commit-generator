@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 
 export type IOpenAIParams = {
   key: string;
-  model: string;
+  model?: string;
 };
 
 export const OpenAISchema = {
@@ -27,7 +27,7 @@ export default class OpenAIModel extends AIModel<IOpenAIParams> {
 
   async complete(prompt: string): Promise<string> {
     const completion = await this.model.chat.completions.create({
-      model: this.parameters.model,
+      model: this.parameters.model ?? 'gpt-4o-mini',
       messages: [
         {
           role: 'user',
