@@ -1,5 +1,11 @@
 # @commit-generator/cli
 
+## 1.0.1
+
+### Patch Changes
+
+- @commit-generator/core@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

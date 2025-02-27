@@ -1,5 +1,12 @@
 # @commit-generator/core
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @commit-generator/ai-models@1.1.0
+
 ## 1.0.0
 
 ### Major Changes

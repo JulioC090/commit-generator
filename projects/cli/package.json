@@ -1,6 +1,6 @@
 {
   "name": "@commit-generator/cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI for generating commit messages using AI.",
   "author": "JulioC090",
   "repository": {
@@ -41,7 +41,7 @@
     "@commander-js/extra-typings": "^13.1.0",
     "@commit-generator/commit-history": "1.0.0",
     "@commit-generator/config": "1.0.0",
-    "@commit-generator/core": "1.0.0",
+    "@commit-generator/core": "1.0.1",
     "@commit-generator/git": "1.0.0",
     "chalk": "^4",
     "commander": "^13.0.0",

@@ -1,5 +1,11 @@
 # @commit-generator/ai-models
 
+## 1.1.0
+
+### Minor Changes
+
+- add new parameters to ai models
+
 ## 1.0.1
 
 ### Patch Changes
