@@ -46,8 +46,9 @@
     "@commit-generator/prompt-parser": "workspace:^"
   },
   "devDependencies": {
-    "@commit-generator/typescript-config": "workspace:^",
     "@commit-generator/eslint-config": "workspace:^",
-    "@types/node": "^22.10.2"
+    "@commit-generator/typescript-config": "workspace:^",
+    "@types/node": "^22.10.2",
+    "eslint": "9.19.0"
   }
 }

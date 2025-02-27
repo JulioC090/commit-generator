@@ -34,7 +34,8 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "devDependencies": {
+    "@commit-generator/eslint-config": "workspace:^",
     "@commit-generator/typescript-config": "workspace:^",
-    "@commit-generator/eslint-config": "workspace:^"
+    "eslint": "9.19.0"
   }
 }

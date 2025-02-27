@@ -56,14 +56,17 @@ importers:
         version: 4.80.1
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
       ts-morph:
         specifier: ^25.0.1
         version: 25.0.1
@@ -71,14 +74,17 @@ importers:
   packages/commit-history:
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
 
   packages/config:
     dependencies:
@@ -90,26 +96,26 @@ importers:
         version: 4.17.21
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/lodash':
         specifier: ^4.17.15
         version: 4.17.15
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
 
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
         specifier: ^9.19.0
         version: 9.19.0
-      eslint:
-        specifier: ^9.19.0
-        version: 9.19.0(jiti@2.4.2)
       eslint-config-prettier:
         specifier: ^10.0.1
         version: 10.0.1(eslint@9.19.0(jiti@2.4.2))
@@ -132,23 +138,29 @@ importers:
   packages/git:
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
 
   packages/prompt-parser:
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../typescript-config
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
 
   packages/typescript-config: {}
 
@@ -158,17 +170,17 @@ importers:
         specifier: ^13.1.0
         version: 13.1.0(commander@13.1.0)
       '@commit-generator/commit-history':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../../packages/commit-history
       '@commit-generator/config':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../../packages/config
       '@commit-generator/core':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../core
       '@commit-generator/git':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../../packages/git
       chalk:
         specifier: ^4
         version: 4.1.2
@@ -183,39 +195,45 @@ importers:
         version: 5.4.2
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../../packages/eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
 
   projects/core:
     dependencies:
       '@commit-generator/ai-models':
-        specifier: 1.0.1
-        version: 1.0.1
+        specifier: workspace:^
+        version: link:../../packages/ai-models
       '@commit-generator/commit-history':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../../packages/commit-history
       '@commit-generator/git':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../../packages/git
       '@commit-generator/prompt-parser':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: workspace:^
+        version: link:../../packages/prompt-parser
     devDependencies:
       '@commit-generator/eslint-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../../packages/eslint-config
       '@commit-generator/typescript-config':
-        specifier: 0.1.0
-        version: 0.1.0
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.10
+      eslint:
+        specifier: 9.19.0
+        version: 9.19.0(jiti@2.4.2)
 
 packages:
 
@@ -310,30 +328,6 @@ packages:
     resolution: {integrity: sha512-q5P52BYb1hwVWE6dtID7VvuJWrlfbCv4klj7BjUUOqMz4jbSZD4C9fJ9lRjL2jnBGTg+gDDlaXN51rkWcLk4fg==}
     peerDependencies:
       commander: ~13.1.0
-
-  '@commit-generator/ai-models@1.0.1':
-    resolution: {integrity: sha512-BLEaHtTgHgOH+MQ5Q0GSKO6HKS0Ia0a/3kgoejhrBCfEyh6qF8jNlhYjrWkv6hUVDd3Gt9uB2HVokCYuRMzSYg==}
-
-  '@commit-generator/commit-history@1.0.0':
-    resolution: {integrity: sha512-JfVL9g8R44kVYwCh90JumXlqYFg0LUJLRNH27lTiBu1APCnzUMjllhq0EpCiPsGJG2dFVsGOWq+g3Yn2WdA4Jg==}
-
-  '@commit-generator/config@1.0.0':
-    resolution: {integrity: sha512-Uw8jBqUcukmvy5xQZZXG7kjVi0Wa0ONbNr7VoHE1EzecMAGDXYlyJ+0EX0wQa7fph4JmEPabN+mmFM5B1193XQ==}
-
-  '@commit-generator/core@1.0.0':
-    resolution: {integrity: sha512-0Rtlhn1x/7x9mPFW8diicYy9kJDa9qVi43tlm6VeUK3dOm0BBYP9F/3rt4YqJ6ljF5+go2mxFILIgQfARmHbTQ==}
-
-  '@commit-generator/eslint-config@0.1.0':
-    resolution: {integrity: sha512-M4/M2rwQ4H/K4kgE3Lmi82CtvKrQfjn/6kYHzNtfs2BCEb1MwwbqHRgcAo0BhUT/diPbdP8CCzsg+jaKeN7XtQ==}
-
-  '@commit-generator/git@1.0.0':
-    resolution: {integrity: sha512-cuGmvrObTKNoRaOO0bXp0MNV07dTWcIAbGV1Cfq68mgM8na0d3DRsbt4bH0zTyUQNG1j24x8KZN+X/cVEgj+7A==}
-
-  '@commit-generator/prompt-parser@1.0.0':
-    resolution: {integrity: sha512-X3WeeX2VwxN4uceLvepT3xoF2Z5w+bCiwQsrNaThgmyw/DKm0KGSC8HanT3pJ4YZYkGfVBtXaUgNUxPUyds5Nw==}
-
-  '@commit-generator/typescript-config@0.1.0':
-    resolution: {integrity: sha512-B4wVzLGjvwQfFlj9ABltJ9ZGDRzn0Ehdzq1ZdQF86MXCGtn0ffxLx6Me3KPUle0UZvuCx08F2ZLrfpD2NnTihA==}
 
   '@commitlint/cli@19.6.1':
     resolution: {integrity: sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ==}
@@ -3061,42 +3055,6 @@ snapshots:
   '@commander-js/extra-typings@13.1.0(commander@13.1.0)':
     dependencies:
       commander: 13.1.0
-
-  '@commit-generator/ai-models@1.0.1':
-    dependencies:
-      ajv: 8.17.1
-      ollama: 0.5.13
-      openai: 4.80.1
-    transitivePeerDependencies:
-      - encoding
-      - ws
-      - zod
-
-  '@commit-generator/commit-history@1.0.0': {}
-
-  '@commit-generator/config@1.0.0':
-    dependencies:
-      ajv: 8.17.1
-      lodash: 4.17.21
-
-  '@commit-generator/core@1.0.0':
-    dependencies:
-      '@commit-generator/ai-models': 1.0.1
-      '@commit-generator/commit-history': 1.0.0
-      '@commit-generator/git': 1.0.0
-      '@commit-generator/prompt-parser': 1.0.0
-    transitivePeerDependencies:
-      - encoding
-      - ws
-      - zod
-
-  '@commit-generator/eslint-config@0.1.0': {}
-
-  '@commit-generator/git@1.0.0': {}
-
-  '@commit-generator/prompt-parser@1.0.0': {}
-
-  '@commit-generator/typescript-config@0.1.0': {}
 
   '@commitlint/cli@19.6.1(@types/node@22.10.10)(typescript@5.7.3)':
     dependencies:
