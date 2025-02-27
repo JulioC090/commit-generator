@@ -40,14 +40,14 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
-    "@commit-generator/ai-models": "1.1.0",
-    "@commit-generator/commit-history": "1.0.0",
-    "@commit-generator/git": "1.0.0",
-    "@commit-generator/prompt-parser": "1.0.0"
+    "@commit-generator/ai-models": "workspace:^",
+    "@commit-generator/commit-history": "workspace:^",
+    "@commit-generator/git": "workspace:^",
+    "@commit-generator/prompt-parser": "workspace:^"
   },
   "devDependencies": {
-    "@commit-generator/typescript-config": "0.1.0",
-    "@commit-generator/eslint-config": "0.1.0",
+    "@commit-generator/typescript-config": "workspace:^",
+    "@commit-generator/eslint-config": "workspace:^",
     "@types/node": "^22.10.2"
   }
 }

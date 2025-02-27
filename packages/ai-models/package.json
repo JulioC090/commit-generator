@@ -47,8 +47,8 @@
     "openai": "^4.77.0"
   },
   "devDependencies": {
-    "@commit-generator/typescript-config": "0.1.0",
-    "@commit-generator/eslint-config": "0.1.0",
+    "@commit-generator/typescript-config": "workspace:^",
+    "@commit-generator/eslint-config": "workspace:^",
     "@types/node": "^22.10.2",
     "ts-morph": "^25.0.1"
   }
