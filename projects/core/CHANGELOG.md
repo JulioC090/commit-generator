@@ -1,5 +1,16 @@
 # @commit-generator/core
 
+## 1.0.2
+
+### Patch Changes
+
+- update local package to use workspace
+- Updated dependencies
+  - @commit-generator/commit-history@1.0.1
+  - @commit-generator/prompt-parser@1.0.1
+  - @commit-generator/ai-models@1.1.1
+  - @commit-generator/git@1.0.1
+
 ## 1.0.1
 
 ### Patch Changes

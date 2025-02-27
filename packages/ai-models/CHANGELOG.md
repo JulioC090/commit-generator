@@ -1,5 +1,11 @@
 # @commit-generator/ai-models
 
+## 1.1.1
+
+### Patch Changes
+
+- update local package to use workspace
+
 ## 1.1.0
 
 ### Minor Changes

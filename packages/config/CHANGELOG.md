@@ -1,5 +1,11 @@
 # @commit-generator/config
 
+## 1.0.1
+
+### Patch Changes
+
+- update local package to use workspace
+
 ## 1.0.0
 
 ### Major Changes

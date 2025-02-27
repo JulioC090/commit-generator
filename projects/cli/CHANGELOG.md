@@ -1,5 +1,16 @@
 # @commit-generator/cli
 
+## 1.0.2
+
+### Patch Changes
+
+- update local package to use workspace
+- Updated dependencies
+  - @commit-generator/commit-history@1.0.1
+  - @commit-generator/config@1.0.1
+  - @commit-generator/core@1.0.2
+  - @commit-generator/git@1.0.1
+
 ## 1.0.1
 
 ### Patch Changes
